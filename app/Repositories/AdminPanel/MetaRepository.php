@@ -10,7 +10,7 @@ use App\Repositories\BaseRepository;
  * Class MetaRepository
  * @package App\Repositories\AdminPanel
  * @version December 19, 2019, 3:31 pm UTC
-*/
+ */
 
 class MetaRepository extends BaseRepository
 {
@@ -45,11 +45,11 @@ class MetaRepository extends BaseRepository
 
     public function search($request)
     {
-        // $queryTranslation = MetaTranslation::query();
-        // if (request()->filled('title')) $queryTranslation->where('title', 'LIKE', "%{request('title')}%"); //name
-        // if (request()->filled('description')) $queryTranslation->where('description', 'LIKE', "%{request('description')}%"); //email
-        // if (request()->filled('keywords')) $queryTranslation->where('keywords', 'LIKE', "%{request('keywords')}%"); //email
-        // return $queryTranslation->pluck('meta_id')->toArray();
+        $queryTranslation = MetaTranslation::query();
+        if (request()->filled('title')) $queryTranslation->where('title', 'LIKE', "%{request('title')}%"); //name
+        if (request()->filled('description')) $queryTranslation->where('description', 'LIKE', "%{request('description')}%"); //email
+        if (request()->filled('keywords')) $queryTranslation->where('keywords', 'LIKE', "%{request('keywords')}%"); //email
+        return $queryTranslation->pluck('meta_id')->toArray();
         $query = Meta::query();
 
         // $query->where('id', $queryTranslation->pluck('meta_id')->toArray());

@@ -47,7 +47,7 @@ class RolesController extends AppBaseController
     public function create()
     {
         $permissions = Permission::orderBy('page')->get();
-        return view('adminPanel.roles.create',compact('permissions'));
+        return view('adminPanel.roles.create', compact('permissions'));
     }
 
     /**
@@ -106,7 +106,7 @@ class RolesController extends AppBaseController
         // $roles = $this->rolesRepository->find($id);
         $roles = Role::findOrFail($id);
         $permissions = Permission::orderBy('page')->get();
-        if (empty($roles) || $roles->id == 1) {
+        if (empty($roles)) {
             Flash::error(__('messages.cannot', ['model' => __('models/roles.singular')]));
 
             return redirect(route('adminPanel.roles.index'));
@@ -130,7 +130,7 @@ class RolesController extends AppBaseController
         $role->update(['name' => request('name')]);
         $role->syncPermissions(request('permissions'));
 
-        if (empty($role) || $role->id == 1) {
+        if (empty($role)) {
             Flash::error(__('messages.cannot', ['model' => __('models/roles.singular')]));
 
             return redirect(route('adminPanel.roles.index'));
@@ -179,10 +179,10 @@ class RolesController extends AppBaseController
         $routes = [];
         $permissions = [];
 
-        foreach($collection as $route) {
+        foreach ($collection as $route) {
             if ($route->getPrefix() == 'en/adminPanel') {
                 $routeName = $route->getName();
-                if ($routeName && !in_array($routeName, config('permission.excluded_routes')) ) {
+                if ($routeName && !in_array($routeName, config('permission.excluded_routes'))) {
                     $routePartials = explode('.', $routeName);
                     // dd($routeName);
                     $page = $routePartials[1];
@@ -190,42 +190,42 @@ class RolesController extends AppBaseController
 
                     switch (true) {
                         case in_array($action, ['index', 'show']):
-                            $permissions[$page .'_view'] = [
+                            $permissions[$page . '_view'] = [
                                 'page' => $page,
                                 'action' => 'view',
-                                'name' => $page .' view'
+                                'name' => $page . ' view'
                             ];
                             break;
 
                         case in_array($action, ['create', 'store']):
-                            $permissions[$page .'_create'] = [
+                            $permissions[$page . '_create'] = [
                                 'page' => $page,
                                 'action' => 'create',
-                                'name' => $page .' create'
+                                'name' => $page . ' create'
                             ];
                             break;
 
                         case in_array($action, ['edit', 'update']):
-                            $permissions[$page .'_edit'] = [
+                            $permissions[$page . '_edit'] = [
                                 'page' => $page,
                                 'action' => 'edit',
-                                'name' => $page .' edit'
+                                'name' => $page . ' edit'
                             ];
                             break;
 
                         case in_array($action, ['destory']):
-                            $permissions[$page .'_delete'] = [
+                            $permissions[$page . '_delete'] = [
                                 'page' => $page,
                                 'action' => 'delete',
-                                'name' => $page .' delete'
+                                'name' => $page . ' delete'
                             ];
                             break;
 
                         default:
-                            $permissions[$page .'_'. $action] = [
+                            $permissions[$page . '_' . $action] = [
                                 'page' => $page,
                                 'action' => $action,
-                                'name' => $page .' '. $action
+                                'name' => $page . ' ' . $action
                             ];
                             break;
                     }

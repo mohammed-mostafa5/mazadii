@@ -30,9 +30,7 @@ class MetaController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $metas = $this->metaRepository
-        ->allQueryTranslations($request->all())
-        ->paginate(10);
+        $metas = $this->metaRepository->all();
 
         return view('adminPanel.metas.index')
             ->with('metas', $metas);
@@ -161,5 +159,4 @@ class MetaController extends AppBaseController
 
         return redirect(route('adminPanel.metas.index'));
     }
-
 }

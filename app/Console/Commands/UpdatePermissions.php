@@ -73,7 +73,6 @@ class UpdatePermissions extends Command
                     $page = $routePartials[1];
 
                     $action = $routePartials[2];
-
                     switch (true) {
                         case in_array($action, ['index', 'show']):
                             $permissions[$page . '_view'] = [
@@ -121,7 +120,6 @@ class UpdatePermissions extends Command
         }
 
         $bar->finish();
-
         foreach ($permissions as $permission) {
             Permission::createOnlyNew($permission);
         }

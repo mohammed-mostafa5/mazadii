@@ -29,9 +29,7 @@ class InformationController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $information = $this->informationRepository
-        ->allQueryTranslations($request->all())
-        ->paginate(10);
+        $information = $this->informationRepository->all();
 
         return view('adminPanel.information.index')
             ->with('information', $information);
