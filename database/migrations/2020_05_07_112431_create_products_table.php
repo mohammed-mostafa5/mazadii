@@ -17,26 +17,7 @@ class CreateProductsTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('category_id')->unsigned();
             $table->integer('admin_id')->unsigned();
-            $table->unsignedInteger('regular_price');
-            $table->unsignedInteger('sale_price');
-            $table->unsignedInteger('offer')->nullable();
-            $table->string('photo_1')->nullable();
-            $table->string('photo_2')->nullable();
-            $table->string('photo_3')->nullable();
-            $table->string('sku');
-            $table->unsignedTinyInteger('type')->comment('0 => Food, 1 => Accessories');
-            $table->string('color_id')->nullable();
-            $table->string('size_id')->nullable();
-            $table->string('style_id')->nullable();
-            $table->string('brand_id')->nullable();
-            $table->string('weight_id')->nullable();
-            $table->integer('views');
-
-            // $table->string('video')->nullable();
-            // $table->string('barcode')->nullable();
-            // $table->tinyInteger('is_bundle')
-            //     ->default(0)
-            //     ->comment('0 => Inactive, 1 => Active');
+            $table->unsignedInteger('start_price');
 
             $table->unsignedTinyInteger('status')
                 ->default(0)
@@ -61,6 +42,15 @@ class CreateProductsTable extends Migration
             $table->unique(['product_id', 'locale']);
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
         });
+
+
+        Schema::create('product_gallery', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('product_id')->unsigned();
+            $table->string('photo');
+
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+        });
     }
 
     /**
@@ -70,6 +60,7 @@ class CreateProductsTable extends Migration
      */
     public function down()
     {
+        Schema::drop('product_gallery');
         Schema::drop('product_translations');
         Schema::drop('products');
     }

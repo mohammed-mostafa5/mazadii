@@ -189,7 +189,7 @@
 <script>
     window.setTimeout(function(){
         $( ".nav-item.open a.active" ).closest( ".collapse" ).collapse("show");
-    }, 500);
+    }, 700);
 </script>
 
 @endsection

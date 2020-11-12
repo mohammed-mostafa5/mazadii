@@ -12,6 +12,7 @@ use App\Http\Requests\AdminPanel\UpdateProductRequest;
 use App\Models\Brand;
 use App\Models\Color;
 use App\Models\Product;
+use App\Models\ProductGallery;
 use App\Models\Size;
 use App\Models\Style;
 use App\Models\Weight;
@@ -35,27 +36,26 @@ class ProductController extends AppBaseController
 
     public function create()
     {
-        $categories = Category::active()
-            ->parent()
-            ->inOrderTOProdcut()
-            ->with('children')
-            ->get();
+        $categories = Category::active()->get();
 
-        $colors = Color::get()->pluck('text', 'id');
-        $sizes = Size::get()->pluck('text', 'id');
-        $styles = Style::get()->pluck('text', 'id');
-        $brands = Brand::get()->pluck('text', 'id');
-        $weights = Weight::get()->pluck('text', 'id');
-
-        return view('adminPanel.products.create', compact('categories', 'colors', 'sizes', 'styles', 'brands', 'weights'));
+        return view('adminPanel.products.create', compact('categories'));
     }
 
-    public function store(CreateProductRequest $request)
+    public function store(Request $request)
     {
         $input = $request->all();
         $input['admin_id'] = auth()->id();
 
-        $this->productRepository->create($input);
+        $product = $this->productRepository->create($input);
+
+        foreach ($request->photo as $photo) {
+
+            ProductGallery::create([
+                'product_id' => $product->id,
+                'photo' => $photo
+            ]);
+        }
+
 
         Flash::success(__('messages.saved', ['model' => __('models/products.singular')]));
 
@@ -79,17 +79,9 @@ class ProductController extends AppBaseController
     {
         $product = $this->productRepository->find($id);
 
-        $categories = Category::active()
-            ->parent()
-            ->inOrderTOProdcut()
-            ->with('children')
-            ->get();
+        $categories = Category::active()->get();
 
-        $colors = Color::get()->pluck('text', 'id');
-        $sizes = Size::get()->pluck('text', 'id');
-        $styles = Style::get()->pluck('text', 'id');
-        $brands = Brand::get()->pluck('text', 'id');
-        $weights = Weight::get()->pluck('text', 'id');
+
 
         if (empty($product)) {
             Flash::error(__('messages.not_found', ['model' => __('models/products.singular')]));
@@ -97,7 +89,7 @@ class ProductController extends AppBaseController
             return redirect(route('adminPanel.products.index'));
         }
 
-        return view('adminPanel.products.edit', compact('categories', 'product', 'colors', 'sizes', 'styles', 'brands', 'weights'));
+        return view('adminPanel.products.edit', compact('categories', 'product'));
     }
 
     public function update($id, UpdateProductRequest $request)
@@ -111,6 +103,16 @@ class ProductController extends AppBaseController
         }
 
         $this->productRepository->update($request->all(), $id);
+        if ($request->photo) {
+            foreach ($request->photo as $photo) {
+
+                ProductGallery::updateOrCreate([
+                    'product_id' => $product->id,
+                    'photo' => $photo
+                ]);
+            }
+        }
+
 
         Flash::success(__('messages.updated', ['model' => __('models/products.singular')]));
 
@@ -132,5 +134,16 @@ class ProductController extends AppBaseController
         Flash::success(__('messages.deleted', ['model' => __('models/products.singular')]));
 
         return redirect(route('adminPanel.products.index'));
+    }
+    public function destroyImage($imageId)
+    {
+        $image = ProductGallery::find($imageId);
+
+        $image->delete($imageId);
+
+        Flash::success(__('messages.deleted', ['model' => __('models/products.singular')]));
+
+        // return redirect(route('adminPanel.products.index'));
+        return back();
     }
 }

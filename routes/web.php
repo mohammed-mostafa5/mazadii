@@ -105,11 +105,14 @@ Route::group(['prefix' => 'adminPanel', 'namespace' => 'AdminPanel', 'as' => 'ad
         // Newsletter CURD
         Route::resource('newsletters', 'NewsletterController');
 
-       // Categories CURD
-       Route::resource('categories', 'CategoryController');
+        // Categories CURD
+        Route::resource('categories', 'CategoryController');
 
         // Product CURD
         Route::resource('products', 'ProductController');
+
+        Route::delete('photo/{image}', 'ProductController@destroyImage')->name('products.destroyImage');
+
 
         Route::resource('countries', 'CountryController');
         Route::resource('countries.cities', 'CityController')->shallow();

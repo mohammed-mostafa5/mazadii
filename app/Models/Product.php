@@ -54,24 +54,8 @@ class Product extends Model
         'name',
         'description',
         'admin_id',
-        'regular_price',
-        'offer',
-        'sale_price',
+        'start_price',
         'status',
-        'sku',
-        'views',
-        'type',
-        'color_id',
-        'size_id',
-        'style_id',
-        'brand_id',
-        'weight_id',
-        'photo_1',
-        'photo_2',
-        'photo_3',
-
-
-
     ];
 
     /**
@@ -101,159 +85,19 @@ class Product extends Model
         }
 
         // $rules['photo'] = 'required|image|mimes:jpeg,jpg,png';
-        $rules['regular_price'] = 'required';
-        $rules['sale_price'] = '';
+        $rules['start_price'] = 'required';
         $rules['category_id'] = 'required';
-        $rules['offer'] = '';
         $rules['status'] = 'required';
-        $rules['sku'] = 'required';
-        $rules['views'] = '';
-        $rules['color_id'] = '';
-        $rules['size_id'] = '';
-        $rules['style_id'] = '';
-        $rules['brand_id'] = '';
-        $rules['weight_id'] = '';
-        $rules['photo_1'] = 'required|image|mimes:jpeg,jpg,png';
-        $rules['photo_2'] = '';
-        $rules['photo_3'] = '';
-
         return $rules;
     }
 
 
-    /**
-     * Set photo_1 and storge.
-     */
-    public function setPhoto1Attribute($file)
-    {
-        try {
-            if ($file) {
-                if (is_array($file)) {
-
-                    foreach ($file as $f) {
-                        $fileName = $this->createFileName($f);
-
-                        $this->originalImage($f, $fileName);
-
-                        $this->thumbImage($f, $fileName, 300, 300);
-
-                        $this->attributes['photo_1'] = $fileName;
-                    }
-                } else {
-
-                    $fileName = $this->createFileName($file);
-
-                    $this->originalImage($file, $fileName);
-
-                    $this->thumbImage($file, $fileName, 300, 300);
-
-                    $this->attributes['photo_1'] = $fileName;
-                }
-            }
-        } catch (\Throwable $th) {
-            $this->attributes['photo_1'] = $file;
-        }
-    }
-
-    /**
-     * Set photo_2 and storge.
-     */
-    public function setPhoto2Attribute($file)
-    {
-        try {
-            if ($file) {
-                if (is_array($file)) {
-
-                    foreach ($file as $f) {
-                        $fileName = $this->createFileName($f);
-
-                        $this->originalImage($f, $fileName);
-
-                        $this->thumbImage($f, $fileName, 216, 216);
-
-                        $this->attributes['photo_2'] = $fileName;
-                    }
-                } else {
-
-                    $fileName = $this->createFileName($file);
-
-                    $this->originalImage($file, $fileName);
-
-                    $this->thumbImage($file, $fileName, 216, 216);
-
-                    $this->attributes['photo_2'] = $fileName;
-                }
-            }
-        } catch (\Throwable $th) {
-            $this->attributes['photo_2'] = $file;
-        }
-    }
-
-    /**
-     * Set photo_3 and storge.
-     */
-    public function setPhoto3Attribute($file)
-    {
-        try {
-            if ($file) {
-                if (is_array($file)) {
-
-                    foreach ($file as $f) {
-                        $fileName = $this->createFileName($f);
-
-                        $this->originalImage($f, $fileName);
-
-                        $this->thumbImage($f, $fileName, 216, 216);
-
-                        $this->attributes['photo_3'] = $fileName;
-                    }
-                } else {
-
-                    $fileName = $this->createFileName($file);
-
-                    $this->originalImage($file, $fileName);
-
-                    $this->thumbImage($file, $fileName, 216, 216);
-
-                    $this->attributes['photo_3'] = $fileName;
-                }
-            }
-        } catch (\Throwable $th) {
-            $this->attributes['photo_3'] = $file;
-        }
-    }
 
     #################################################################################
     ################################### Appends #####################################
     #################################################################################
 
-    protected $appends = ['is_fav', 'is_in_cart', 'rate', 'price', 'photo1_path', 'photo2_path', 'photo3_path'];
-
-    /**
-     * append photo_1 with path.
-     */
-    public function getphoto1PathAttribute()
-    {
-
-        return $this->photo_1 ? asset('uploads/images/original/' . $this->photo_1) : null;
-    }
-
-    /**
-     * append photo_2 with path.
-     */
-    public function getphoto2PathAttribute()
-    {
-        return $this->photo_2 ? asset('uploads/images/original/' . $this->photo_2) : null;
-    }
-
-    /**
-     * append photo_1 with path.
-     */
-    public function getphoto3PathAttribute()
-    {
-        return $this->photo_3 ? asset('uploads/images/original/' . $this->photo_3) : null;
-    }
-
+    protected $appends = ['is_fav', 'is_in_cart', 'rate', 'price', 'first_photo'];
 
     /**
      * append 1/0 if exist cart.
@@ -315,6 +159,16 @@ class Product extends Model
         return $this->attributes['rate'] = 0;
     }
 
+    /**
+     * append firs photo for product.
+     */
+    public function getFirstPhotoAttribute()
+    {
+        $gallery = $this->gallery->first();
+        dd($gallery->photo);
+        return $this->attributes['first_photo'] = $gallery->photo;
+    }
+
     #################################################################################
     ################################### Relations ###################################
     #################################################################################
@@ -327,45 +181,6 @@ class Product extends Model
         return $this->belongsTo('App\Models\Category', 'category_id', 'id');
     }
 
-    /**
-     * Get Colors for product.
-     */
-    public function color()
-    {
-        return $this->belongsTo('App\Models\Color', 'color_id', 'id');
-    }
-
-    /**
-     * Get Sizes for product.
-     */
-    public function size()
-    {
-        return $this->belongsTo('App\Models\Size', 'size_id', 'id');
-    }
-
-    /**
-     * Get Styles for product.
-     */
-    public function style()
-    {
-        return $this->belongsTo('App\Models\Style', 'style_id', 'id');
-    }
-
-    /**
-     * Get Brands for product.
-     */
-    public function brand()
-    {
-        return $this->belongsTo('App\Models\Brand', 'brand_id', 'id');
-    }
-
-    /**
-     * Get Weights for product.
-     */
-    public function weight()
-    {
-        return $this->belongsTo('App\Models\Weight', 'weight_id', 'id');
-    }
 
     /**
      * Get Reviews for product.
@@ -381,6 +196,13 @@ class Product extends Model
     public function reviewsProduct()
     {
         return $this->hasMany('App\Models\ProductReview', 'product_id', 'id');
+    }
+    /**
+     * Get Colors for product.
+     */
+    public function gallery()
+    {
+        return $this->hasMany('App\Models\ProductGallery', 'product_id', 'id');
     }
 
     /**
@@ -425,17 +247,6 @@ class Product extends Model
     #################################################################################
 
     /**
-     * Scope a query to only include offers products.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeOffers($query)
-    {
-        $query->where('offer', '!=',  null);
-    }
-
-    /**
      * Scope a query to only include active products.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
@@ -445,11 +256,4 @@ class Product extends Model
     {
         return $query->where('status', 1);
     }
-
-
-    // public function cartProductThrough()
-    // {
-    //     return $this->hasManyThrough('App\Models\CartProducts', 'App\Models\Cart');
-    // }
-
 }
