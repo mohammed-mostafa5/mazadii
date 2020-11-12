@@ -3,7 +3,7 @@
 @section('content')
     <ol class="breadcrumb">
           <li class="breadcrumb-item">
-             <a href="{!! route('adminPanel.categoryProduct.index') !!}">@lang('models/categoryProduct.singular')</a>
+             <a href="{!! route('adminPanel.categories.index') !!}">@lang('models/categories.singular')</a>
           </li>
           <li class="breadcrumb-item active">@lang('crud.edit')</li>
         </ol>
@@ -15,12 +15,12 @@
                       <div class="card">
                           <div class="card-header">
                               <i class="fa fa-edit fa-lg"></i>
-                              <strong>Edit @lang('models/categoryProduct.singular')</strong>
+                              <strong>Edit @lang('models/categories.singular')</strong>
                           </div>
                           <div class="card-body">
-                              {!! Form::model($category, ['route' => ['adminPanel.categoryProduct.update', $category->id], 'method' => 'patch', 'enctype' => 'multipart/form-data']) !!}
+                              {!! Form::model($category, ['route' => ['adminPanel.categories.update', $category->id], 'method' => 'patch', 'enctype' => 'multipart/form-data']) !!}
 
-                              @include('adminPanel.categoryProduct.fields')
+                              @include('adminPanel.categories.fields')
 
                               {!! Form::close() !!}
                             </div>

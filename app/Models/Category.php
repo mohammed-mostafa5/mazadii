@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Eloquent as Model;
-use App\Helpers\ImageUploaderTrait;
-use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+
+use Astrotomic\Translatable\Translatable;
+
+use App\Helpers\ImageUploaderTrait;
 
 /**
  * Class category
@@ -35,7 +37,7 @@ class Category extends Model
     public $fillable = [
         'parent_id',
         'photo',
-        'status',
+        'status'
     ];
 
     /**
@@ -47,7 +49,6 @@ class Category extends Model
         'id' => 'integer',
         'name' => 'string',
         'photo' => 'string',
-        'parent_id' => 'integer',
         'status' => 'integer'
     ];
 
@@ -70,74 +71,65 @@ class Category extends Model
         return $rules;
     }
 
+
+    #################################################################################
+    ################################### Appends #####################################
+    #################################################################################
+
+
+    protected $appends = ['photo_path'];
+
+    public function getPhotoPathAttribute()
+    {
+        return $this->photo ? asset('uploads/images/original/' . $this->photo) : null;
+    }
+
+
+
+
+    #################################################################################
+    ################################# Functions #####################################
+    #################################################################################
+
     public function setPhotoAttribute($file)
     {
-        try {
 
-            if ($file) {
-                if (is_array($file)) {
-                    foreach ($file as $f) {
-                        $fileName = $this->createFileName($f);
+        if ($file) {
+            if (is_array($file)) {
+                foreach ($file as $f) {
+                    $fileName = $this->createFileName($f);
 
-                        $this->originalImage($f, $fileName);
+                    $this->originalImage($f, $fileName);
 
-                        $this->thumbImage($f, $fileName, 182, 182);
-
-                        $this->attributes['photo'] = $fileName;
-                    }
-                } else {
-                    $fileName = $this->createFileName($file);
-
-                    $this->originalImage($file, $fileName);
-
-                    $this->thumbImage($file, $fileName, 182, 182);
+                    $this->thumbImage($f, $fileName, 182, 182);
 
                     $this->attributes['photo'] = $fileName;
                 }
+            } else {
+                $fileName = $this->createFileName($file);
+
+                $this->originalImage($file, $fileName);
+
+                $this->thumbImage($file, $fileName, 182, 182);
+
+                $this->attributes['photo'] = $fileName;
             }
-        } catch (\Throwable $th) {
-            //throw $th;
         }
     }
 
 
-    protected $appends = ['photo_original_path', 'photo_thumbnail_path'];
 
-    public function getPhotoOriginalPathAttribute()
-    {
-        return asset('uploads/images/original/' . $this->photo);
-    }
-    public function getPhotoThumbnailPathAttribute()
-    {
-        return asset('uploads/images/thumbnail/' . $this->photo);
-    }
+
+    #################################################################################
+    ################################### Scopes #####################################
+    #################################################################################
+
+
 
     public function scopeActive($query)
     {
         return $query->where('status', 1);
     }
-
-    // IN Order TO ///////////////////////////
-    public function scopeInOrderTOProdcut($query)
-    {
-        return $query->where('in_order_to', 1);
-    }
-
-    public function scopeInOrderTOMagazine($query)
-    {
-        return $query->where('in_order_to', 2);
-    }
-
-    public function scopeInOrderTOService($query)
-    {
-        return $query->where('in_order_to', 3);
-    }
-
-    public function scopeInOrderTOBlog($query)
-    {
-        return $query->where('in_order_to', 4);
-    }
-    // IN Order TO ///////////////////////////
 
     public function scopeParent($query)
     {
@@ -152,31 +144,5 @@ class Category extends Model
     public function children()
     {
         return $this->hasMany('App\Models\Category', 'parent_id', 'id');
-    }
-
-    public function products()
-    {
-        return $this->hasMany('App\Models\Product', 'category_id', 'id');
-    }
-    public function parentCategory()
-    {
-        return $this->belongsTo('App\Models\Category', 'parent_id', 'id');
-    }
-
-    /**
-     * Get all of the product for the Parent.
-     */
-    public function productsCategory()
-    {
-        // return $this->hasManyThrough('App\Models\Category', 'App\Models\Product');
-
-        return $this->hasManyThrough(
-            'App\Models\Product',
-            'App\Models\Category',
-            'parent_id', // Foreign key on category child table...
-            'category_id', // Foreign key on Products table...
-            'id', // Local key on category Parent table...
-            'id' // Local key on category child table...
-        );
     }
 }

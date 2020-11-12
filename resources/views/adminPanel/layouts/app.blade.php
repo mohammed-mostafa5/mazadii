@@ -25,18 +25,7 @@
     <script src="https://cdn.ckeditor.com/4.12.1/full/ckeditor.js"></script>
 
 
-
-
-
-
-
     <link rel="stylesheet" href="{{ asset('css/bootstrap-iconpicker.min.css') }}">
-
-
-
-
-
-
 
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css">
@@ -170,11 +159,12 @@
 <script type="text/javascript" language="javascript">
     $(document).ready( function () {
         $('.table').DataTable( {
-            
+
         } );
 
     } );
 </script>
+
 
 @yield('scripts')
 

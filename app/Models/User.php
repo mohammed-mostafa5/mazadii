@@ -4,14 +4,14 @@ namespace App\Models;
 
 use App\Helpers\ImageUploaderTrait;
 use Illuminate\Support\Facades\Hash;
-use Tymon\JWTAuth\Contracts\JWTSubject;
+// use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable implements MustVerifyEmail, JWTSubject
+class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable, SoftDeletes, ImageUploaderTrait;
 
@@ -27,21 +27,10 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         // register
         'name',
         'address',
-        'area_id',
-        'phone',
         'email',
         'password',
-        'type',
-
-        // verify
         'email_verified_at',
-        'verify_code',
-
-        // setting
         'photo',
-        'gender',
-        'about_me',
-        'status'
     ];
 
 
@@ -93,27 +82,6 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         }
     }
 
-    /**
-     * Get the identifier that will be stored in the subject claim of the JWT.
-     *
-     * @return mixed
-     */
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
-
-    /**
-     * Return a key value array, containing any custom claims to be added to the JWT.
-     *
-     * @return array
-     */
-    public function getJWTCustomClaims()
-    {
-        return [];
-    }
-
-
     public function setPhotoAttribute($file)
     {
         if ($file) {
@@ -128,7 +96,6 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
 
                     $this->attributes['photo'] = $fileName;
                 }
-
             } else {
 
                 $fileName = $this->createFileName($file);
@@ -210,5 +177,4 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         }
         return array();
     }
-
 }

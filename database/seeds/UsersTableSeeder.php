@@ -16,17 +16,11 @@ class UsersTableSeeder extends Seeder
 
             'name' => 'Ahmed Abdullah',
             'address' => 'Nasr-City, Cairo, Egypt',
-            'area_id' => 1,
-            'phone' => '01100547820',
             'email' => 'user@email.com',
             'password' => 'password',
-            'start_as' => 'Owner Pet',
             'email_verified_at' => now(),
-            'verify_code' => '1234',
-            'gender' => 'Male',
-            'about_me' => 'Back-end Developer',
-            'status' => '1',
-
         ]);
+
+        factory(App\Models\User::class, 10)->create();
     }
 }

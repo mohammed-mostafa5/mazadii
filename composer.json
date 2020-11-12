@@ -20,6 +20,7 @@
         "infyomlabs/coreui-templates": "7.0.x-dev",
         "infyomlabs/generator-builder": "dev-master",
         "infyomlabs/laravel-generator": "7.0.x-dev",
+        "intervention/image": "^2.5",
         "laravel/framework": "^7.0",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.0",

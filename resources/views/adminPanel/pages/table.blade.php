@@ -1,17 +1,19 @@
 <div class="table-responsive-sm">
     <table class="table table-striped" id="pages-table">
         <thead>
+            <th>@lang('models/pages.fields.id')</th>
             <th>@lang('models/pages.fields.language')</th>
             <th>@lang('models/pages.fields.name')</th>
             <th>@lang('models/paragraphs.plural')</th>
             <th>@lang('models/images.plural')</th>
-            <th >@lang('crud.action')</th>
+            <th>@lang('crud.action')</th>
         </thead>
         <tbody>
             @foreach($pages as $page)
             @php $i = 1; @endphp
             @foreach ( config('langs') as $locale => $name)
             <tr>
+                <td>{{ $page->id }}</td>
                 <td>{{ $name }}</td>
                 <td>{{ $page->translate($locale)->name }}</td>
 
@@ -34,8 +36,7 @@
                         </a>
                         @endcan
                         @can('pages edit')
-                        <a href="{{ route('adminPanel.pages.edit', [$page->id]) . "?languages=$locale" }}"
-                            class='btn btn-ghost-info'>
+                        <a href="{{ route('adminPanel.pages.edit', [$page->id]) . "?languages=$locale" }}" class='btn btn-ghost-info'>
                             <i class="fa fa-edit"></i>
                         </a>
                         @endcan
