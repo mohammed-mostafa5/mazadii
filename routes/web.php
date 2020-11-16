@@ -172,7 +172,7 @@ Route::group(['namespace' => 'Website', 'as' => 'website.'], function () {
     Route::get('/search',  'SearchController@search')->name('search');
 });
 
-Route::group(['middleware' => ['guest']], function () {
+Route::group([['middleware' => ['guest'], 'verify' => true]], function () {
 
     Route::get('login', 'AuthController@login')->name('login');
     Route::post('postLogin', 'AuthController@postLogin')->name('postLogin');

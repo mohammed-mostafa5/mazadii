@@ -25,12 +25,18 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
 
         // register
-        'name',
+        'first_name',
+        'last_name',
+        'username',
+        'code',
+        'verify_code',
+        'phone',
         'address',
         'email',
         'password',
         'email_verified_at',
         'photo',
+        'attach',
     ];
 
 
@@ -58,7 +64,8 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     public static $rules = [
-        'name' => 'required',
+        'first_name' => 'required',
+        'last_name' => 'required',
         'phone' => 'required',
         'email' => 'required|email|max:255|unique:users',
         'password' => 'required|string|min:6|confirmed',

@@ -14,7 +14,10 @@ class UsersTableSeeder extends Seeder
     {
         User::create([
 
-            'name' => 'Ahmed Abdullah',
+            'first_name' => 'Ahmed',
+            'last_name' => 'Abdullah',
+            'username' => 'ahmed777',
+            'code' => 'AH1205',
             'phone' => '01001010101',
             'attach' => 'dummy.pdf',
             'address' => 'Nasr-City, Cairo, Egypt',
