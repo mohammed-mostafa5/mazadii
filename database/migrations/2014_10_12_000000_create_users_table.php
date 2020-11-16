@@ -21,7 +21,17 @@ class CreateUsersTable extends Migration
             $table->string('password');
 
             $table->string('photo')->nullable()->default('avatar.jpg');
+            $table->string('phone');
+            $table->unsignedInteger('points')->default(0);
+            $table->unsignedTinyInteger('status')
+                ->default(1)
+                ->comment('0 => Inactive, 1 => Active, 2 => Suspended for 1 month, 3 => Suspended for 3 months, 3 => Suspended PERMANENTLY');
+            $table->unsignedTinyInteger('membership')
+                ->default(0)
+                ->comment('0 => Free, 1 => Normal, 2 => VIP, 3 => VIP/Gold, 4 => VIP/Diamond');
             $table->longText('address')->nullable();
+            $table->string('attach');
+            $table->integer('transactions_count')->default(0);
 
             $table->rememberToken();
             $table->softDeletes();

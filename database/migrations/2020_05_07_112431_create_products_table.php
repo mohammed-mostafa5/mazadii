@@ -18,6 +18,9 @@ class CreateProductsTable extends Migration
             $table->bigInteger('category_id')->unsigned();
             $table->integer('admin_id')->unsigned();
             $table->unsignedInteger('start_price');
+            $table->string('code');
+            $table->string('attach')->nullable();
+            $table->timestamp('start_at');
 
             $table->unsignedTinyInteger('status')
                 ->default(0)

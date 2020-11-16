@@ -15,6 +15,8 @@ class UsersTableSeeder extends Seeder
         User::create([
 
             'name' => 'Ahmed Abdullah',
+            'phone' => '01001010101',
+            'attach' => 'dummy.pdf',
             'address' => 'Nasr-City, Cairo, Egypt',
             'email' => 'user@email.com',
             'password' => 'password',

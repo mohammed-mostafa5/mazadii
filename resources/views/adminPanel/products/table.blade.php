@@ -28,7 +28,7 @@
                 <td>
                     @if ($i)
                     {{-- {{$product->first_photo}} --}}
-                    <img src="{{asset('uploads/images/thumbnail/')}}" alt="{{$product->name}}">
+                    <img src="{{asset('uploads/images/thumbnail/' . $product->first_photo)}}" alt="{{$product->name}}">
                     @endif
                 </td>
 

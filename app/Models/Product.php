@@ -164,9 +164,10 @@ class Product extends Model
      */
     public function getFirstPhotoAttribute()
     {
-        $gallery = $this->gallery->first();
-        dd($gallery->photo);
-        return $this->attributes['first_photo'] = $gallery->photo;
+        $gallery = $this->gallery;
+        foreach ($gallery as $item) {
+            return $this->attributes['first_photo'] = $item->photo;
+        }
     }
 
     #################################################################################
