@@ -12,14 +12,14 @@ class AdminsTableSeeder extends Seeder
      */
     public function run()
     {
-        if(! DB::table('admins')->first())
-        {
+        if (!DB::table('admins')->first()) {
             DB::table('admins')->insert([
                 'name' => 'admin',
                 'email' => 'admin@email.com',
                 'password' => bcrypt('password'),
                 'created_at' => now(),
                 'updated_at' => now(),
+                'approved_at' => now(),
             ]);
         }
     }

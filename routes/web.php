@@ -132,6 +132,82 @@ Route::group(['prefix' => 'adminPanel', 'namespace' => 'AdminPanel', 'as' => 'ad
 ///								end admin panel routes 					///
 ///////////////////////////////////////////////////////////////////////////
 
+/*
+|--------------------------------------------------------------------------
+| Users Panel Routes
+|--------------------------------------------------------------------------
+*/
+
+
+Route::group(['prefix' => 'usersPanel', 'namespace' => 'UsersPanel', 'as' => 'usersPanel.'], function () {
+
+
+    Route::get('packages', 'PackageController@packages')->name('packages');
+
+
+    Route::group(['middleware' => ['auth:web']], function () {
+
+        Route::get('/approval', 'AuthController@approval')->name('approval');
+
+        Route::get('logout', 'AuthController@logout')->name('logout');
+
+        Route::middleware(['approved'])->group(function () {
+            Route::get('resendCodeToUser', 'AuthController@resendCodeToUser')->name('resendCodeToUser');
+
+            Route::resource('pets', 'PetController');
+
+            ////// Dashboard //////
+            Route::get('dashboard', 'MainController@dashboard')->name('dashboard');
+            Route::get('profile', 'MainController@profile')->name('profile');
+            Route::get('setting', 'MainController@setting')->name('setting');
+            Route::patch('setting', 'MainController@update')->name('update');
+            // personal-information
+            Route::get('personal-information', 'MainController@personalInformation')->name('personalInformation');
+            Route::patch('personal-information', 'MainController@updatePersonalInformation')->name('updatePersonalInformation');
+            // change-email
+            Route::get('change-email', 'MainController@changeEmail')->name('changeEmail');
+            Route::patch('change-email', 'MainController@updateEmail')->name('updateEmail');
+            // change-password
+            Route::get('change-password', 'MainController@changePassword')->name('changePassword');
+            Route::patch('change-password', 'MainController@updatePassword')->name('updatePassword');
+
+
+            ////// Wishlist //////
+            Route::get('wishlist/{id}', 'WishlistController@addToWishlistOrRemoveProduct')->name('addToWishlist');
+            Route::get('wishlist', 'WishlistController@wishlist')->name('wishlist');
+            Route::get('wishlist/remove/{id}', 'WishlistController@removeProductWishlist')->name('removeProductWishlist');
+
+
+            ////// Cart //////
+            Route::get('cart', 'CartController@cart')->name('cart');
+            Route::get('cart/{id}', 'CartController@addOrRemove')->name('cart.addOrRemove');
+            Route::get('cart/quantity/{cart}', 'CartController@updateQuantity')->name('quantityUpdate');
+
+
+            ////// Order //////
+            Route::get('checkout', 'InvoiceController@checkout')->name('checkout');
+            Route::get('coupon-validation', 'InvoiceController@couponValidation')->name('couponValidation');
+            Route::post('order', 'InvoiceController@order')->name('orders.order');
+
+            Route::get('orders', 'InvoiceController@invoices')->name('invoices');
+            Route::get('orders/{id}', 'InvoiceController@invoice')->name('invoice');
+        });
+
+
+        Route::group(['middleware' => ['verified']], function () {
+            // Route::get('dashboard', 'MainController@dashboard')->name('dashboard');
+
+        });
+    });
+});
+
+///////////////////////////////////////////////////////////////////////////
+///								end Users Panel routes 				///
+///////////////////////////////////////////////////////////////////////////
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -172,7 +248,7 @@ Route::group(['namespace' => 'Website', 'as' => 'website.'], function () {
     Route::get('/search',  'SearchController@search')->name('search');
 });
 
-Route::group([['middleware' => ['guest'], 'verify' => true]], function () {
+Route::group(['middleware' => ['guest']], function () {
 
     Route::get('login', 'AuthController@login')->name('login');
     Route::post('postLogin', 'AuthController@postLogin')->name('postLogin');

@@ -62,7 +62,7 @@ class AuthController extends Controller
         $validatedData = $request->only('first_name', 'last_name', 'phone', 'email', 'password', 'attach');
         $validatedData['username'] = 'user_' . $this->randomCode(5);
         $validatedData['password'] = $passwordValue;
-        $validatedData['verify_code'] = $this->randomCode(4);
+        // $validatedData['verify_code'] = $this->randomCode(4);
         $validatedData['code'] = strtoupper($request->first_name[0]) . strtoupper($request->last_name[0]) .  $this->randomCode(4);
 
         $user = User::create($validatedData);
@@ -75,26 +75,33 @@ class AuthController extends Controller
         return redirect(route('website.home'));
     }
 
-    public function verifyCode(Request $request)
+    // public function verifyCode(Request $request)
+    // {
+    //     $validatedData = $request->validate(['verify_code' => 'required|min:4|max:5']);
+
+    //     $user = auth()->user();
+
+    //     if ($user->verify_code == request('verify_code')) {
+
+    //         $user->update(['email_verified_at' => now(), 'steps' => 4]);
+    //     }
+    // }
+
+    // public function resendCodeToUser()
+    // {
+    //     $user = auth()->user();
+
+    //     $this->sendCodeToMail($user->email, $user->verify_code);
+
+    //     return back();
+    // }
+
+
+    public function approval()
     {
-        $validatedData = $request->validate(['verify_code' => 'required|min:4|max:5']);
-
-        $user = auth()->user();
-
-        if ($user->verify_code == request('verify_code')) {
-
-            $user->update(['email_verified_at' => now(), 'steps' => 4]);
-        }
+        return view('approval');
     }
 
-    public function resendCodeToUser()
-    {
-        $user = auth()->user();
-
-        $this->sendCodeToMail($user->email, $user->verify_code);
-
-        return back();
-    }
 
     public function logout()
     {
