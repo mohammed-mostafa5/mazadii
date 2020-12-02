@@ -22,12 +22,12 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('photo')->nullable()->default('avatar.jpg');
+            $table->string('photo')->nullable();
             $table->string('phone');
             $table->unsignedInteger('points')->default(0);
             $table->unsignedTinyInteger('status')
                 ->default(0)
-                ->comment('0 => Inactive, 1 => Active, 2 => Suspended for 1 month, 3 => Suspended for 3 months, 4 => Suspended PERMANENTLY');
+                ->comment('0 => Inactive, 1 => Active');
             $table->unsignedTinyInteger('membership')
                 ->default(0)
                 ->comment('0 => Free, 1 => Normal, 2 => VIP, 3 => VIP/Gold, 4 => VIP/Diamond');

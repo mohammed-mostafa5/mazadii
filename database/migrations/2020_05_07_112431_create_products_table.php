@@ -16,21 +16,20 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('category_id')->unsigned();
-            $table->integer('admin_id')->unsigned();
-            $table->unsignedInteger('start_price');
             $table->string('code');
-            $table->string('attach')->nullable();
+            $table->unsignedInteger('start_bid_price');
+            $table->unsignedInteger('min_bid_price');
+            $table->unsignedInteger('watched_count');
             $table->timestamp('start_at');
 
             $table->unsignedTinyInteger('status')
                 ->default(0)
-                ->comment('0 => Inactive, 1 => Active');
+                ->comment('0 => not approved, 1 => active, 2 => pending, 3 => finished');
 
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
-            $table->foreign('admin_id')->references('id')->on('admins')->onDelete('cascade');
         });
 
 
