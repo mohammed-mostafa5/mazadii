@@ -44,7 +44,7 @@
 
 
 
-<!-- Parent Category Field -->
+{{-- <!-- Parent Category Field -->
 <div class="form-group col-sm-6">
 
     {!! Form::label('type', __('models/categories.fields.type').':') !!}
@@ -63,7 +63,7 @@
 
         @endforelse
     </select>
-</div>
+</div> --}}
 
 
 

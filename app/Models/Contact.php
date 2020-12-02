@@ -29,7 +29,7 @@ class Contact extends Model
     public $fillable = [
         'name',
         'email',
-        'subject',
+        'phone',
         'message'
     ];
 
@@ -42,7 +42,7 @@ class Contact extends Model
         'id' => 'integer',
         'name' => 'string',
         'email' => 'string',
-        'subject' => 'string',
+        'phone' => 'string',
         'message' => 'string'
     ];
 
@@ -54,7 +54,7 @@ class Contact extends Model
     public static $rules = [
         'name' => 'required|string|min:3|max:191',
         'email' => 'required|email|min:3|max:191',
-        'subject' => 'required|string|min:3|max:191',
+        'phone' => 'required',
         'message' => 'required|string|min:3',
     ];
 }

@@ -21,7 +21,7 @@ class Product extends Model
     /**
      * Trait Used.
      */
-    use SoftDeletes, Translatable, ImageUploaderTrait;
+    use SoftDeletes, ImageUploaderTrait;
 
     /**
      * Table Name.
@@ -37,12 +37,6 @@ class Product extends Model
      */
     protected $dates = ['deleted_at'];
 
-    /**
-     * Translated attributes.
-     *
-     * @var array
-     */
-    public $translatedAttributes =  ['name', 'description'];
 
     /**
      * Fillable attributes.
@@ -69,35 +63,25 @@ class Product extends Model
         'photo' => 'string'
     ];
 
-    /**
+   /**
      * Validation rules
      *
      * @var array
      */
-    public static function rules()
-    {
-
-        $languages = array_keys(config('langs'));
-
-        foreach ($languages as $language) {
-            $rules[$language . '.name'] = 'required|string|min:3';
-            $rules[$language . '.description'] = 'required|string|min:3';
-        }
-
-        // $rules['photo'] = 'required|image|mimes:jpeg,jpg,png';
-        $rules['start_price'] = 'required';
-        $rules['category_id'] = 'required';
-        $rules['status'] = 'required';
-        return $rules;
-    }
-
+    public static $rules = [
+        'name' => 'required|string|min:3',
+        'description' => 'required|string|min:3',
+        'start_bid_price' => 'required',
+        'min_bid_price' => 'required',
+        'category_id' => 'required',
+    ];
 
 
     #################################################################################
     ################################### Appends #####################################
     #################################################################################
 
-    protected $appends = ['is_fav', 'is_in_cart', 'rate', 'price', 'first_photo'];
+    protected $appends = ['is_fav', 'is_in_cart', 'rate', 'first_photo'];
 
     /**
      * append 1/0 if exist cart.
@@ -138,13 +122,6 @@ class Product extends Model
         return $this->attributes['is_fav'] = 0;
     }
 
-    /**
-     * append 1/0 if exist wishlist.
-     */
-    public function getPriceAttribute()
-    {
-        return $this->attributes['sale_price'] ? $this->sale_price : $this->regular_price;
-    }
 
     /**
      * append rateing for product.

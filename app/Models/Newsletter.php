@@ -17,7 +17,7 @@ class Newsletter extends Model
     use SoftDeletes;
 
     public $table = 'newsletters';
-    
+
 
     protected $dates = ['deleted_at'];
 
@@ -43,8 +43,8 @@ class Newsletter extends Model
      * @var array
      */
     public static $rules = [
-        
+        'email' => 'required|email|min:3|max:191'
     ];
 
-    
+
 }

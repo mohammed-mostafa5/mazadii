@@ -33,13 +33,11 @@
                 </td>
 
                 <td>
-                    {!! Form::open(['route' => ['adminPanel.products.destroy', $product->id], 'method' => 'delete'])
+                    <a href="{{ route('adminPanel.products.show', [$product->id]) }}" class='btn btn-ghost-success'><i class="fa fa-eye"></i></a>
+                    {!! Form::open(['route' => ['adminPanel.product.approve', $product->id], 'method' => 'patch'])
                     !!}
                     <div class='btn-group'>
-                        <a href="{{ route('adminPanel.products.show', [$product->id]) }}" class='btn btn-ghost-success'><i class="fa fa-eye"></i></a>
-                        <a href="{{ route('adminPanel.products.edit', [$product->id]) . "?languages=$locale" }}" class='btn btn-ghost-info'><i class="fa fa-edit"></i></a>
-                        {!! Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn
-                        btn-ghost-danger', 'onclick' => 'return confirm("'.__('crud.are_you_sure').'")']) !!}
+                        {!! Form::button('Approve', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
                     </div>
                     {!! Form::close() !!}
                 </td>

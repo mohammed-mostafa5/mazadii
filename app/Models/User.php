@@ -4,14 +4,14 @@ namespace App\Models;
 
 use App\Helpers\ImageUploaderTrait;
 use Illuminate\Support\Facades\Hash;
-// use Tymon\JWTAuth\Contracts\JWTSubject;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable implements MustVerifyEmail, JWTSubject
 {
     use Notifiable, SoftDeletes, ImageUploaderTrait;
 
@@ -36,7 +36,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'email_verified_at',
         'photo',
-        'attach',
+        'identification',
         'approved_at'
     ];
 
@@ -90,6 +90,7 @@ class User extends Authenticatable implements MustVerifyEmail
         }
     }
 
+
     public function setPhotoAttribute($file)
     {
         if ($file) {
@@ -116,6 +117,30 @@ class User extends Authenticatable implements MustVerifyEmail
             }
         }
     }
+
+
+
+        /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     *
+     * @return mixed
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+
+
     #################################################################################
     ################################### Appends #####################################
     #################################################################################
@@ -184,5 +209,15 @@ class User extends Authenticatable implements MustVerifyEmail
             return auth()->user()->cart;
         }
         return array();
+    }
+
+
+    #################################################################################
+    ################################### Functions ###################################
+    #################################################################################
+
+    public function getStatusAttribute()
+    {
+        return $this->attributes['status'] ? 'Active' : 'Inactive';
     }
 }

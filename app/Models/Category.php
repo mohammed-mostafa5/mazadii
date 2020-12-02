@@ -35,7 +35,7 @@ class Category extends Model
     public $translatedAttributes =  ['name'];
 
     public $fillable = [
-        'parent_id',
+        // 'parent_id',
         'photo',
         'status'
     ];

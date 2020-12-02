@@ -14,6 +14,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('test', 'HomeController@test');
+
+Route::post('register', 'HomeController@register');
+Route::post('login', 'HomeController@login');
+
+Route::get('home', 'HomeController@home');
+
+
+Route::post('send-contact', 'HomeController@sendContactMessage');
+Route::post('newsletter', 'HomeController@newsletter');
+
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });

@@ -32,7 +32,7 @@ class CreateUsersTable extends Migration
                 ->default(0)
                 ->comment('0 => Free, 1 => Normal, 2 => VIP, 3 => VIP/Gold, 4 => VIP/Diamond');
             $table->longText('address')->nullable();
-            $table->string('attach');
+            $table->string('identification');
             $table->integer('transactions_count')->default(0);
             $table->timestamp('approved_at')->nullable();
 

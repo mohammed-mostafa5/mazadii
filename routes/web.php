@@ -94,6 +94,7 @@ Route::group(['prefix' => 'adminPanel', 'namespace' => 'AdminPanel', 'as' => 'ad
         Route::resource('users', 'UserController')->only(['index', 'show', 'update']);
 
         Route::patch('users/approve/{id}', 'UserController@approve')->name('user.approve');
+
         // Informations CURD
         Route::resource('information', 'InformationController');
 
@@ -110,7 +111,9 @@ Route::group(['prefix' => 'adminPanel', 'namespace' => 'AdminPanel', 'as' => 'ad
         Route::resource('categories', 'CategoryController');
 
         // Product CURD
-        Route::resource('products', 'ProductController');
+        Route::resource('products', 'ProductController')->only(['index', 'show']);
+
+        Route::patch('products/approve/{id}', 'UserController@approve')->name('product.approve');
 
         Route::delete('photo/{image}', 'ProductController@destroyImage')->name('products.destroyImage');
 
