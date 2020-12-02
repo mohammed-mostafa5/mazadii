@@ -27,7 +27,7 @@ class CreateUsersTable extends Migration
             $table->unsignedInteger('points')->default(0);
             $table->unsignedTinyInteger('status')
                 ->default(0)
-                ->comment('0 => Active, 1 => Inactive, 2 => Suspended for 1 month, 3 => Suspended for 3 months, 4 => Suspended PERMANENTLY');
+                ->comment('0 => Inactive, 1 => Active, 2 => Suspended for 1 month, 3 => Suspended for 3 months, 4 => Suspended PERMANENTLY');
             $table->unsignedTinyInteger('membership')
                 ->default(0)
                 ->comment('0 => Free, 1 => Normal, 2 => VIP, 3 => VIP/Gold, 4 => VIP/Diamond');

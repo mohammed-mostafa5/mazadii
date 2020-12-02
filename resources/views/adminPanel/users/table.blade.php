@@ -16,6 +16,12 @@
                     <div class='btn-group'>
                         @can('users view')
                         <a href="{{ route('adminPanel.users.show', [$user->id]) }}" class='btn btn-ghost-success'><i class="fa fa-eye"></i></a>
+                        <form action="{{ route('adminPanel.user.approve', [$user->id]) }}" method="post">
+                            @csrf
+                            @method('patch')
+                        <button type="submit" class="btn btn-primary btn-sm" {{$user->approved_at ? 'disabled': ''}}>Approve</button>
+                        </form>
+                        {{-- <a href="{{ route('adminPanel.user.approve', [$user->id]) }}" class='btn btn-ghost-success'>Approve</a> --}}
                         @endcan
                     </div>
                 </td>

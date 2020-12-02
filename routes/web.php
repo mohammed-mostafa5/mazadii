@@ -93,6 +93,7 @@ Route::group(['prefix' => 'adminPanel', 'namespace' => 'AdminPanel', 'as' => 'ad
         // User CURD
         Route::resource('users', 'UserController')->only(['index', 'show', 'update']);
 
+        Route::patch('users/approve/{id}', 'UserController@approve')->name('user.approve');
         // Informations CURD
         Route::resource('information', 'InformationController');
 
@@ -147,7 +148,7 @@ Route::group(['prefix' => 'usersPanel', 'namespace' => 'UsersPanel', 'as' => 'us
 
     Route::group(['middleware' => ['auth:web']], function () {
 
-        Route::get('/approval', 'AuthController@approval')->name('approval');
+        Route::get('/approval', 'MainController@approval')->name('approval');
 
         Route::get('logout', 'AuthController@logout')->name('logout');
 
@@ -202,7 +203,7 @@ Route::group(['prefix' => 'usersPanel', 'namespace' => 'UsersPanel', 'as' => 'us
 });
 
 ///////////////////////////////////////////////////////////////////////////
-///								end Users Panel routes 				///
+///								end Users Panel routes 				    ///
 ///////////////////////////////////////////////////////////////////////////
 
 
@@ -222,7 +223,10 @@ Route::group(['prefix' => 'usersPanel', 'namespace' => 'UsersPanel', 'as' => 'us
 Route::group(['namespace' => 'Website', 'as' => 'website.'], function () {
 
     // Route::get('/', 'MainController@coming_soon');
-    Route::get('/', 'MainController@home')->name('home');
+    Route::middleware(['approved'])->group(function () {
+        // Route::get('/home', 'HomeController@index')->name('home');
+        Route::get('/', 'MainController@home')->name('home');
+    });
     Route::get('who-we-are', 'MainController@about')->name('about');
     Route::get('contact',  'MainController@contact')->name('contact');
     Route::post('contact',  'MainController@contactPost')->name('contact.post');

@@ -197,7 +197,7 @@
                         });
 
                         var channel = pusher.subscribe('notifications-admin');
-                        channel.bind('{{$typeUser}}', function(data) {
+                        channel.bind('{{$typeUser ?? ''}}', function(data) {
                             // alert(JSON.stringify(data));
                             var count = $('.notification_count').html();
                             var html = $('.notification_html').html();

@@ -21,6 +21,7 @@ class CreateAdminsTable extends Migration
             $table->tinyInteger('status')
                 ->default(1)
                 ->comment('0 => Inactive, 1 => Active');
+            $table->timestamp('approved_at')->nullable();
             $table->timestamps();
         });
     }

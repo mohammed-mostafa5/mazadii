@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\AdminPanel;
 
-use App\Repositories\AdminPanel\UserRepository;
-use App\Http\Controllers\AppBaseController;
-use Illuminate\Http\Request;
 use Flash;
 use Response;
+use App\Models\User;
+use Illuminate\Http\Request;
+use App\Http\Controllers\AppBaseController;
+use App\Repositories\AdminPanel\UserRepository;
 
 class UserController extends AppBaseController
 {
@@ -75,6 +76,15 @@ class UserController extends AppBaseController
         $this->userRepository->update($request->all(), $id);
 
         Flash::success(__('messages.updated', ['model' => __('models/users.singular')]));
+
+        return back();
+    }
+
+
+    public function approve($id)
+    {
+        $user = User::find($id);
+        $user->update(['approved_at' => now()]);
 
         return back();
     }

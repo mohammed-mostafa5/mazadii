@@ -97,10 +97,10 @@ class AuthController extends Controller
     // }
 
 
-    public function approval()
-    {
-        return view('approval');
-    }
+    // public function approval()
+    // {
+    //     return view('approval');
+    // }
 
 
     public function logout()
