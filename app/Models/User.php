@@ -192,6 +192,19 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         }
     }
 
+    public function setIdentificationAttribute($file)
+    {
+        if ($file) {
+            $fileName = $this->createFileName($file);
+
+            $this->originalImage($file, $fileName);
+
+            $this->thumbImage($file, $fileName);
+
+            $this->attributes['photo'] = $fileName;
+        }
+    }
+
     public function getStatusAttribute()
     {
         return $this->attributes['status'] ? 'Active' : 'Inactive';

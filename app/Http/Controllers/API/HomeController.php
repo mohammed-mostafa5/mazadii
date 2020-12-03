@@ -22,13 +22,10 @@ class HomeController extends Controller
 {
     use HelperFunctionTrait, MailsTrait;
 
-
     public function test()
     {
         return ('test home');
     }
-
-
 
     public function login(Request $request)
     {
@@ -58,38 +55,26 @@ class HomeController extends Controller
             'identification' => 'required',
         ]);
 
-        $validatedData = $request->only('first_name', 'last_name', 'phone', 'email', 'password', 'address', 'identification');
-
-        $user = User::create($validatedData);
-        $credentials = $request->only('email','password');
-        $token = auth('api')->attempt($credentials);
-        // $this->sendCodeToMail($user->email, $user->verify_code);
-        $user = auth('api')->user();
+        $user = User::create($request->all());
 
         return response()->json(compact('user', 'token'));
     }
 
+    public function home()
+    {
+        $sliders = Slider::active()->inOrderToMobile()->get();
+        $categories = Category::get();
 
+        return response()->json(compact('sliders', 'categories'));
+    }
 
+    public function sendContactMessage(Request $request)
+    {
+        $validated = $request->validate(Contact::$rules);
+        Contact::create($validated);
 
-  // Pages ////////////////////////////////
-
-  public function home()
-  {
-      $sliders = Slider::active()->inOrderToMobile()->get();
-      $categories = Category::get();
-
-      return response()->json(compact('sliders', 'categories'));
-  }
-
-
-  public function sendContactMessage(Request $request)
-  {
-      $validated = $request->validate(Contact::$rules);
-      Contact::create($validated);
-
-      return response()->json(['msg' => 'success']);
-  }
+        return response()->json(['msg' => 'success']);
+    }
 
 
   public function newsletter(Request $request)
