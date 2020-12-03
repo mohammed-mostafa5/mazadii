@@ -47,7 +47,6 @@ class Product extends Model
         'category_id',
         'name',
         'description',
-        'admin_id',
         'start_price',
         'status',
     ];
@@ -63,7 +62,7 @@ class Product extends Model
         'photo' => 'string'
     ];
 
-   /**
+    /**
      * Validation rules
      *
      * @var array
@@ -81,46 +80,7 @@ class Product extends Model
     ################################### Appends #####################################
     #################################################################################
 
-    protected $appends = ['is_fav', 'is_in_cart', 'rate', 'first_photo'];
-
-    /**
-     * append 1/0 if exist cart.
-     */
-    public function getIsInCartAttribute()
-    {
-        if (auth()->user()) {
-
-            if (in_array($this->attributes['id'], auth()->user()->cart->pluck('id')->toArray())) {
-
-                return $this->attributes['is_in_cart'] = 1;
-            }
-        }
-        return $this->attributes['is_in_cart'] = 0;
-    }
-
-    /**
-     * append 1/0 if exist wishlist.
-     */
-    public function getIsFavAttribute()
-    {
-        if (auth()->user()) {
-
-            if (in_array(auth()->id(), $this->wishlistable->pluck('user_id')->toArray())) {
-
-                return $this->attributes['is_fav'] = 1;
-            }
-        }
-
-        if (auth('api')->user()) {
-
-            if (in_array(auth()->id(), $this->wishlistable->pluck('user_id')->toArray())) {
-
-                return $this->attributes['is_fav'] = 1;
-            }
-        }
-
-        return $this->attributes['is_fav'] = 0;
-    }
+    protected $appends = ['rate', 'first_photo'];
 
 
     /**
@@ -183,26 +143,9 @@ class Product extends Model
         return $this->hasMany('App\Models\ProductGallery', 'product_id', 'id');
     }
 
-    /**
-     * Get Users for the product.
-     */
-    public function wishlistable()
-    {
-        return $this->morphMany('App\Models\Wishlist', 'wishlistable');
-    }
-
-
     #################################################################################
     ################################### Functions ###################################
     #################################################################################
-
-    /**
-     * Get Sale or Regular Price.
-     */
-    public function price()
-    {
-        return $this->attributes['sale_price'] ? $this->attributes['sale_price'] : $this->attributes['regular_price'];
-    }
 
     /**
      * Deprecated.
@@ -233,5 +176,36 @@ class Product extends Model
     public function scopeActive($query)
     {
         return $query->where('status', 1);
+    }
+
+
+    #################################################################################
+    ############################## Accessors & Mutators #############################
+    #################################################################################
+
+    /**
+     * append firs photo for product.
+     */
+    public function getStatusAttribute()
+    {
+
+        switch ($this->attributes['status']) {
+            case 0:
+                return 'Not Approved';
+                break;
+            case 1:
+                return 'Active';
+                break;
+            case 2:
+                return 'Pending';
+                break;
+            case 3:
+                return 'Finished';
+                break;
+
+            default:
+                return 'Not Approved';
+                break;
+        }
     }
 }

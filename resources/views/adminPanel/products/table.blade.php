@@ -7,7 +7,8 @@
                 <th>@lang('models/products.fields.name')</th>
                 <th>@lang('models/products.fields.description')</th>
                 {{-- <th>@lang('lang.distributors')</th> --}}
-                <th>@lang('models/products.fields.regular_price')</th>
+                <th>@lang('models/products.fields.start_bid_price')</th>
+                <th>@lang('models/products.fields.status')</th>
                 <th>@lang('models/products.fields.photo')</th>
                 {{-- <th>@lang('models/products.fields.is_bundle')</th>
                 <th>@lang('models/products.fields.is_offer')</th> --}}
@@ -17,33 +18,29 @@
         </thead>
         <tbody>
             @foreach($products as $product)
-            @php $i = 1; @endphp
-            @foreach ( config('langs') as $locale => $name)
+
             <tr>
                 <td>{{$product->id}}</td>
-                <td>{{ $product->category->translateOrNew($locale)->name ?? ''}}</td>
-                <td>{{ $product->translateOrNew($locale)->name ?? ''}}</td>
-                <td>{{ Str::limit($product->translateOrNew($locale)->description ?? '',50) ?? ''}}</td>
-                <td>{{ $i? $product->start_price ?? '' : ''}}</td>
+                <td>{{ $product->category->name ?? ''}}</td>
+                <td>{{ $product->name ?? ''}}</td>
+                <td>{{ Str::limit($product->description ?? '',50) ?? ''}}</td>
+                <td>{{ $product->start_bid_price ?? ''}}</td>
+                <td>{{ $product->status ?? ''}}</td>
                 <td>
-                    @if ($i)
-                    {{-- {{$product->first_photo}} --}}
                     <img src="{{asset('uploads/images/thumbnail/' . $product->first_photo)}}" alt="{{$product->name}}">
-                    @endif
                 </td>
 
                 <td>
                     <a href="{{ route('adminPanel.products.show', [$product->id]) }}" class='btn btn-ghost-success'><i class="fa fa-eye"></i></a>
-                    {!! Form::open(['route' => ['adminPanel.product.approve', $product->id], 'method' => 'patch'])
+                    {!! Form::open(['route' => ['adminPanel.product.approve', $product->id], 'method' => 'patch', 'class' => 'd-inline'])
                     !!}
                     <div class='btn-group'>
-                        {!! Form::button('Approve', ['type' => 'submit', 'class' => 'btn btn-primary']) !!}
+                        {!! Form::button('Approve', ['type' => 'submit', 'class' => 'btn btn-primary btn-sm']) !!}
                     </div>
                     {!! Form::close() !!}
                 </td>
             </tr>
-            @php $i = 0; @endphp
-            @endforeach
+
             @endforeach
         </tbody>
     </table>

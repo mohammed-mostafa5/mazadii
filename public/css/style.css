@@ -3,9 +3,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Dosis:wght@400;500;600;700&display=swap');
 :root {
     --white: #fff;
-    --primary-bg: #9CC914;
-    --primary-hover: #789c0d;
-    --primary-border: #678804;
+    --primary-bg: #20a8d8;
+    --primary-hover: #1b8eb7;
+    --primary-border: #20a8d8;
     --primary-shadow: #2a380183;
     /* --secondary-bg: #05a320;
     --secondary-hover: #0ac429;

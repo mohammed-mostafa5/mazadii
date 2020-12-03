@@ -15,6 +15,8 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('name');
+            $table->string('description');
             $table->bigInteger('category_id')->unsigned();
             $table->string('code');
             $table->unsignedInteger('start_bid_price');
@@ -24,7 +26,7 @@ class CreateProductsTable extends Migration
 
             $table->unsignedTinyInteger('status')
                 ->default(0)
-                ->comment('0 => not approved, 1 => active, 2 => pending, 3 => finished');
+                ->comment('0 => Not Approved, 1 => Active, 2 => Pending, 3 => Finished');
 
             $table->timestamps();
             $table->softDeletes();

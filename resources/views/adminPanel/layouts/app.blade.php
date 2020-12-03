@@ -37,7 +37,7 @@
     <link rel="shortcut icon" href="{{ asset('uploads/images/original/'.$settings->where('key', 'favicon')->first()->value) }}">
     <style>
         table td img {
-            width: 40px;
+            width: 100px;
         }
     </style>
 </head>

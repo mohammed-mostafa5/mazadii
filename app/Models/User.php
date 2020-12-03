@@ -76,51 +76,13 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         'g-recaptcha-response'   => 'required',
     ];
 
-    /**|numeric
-     * Set the user's password
-     *
-     * @param  string  $value
-     * @return void
-     */
-    public function setPasswordAttribute($value)
-    {
-        if ($value) {
-            // $this->attributes['password'] = bcrypt($value);
-            $this->attributes['password'] = Hash::make($value);
-        }
-    }
 
 
-    public function setPhotoAttribute($file)
-    {
-        if ($file) {
-            if (is_array($file)) {
+    #################################################################################
+    ############################## JWT Configration #################################
+    #################################################################################
 
-                foreach ($file as $f) {
-                    $fileName = $this->createFileName($f);
-
-                    $this->originalImage($f, $fileName);
-
-                    $this->thumbImage($f, $fileName);
-
-                    $this->attributes['photo'] = $fileName;
-                }
-            } else {
-
-                $fileName = $this->createFileName($file);
-
-                $this->originalImage($file, $fileName);
-
-                $this->thumbImage($file, $fileName);
-
-                $this->attributes['photo'] = $fileName;
-            }
-        }
-    }
-
-
-
-        /**
+    /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
      * @return mixed
@@ -166,21 +128,6 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         // return $this->morphToMany('App\Models\Wishlist', 'favoriteable_id');
     }
 
-    /**
-     * Get all of the products for user in cart.
-     */
-    public function cart()
-    {
-        return $this->belongsToMany('App\Models\Product', 'carts', 'user_id', 'product_id');
-    }
-
-    /**
-     * Get area for user.
-     */
-    public function area()
-    {
-        return $this->belongsTo('App\Models\Area', 'area_id', 'id');
-    }
 
     #################################################################################
     ################################### Functions ###################################
@@ -199,22 +146,51 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
     }
 
 
-    /**
-     * Grapping Cart Products
-     *
-     */
-    public function cartProduct()
-    {
-        if (isset(auth()->user()->cart)) {
-            return auth()->user()->cart;
-        }
-        return array();
-    }
-
-
     #################################################################################
     ################################### Functions ###################################
     #################################################################################
+
+
+    #################################################################################
+    ############################## Accessors & Mutators #############################
+    #################################################################################
+
+
+    public function setPasswordAttribute($value)
+    {
+        if ($value) {
+            // $this->attributes['password'] = bcrypt($value);
+            $this->attributes['password'] = Hash::make($value);
+        }
+    }
+
+
+    public function setPhotoAttribute($file)
+    {
+        if ($file) {
+            if (is_array($file)) {
+
+                foreach ($file as $f) {
+                    $fileName = $this->createFileName($f);
+
+                    $this->originalImage($f, $fileName);
+
+                    $this->thumbImage($f, $fileName);
+
+                    $this->attributes['photo'] = $fileName;
+                }
+            } else {
+
+                $fileName = $this->createFileName($file);
+
+                $this->originalImage($file, $fileName);
+
+                $this->thumbImage($file, $fileName);
+
+                $this->attributes['photo'] = $fileName;
+            }
+        }
+    }
 
     public function getStatusAttribute()
     {

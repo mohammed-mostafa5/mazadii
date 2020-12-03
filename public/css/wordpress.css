@@ -194,19 +194,22 @@ input.form-control {
 
 /* Button  */
 
+
+/*
 .a {
     color: #4638c2 !important;
 }
 
 .a:hover {
     color: #4638c2 !important;
-}
+} */
 
-.btn-primary {
+
+/* .btn-primary {
     color: #fff !important;
     background-color: #4638c2 !important;
     border-color: #4638c2 !important;
-}
+} */
 
 .btn-success {
     color: #fff !important;
@@ -232,11 +235,12 @@ input.form-control {
     border-color: #4c4f54!important;
 }
 
-.btn-primary:hover {
+
+/* .btn-primary:hover {
     color: #fff !important;
     background-color: #4638c2 !important;
     border-color: #4638c2 !important;
-}
+} */
 
 .btn-success:hover {
     color: #fff !important;

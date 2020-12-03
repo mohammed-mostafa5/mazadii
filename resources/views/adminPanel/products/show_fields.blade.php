@@ -1,113 +1,38 @@
 <div class="photos row">
     <!-- Photo Field -->
-    <div class="form-group  col-md-4">
-        {!! Form::label('photo', __('models/products.fields.photo').':') !!}
-
-        <span><img src="{{asset("uploads/images/thumbnail/$product->photo_1")}}" alt="{{$product->name}}" width="200"></span>
-    </div>
-    <!-- Photo Field -->
-    <div class="form-group  col-md-4">
-
-        <span><img src="{{asset("uploads/images/thumbnail/$product->photo_2")}}" alt="{{$product->name}}" width="200"></span>
-    </div>
-    <!-- Photo Field -->
-    <div class="form-group  col-md-4">
-
-        <span><img src="{{asset("uploads/images/thumbnail/$product->photo_3")}}" alt="{{$product->name}}" width="200"></span>
+    <div class="form-group">
+        {!! Form::label('photos', 'Photos : ') !!}
+        <div class="product_photos p-3">
+            @foreach ($product->gallery as $item)
+            <img src="{{asset("uploads/images/thumbnail/$item->photo")}}" alt="{{$product->name}}" width="200" class="img-thumbnail">
+            @endforeach
+        </div>
     </div>
 </div>
-
-<!-- Video Field -->
-<div class="form-group show">
-    {!! Form::label('video', __('models/products.fields.video').':') !!}
-    <span>{!! $product->video_html !!}</span>
-</div>
-
-<!-- Barcode Field -->
-<div class="form-group show">
-    {!! Form::label('sku', __('models/products.fields.sku').':') !!}
-    <span>{{ $product->sku }}</span>
-</div>
-
-
-@foreach ( config('langs') as $locale => $name)
-
 <!-- Category Field -->
 <div class="form-group show">
-    {!! Form::label('id', $name .' ' . __('models/products.fields.category_name').':') !!}
-    <span>{{ $product->category->parentCategory->translate($locale)->name ?? ''}} - {{ $product->category->translate($locale)->name ?? ''}}</span>
+    {!! Form::label('category', __('models/products.fields.category_name').':') !!}
+    <span>{{ $product->category->name ?? ''}}</span>
 </div>
 
 
 <!-- Name Field -->
 <div class="form-group show">
-    {!! Form::label('name', $name .' ' . __('models/products.fields.name').':') !!}
-    <span>{{ $product->translate($locale)->name }}</span>
+    {!! Form::label('name', __('models/products.fields.name').':') !!}
+    <span>{{ $product->name }}</span>
 </div>
 
 <!-- Description Field -->
 <div class="form-group show">
-    {!! Form::label('description', $name .' ' . __('models/products.fields.description').':') !!}
-    <span>{{ $product->translate($locale)->description }}</span>
+    {!! Form::label('description', __('models/products.fields.description').':') !!}
+    <span>{{ $product->description }}</span>
 </div>
 
 
-@if (isset($product->style))
-<!-- style Field -->
+<!-- start_bid_price Field -->
 <div class="form-group show">
-    {!! Form::label('style', $name .' ' . __('models/products.fields.style').':') !!}
-    <span>{{$product->style->translateOrNew($locale)->text}}</span>
-</div>
-@endif
-@if (isset($product->brand))
-<!-- brand Field -->
-<div class="form-group show">
-    {!! Form::label('brand', $name .' ' . __('models/products.fields.brand').':') !!}
-    <span>{{$product->brand->translateOrNew($locale)->text}}</span>
-</div>
-@endif
-
-@endforeach
-
-@if (isset($product->color))
-<!-- color Field -->
-<div class="form-group show">
-    {!! Form::label('color', __('models/products.fields.color').':') !!}
-    {{-- <span>{{$product->color->translateOrNew($locale)->text}}</span> --}}
-    <div class="color" style="width: 25px; height:25px; border: 2px solid #ddd; background-color: {{$product->color->translateOrNew('en')->text}}"></div>
-</div>
-@endif
-
-@if (isset($product->size))
-<!-- Bundle Field -->
-<div class="form-group show">
-    {!! Form::label('size', __('models/products.fields.size').':') !!}
-    <span>{{$product->size->text}}</span>
-</div>
-@endif
-@if (isset($product->weight))
-<!-- Bundle Field -->
-<div class="form-group show">
-    {!! Form::label('weight', __('models/products.fields.weight').':') !!}
-    <span>{{$product->weight->text}}</span>
-</div>
-@endif
-<!-- Regular Price Field -->
-<div class="form-group show">
-    {!! Form::label('regular_price', __('models/products.fields.regular_price').':') !!}
-    <span>{{ $product->regular_price ?? '' }}</span>
-</div>
-
-<!-- Sale Price Field -->
-<div class="form-group show">
-    {!! Form::label('sale_price', __('models/products.fields.sale_price').':') !!}
-    <span>{{ $product->sale_price ?? '' }}</span>
-</div>
-
-<!-- Bundle Field -->
-<div class="form-group show">
-    {!! Form::label('is_bundle', __('models/products.fields.is_bundle').':') !!}
-    <span>{{$product->is_bundle ? 'Yes' : 'No'}}</span>
+    {!! Form::label('start_bid_price', __('models/products.fields.start_bid_price').':') !!}
+    <span>{{ $product->start_bid_price ?? '' }}</span>
 </div>
 
 

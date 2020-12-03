@@ -10,7 +10,7 @@ return array(
         'description' => 'Description',
         'price' => 'Price',
         'category_name' => 'Category',
-        'regular_price' => 'Regular Price',
+        'start_bid_price' => 'Start Bid Price',
         'destributors_price' => 'Destributors Price',
 
         'photo' => 'Photo',
@@ -24,12 +24,8 @@ return array(
         'created_at' => 'Created at',
         'updated_at' => 'Updated at',
 
+        'status' => 'Status',
 
-        'color' => 'Color',
-        'size' => 'Size',
-        'style' => 'Style',
-        'type' => 'Type',
-        'brand' => 'Brand',
-        'weight' => 'Weight',
+
     ),
 );
