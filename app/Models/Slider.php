@@ -115,13 +115,9 @@ class Slider extends Model
 
     public function scopeInOrderToWeb($query)
     {
-        return $query->where('in_order_to', 1);
+        return $query->orderBy('in_order_to', 'desc');
     }
 
-    public function scopeInOrderToMobile($query)
-    {
-        return $query->where('in_order_to', 2);
-    }
 
     // In Order To ///////////////////////////
 }

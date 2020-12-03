@@ -70,7 +70,7 @@ class HomeController extends Controller
 
     public function home()
     {
-        $sliders = Slider::active()->inOrderToMobile()->get();
+        $sliders = Slider::active()->inOrderToWeb()->get();
         $categories = Category::get();
 
         return response()->json(compact('sliders', 'categories'));
