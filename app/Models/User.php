@@ -40,7 +40,6 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         'approved_at'
     ];
 
-
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -76,12 +75,9 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         'g-recaptcha-response'   => 'required',
     ];
 
-
-
     #################################################################################
     ############################## JWT Configration #################################
     #################################################################################
-
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
@@ -102,11 +98,9 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         return [];
     }
 
-
     #################################################################################
     ################################### Appends #####################################
     #################################################################################
-
 
     protected $appends = ['photo_path'];
 
@@ -128,7 +122,6 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         // return $this->morphToMany('App\Models\Wishlist', 'favoriteable_id');
     }
 
-
     #################################################################################
     ################################### Functions ###################################
     #################################################################################
@@ -145,16 +138,9 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         return array();
     }
 
-
-    #################################################################################
-    ################################### Functions ###################################
-    #################################################################################
-
-
     #################################################################################
     ############################## Accessors & Mutators #############################
     #################################################################################
-
 
     public function setPasswordAttribute($value)
     {
@@ -164,31 +150,17 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         }
     }
 
-
     public function setPhotoAttribute($file)
     {
         if ($file) {
-            if (is_array($file)) {
 
-                foreach ($file as $f) {
-                    $fileName = $this->createFileName($f);
+            $fileName = $this->createFileName($file);
 
-                    $this->originalImage($f, $fileName);
+            $this->originalImage($file, $fileName);
 
-                    $this->thumbImage($f, $fileName);
+            $this->thumbImage($file, $fileName);
 
-                    $this->attributes['photo'] = $fileName;
-                }
-            } else {
-
-                $fileName = $this->createFileName($file);
-
-                $this->originalImage($file, $fileName);
-
-                $this->thumbImage($file, $fileName);
-
-                $this->attributes['photo'] = $fileName;
-            }
+            $this->attributes['photo'] = $fileName;
         }
     }
 
@@ -201,7 +173,7 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
 
             $this->thumbImage($file, $fileName);
 
-            $this->attributes['photo'] = $fileName;
+            $this->attributes['identification'] = $fileName;
         }
     }
 

@@ -28,7 +28,7 @@ class Slider extends Model
 
     protected $dates = ['deleted_at'];
 
-    public $translatedAttributes =  ['content'];
+    public $translatedAttributes =  ['title', 'subtitle', 'content'];
 
 
     public $fillable = [
@@ -92,7 +92,6 @@ class Slider extends Model
             } catch (\Throwable $th) {
                 //throw $th;
                 $this->attributes['photo'] = $file;
-
             }
         }
     }
