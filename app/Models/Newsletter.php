@@ -43,7 +43,7 @@ class Newsletter extends Model
      * @var array
      */
     public static $rules = [
-        'email' => 'required|email|min:3|max:191'
+        'email' => 'required|email|min:3|max:191|unique:newsletters'
     ];
 
 
