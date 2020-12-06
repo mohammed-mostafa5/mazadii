@@ -40,7 +40,6 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         'approved_at'
     ];
 
-
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -71,17 +70,14 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         'email' => 'required|email|max:255|unique:users',
         'password' => 'required|string|min:6|confirmed',
         'address' => 'required',
+        'identification' => 'required',
         'about_me' => '',
-        'type' => 'required',
         'g-recaptcha-response'   => 'required',
     ];
-
-
 
     #################################################################################
     ############################## JWT Configration #################################
     #################################################################################
-
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
@@ -102,11 +98,9 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         return [];
     }
 
-
     #################################################################################
     ################################### Appends #####################################
     #################################################################################
-
 
     protected $appends = ['photo_path'];
 
@@ -128,7 +122,6 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         // return $this->morphToMany('App\Models\Wishlist', 'favoriteable_id');
     }
 
-
     #################################################################################
     ################################### Functions ###################################
     #################################################################################
@@ -145,16 +138,9 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         return array();
     }
 
-
-    #################################################################################
-    ################################### Functions ###################################
-    #################################################################################
-
-
     #################################################################################
     ############################## Accessors & Mutators #############################
     #################################################################################
-
 
     public function setPasswordAttribute($value)
     {
@@ -164,22 +150,10 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         }
     }
 
-
     public function setPhotoAttribute($file)
     {
-        if ($file) {
-            if (is_array($file)) {
-
-                foreach ($file as $f) {
-                    $fileName = $this->createFileName($f);
-
-                    $this->originalImage($f, $fileName);
-
-                    $this->thumbImage($f, $fileName);
-
-                    $this->attributes['photo'] = $fileName;
-                }
-            } else {
+        try {
+            if ($file) {
 
                 $fileName = $this->createFileName($file);
 
@@ -189,19 +163,25 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
 
                 $this->attributes['photo'] = $fileName;
             }
+        } catch (\Throwable $th) {
+            $this->attributes['photo'] = $file;
         }
     }
 
     public function setIdentificationAttribute($file)
     {
-        if ($file) {
-            $fileName = $this->createFileName($file);
+        try {
+            if ($file) {
+                $fileName = $this->createFileName($file);
 
-            $this->originalImage($file, $fileName);
+                $this->originalImage($file, $fileName);
 
-            $this->thumbImage($file, $fileName);
+                $this->thumbImage($file, $fileName);
 
-            $this->attributes['photo'] = $fileName;
+                $this->attributes['identification'] = $fileName;
+            }
+        } catch (\Throwable $th) {
+            $this->attributes['identification'] = $file;
         }
     }
 

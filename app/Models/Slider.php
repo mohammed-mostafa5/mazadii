@@ -28,7 +28,7 @@ class Slider extends Model
 
     protected $dates = ['deleted_at'];
 
-    public $translatedAttributes =  ['content'];
+    public $translatedAttributes =  ['title', 'subtitle', 'content'];
 
 
     public $fillable = [
@@ -92,7 +92,6 @@ class Slider extends Model
             } catch (\Throwable $th) {
                 //throw $th;
                 $this->attributes['photo'] = $file;
-
             }
         }
     }
@@ -116,13 +115,9 @@ class Slider extends Model
 
     public function scopeInOrderToWeb($query)
     {
-        return $query->where('in_order_to', 1);
+        return $query->orderBy('in_order_to', 'desc');
     }
 
-    public function scopeInOrderToMobile($query)
-    {
-        return $query->where('in_order_to', 2);
-    }
 
     // In Order To ///////////////////////////
 }

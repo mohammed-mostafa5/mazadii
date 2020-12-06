@@ -238,5 +238,10 @@ return [
     'payment_method' => 'Payment method',
     ###### End Appointments #######
 
+    'not_active' => 'You Are Not Active',
+    'not_approved' => 'You Are Not Approved',
+
+
+
 
 ];

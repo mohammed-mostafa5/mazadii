@@ -18,11 +18,10 @@ class CreateSlidersTable extends Migration
             $table->increments('id');
             $table->string('photo');
 
-            $table->string('in_order_to')
-            ->comment('1=>Web, 2=>Mobile');
+            $table->string('in_order_to');
 
             $table->string('status')
-            ->comment('Active, Inactive');
+                ->comment('Active, Inactive');
 
             $table->timestamps();
             $table->softDeletes();
@@ -32,6 +31,8 @@ class CreateSlidersTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedInteger('slider_id');
             $table->string('locale', 2)->index();
+            $table->string('title');
+            $table->string('subtitle');
             $table->longText('content')->nullable();
 
             $table->unique(['slider_id', 'locale']);

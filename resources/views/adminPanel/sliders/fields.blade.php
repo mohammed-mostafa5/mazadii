@@ -3,8 +3,7 @@
     @foreach ( config('langs') as $locale => $name)
 
     <li class="nav-item">
-        <a class="nav-link {{$i?'active':''}}" id="{{$name}}-tab" data-toggle="pill" href="#{{$name}}" role="tab"
-            aria-controls="{{$name}}" aria-selected="{{ $i ? 'true' : 'false'}}">{{$name}}</a>
+        <a class="nav-link {{$i?'active':''}}" id="{{$name}}-tab" data-toggle="pill" href="#{{$name}}" role="tab" aria-controls="{{$name}}" aria-selected="{{ $i ? 'true' : 'false'}}">{{$name}}</a>
     </li>
 
     @php $i = 0; @endphp
@@ -17,9 +16,16 @@
     <div class="tab-pane fade {{$i?'show active':''}}" id="{{$name}}" role="tabpanel" aria-labelledby="{{$name}}-tab">
         <!-- Name Field -->
         <div class="form-group col-sm-6">
-            {!! Form::label('name', __('models/sliders.fields.title').':') !!}
+            {!! Form::label('title', __('models/sliders.fields.title').':') !!}
             {!! Form::text($locale . '[title]', isset($slider)? $slider->translate($locale)->title : '' , ['class' =>
             'form-control', 'placeholder' => $name . ' title']) !!}
+        </div>
+
+        <!-- Name Field -->
+        <div class="form-group col-sm-6">
+            {!! Form::label('subtitle', __('models/sliders.fields.subtitle').':') !!}
+            {!! Form::text($locale . '[subtitle]', isset($slider)? $slider->translate($locale)->subtitle : '' , ['class' =>
+            'form-control', 'placeholder' => $name . ' subtitle']) !!}
         </div>
 
         <!-- Button text Field -->
@@ -39,12 +45,12 @@
             , ['class' => 'form-control', 'placeholder' => $name . ' description']) !!}
         </div>
 
-{{--
+        {{--
 
         <script type="text/javascript">
             CKEDITOR.replace("{{ $locale . '[description]' }}", {
-            filebrowserUploadUrl: "{{route('adminPanel.ckeditor.upload', ['_token' => csrf_token() ])}}",
-            filebrowserUploadMethod: 'form'
+        filebrowserUploadUrl: "{{route('adminPanel.ckeditor.upload', ['_token' => csrf_token() ])}}",
+        filebrowserUploadMethod: 'form'
         });
         </script> --}}
 

@@ -34,8 +34,16 @@ class HomeController extends Controller
             'password' => 'required',
         ]);
 
-        if (! $token = auth('api')->attempt($credentials)) {
+        if (!$token = auth('api')->attempt($credentials)) {
             return response()->json(['msg' => __('lang.wrongCredential')], 401);
+        } else {
+            $user = auth('api')->user();
+            if ($user->status == 'Inactive') {
+                return response()->json(['msg' => __('lang.not_active')], 401);
+            }
+            if (!$user->approved_at) {
+                return response()->json(['msg' => __('lang.not_approved')], 401);
+            }
         }
 
         $user = auth('api')->user();
@@ -62,7 +70,7 @@ class HomeController extends Controller
 
     public function home()
     {
-        $sliders = Slider::active()->inOrderToMobile()->get();
+        $sliders = Slider::active()->inOrderToWeb()->get();
         $categories = Category::get();
 
         return response()->json(compact('sliders', 'categories'));
@@ -70,20 +78,27 @@ class HomeController extends Controller
 
     public function sendContactMessage(Request $request)
     {
-        $validated = $request->validate(Contact::$rules);
+        $validated = $request->validate([
+            'name' => 'required|string|min:3|max:191',
+            'email' => 'required|email|min:3|max:191',
+            'phone' => 'required',
+            'message' => 'required|string|min:3',
+        ]);
         Contact::create($validated);
 
         return response()->json(['msg' => 'success']);
     }
 
 
-  public function newsletter(Request $request)
-  {
-      $validated = $request->validate(Newsletter::$rules);
-      Newsletter::create($validated);
+    public function newsletter(Request $request)
+    {
+        $validated = $request->validate([
+            'email' => 'required|email|min:3|max:191|unique:newsletters,email',
+        ]);
+        Newsletter::create($validated);
 
-      return response()->json(['msg' => 'success']);
-  }
+        return response()->json(['msg' => 'success']);
+    }
 
 
 
@@ -109,7 +124,7 @@ class HomeController extends Controller
 
         $user = User::where('email', $email)->first();
 
-        if($user){
+        if ($user) {
 
             $user->update(['verify_code' => $this->randomCode(4)]);
 
@@ -118,17 +133,17 @@ class HomeController extends Controller
             return response()->json(['msg' => 'success', 'verify_code' => $user->verify_code]);
         }
 
-        return response()->json(['msg' => 'fail'],403);
+        return response()->json(['msg' => 'fail'], 403);
     }
 
     public function verifyCode(Request $request)
     {
-        $request->validate([ 'verify_code' => 'required|min:4|max:5' ]);
+        $request->validate(['verify_code' => 'required|min:4|max:5']);
 
         $user = User::where('verify_code', $request->verify_code)->first();
 
 
-        if($user){
+        if ($user) {
 
             $user->update(['email_verified_at' => now()]);
             return response()->json(['msg' => 'success']);
@@ -147,13 +162,13 @@ class HomeController extends Controller
         $user = User::where('verify_code', $request->verify_code)->first();
 
 
-        if($user){
+        if ($user) {
 
             $user->update([
 
                 'email_verified_at' => now(),
                 'verify_code' => null,
-                'password'=>$request->password
+                'password' => $request->password
             ]);
 
             return response()->json(['msg' => 'success']);
@@ -168,7 +183,4 @@ class HomeController extends Controller
 
         return response()->json(['message' => __('lang.logoutMsg')]);
     }
-
-
-
 }

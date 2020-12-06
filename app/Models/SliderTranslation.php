@@ -26,7 +26,7 @@ class SliderTranslation extends Model
      *
      * @var array
      */
-    protected $fillable = ['content'];
+    protected $fillable = ['title', 'subtitle', 'content'];
 
     /**
      * Timestamps.

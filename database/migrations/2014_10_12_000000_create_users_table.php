@@ -26,7 +26,7 @@ class CreateUsersTable extends Migration
             $table->string('phone');
             $table->unsignedInteger('points')->default(0);
             $table->unsignedTinyInteger('status')
-                ->default(0)
+                ->default(1)
                 ->comment('0 => Inactive, 1 => Active');
             $table->unsignedTinyInteger('membership')
                 ->default(0)

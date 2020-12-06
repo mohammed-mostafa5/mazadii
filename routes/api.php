@@ -26,6 +26,7 @@ Route::post('send-contact', 'HomeController@sendContactMessage');
 Route::post('newsletter', 'HomeController@newsletter');
 
 
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
