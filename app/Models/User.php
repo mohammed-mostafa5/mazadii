@@ -70,8 +70,8 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         'email' => 'required|email|max:255|unique:users',
         'password' => 'required|string|min:6|confirmed',
         'address' => 'required',
+        'identification' => 'required',
         'about_me' => '',
-        'type' => 'required',
         'g-recaptcha-response'   => 'required',
     ];
 
@@ -152,28 +152,36 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
 
     public function setPhotoAttribute($file)
     {
-        if ($file) {
+        try {
+            if ($file) {
 
-            $fileName = $this->createFileName($file);
+                $fileName = $this->createFileName($file);
 
-            $this->originalImage($file, $fileName);
+                $this->originalImage($file, $fileName);
 
-            $this->thumbImage($file, $fileName);
+                $this->thumbImage($file, $fileName);
 
-            $this->attributes['photo'] = $fileName;
+                $this->attributes['photo'] = $fileName;
+            }
+        } catch (\Throwable $th) {
+            $this->attributes['photo'] = $file;
         }
     }
 
     public function setIdentificationAttribute($file)
     {
-        if ($file) {
-            $fileName = $this->createFileName($file);
+        try {
+            if ($file) {
+                $fileName = $this->createFileName($file);
 
-            $this->originalImage($file, $fileName);
+                $this->originalImage($file, $fileName);
 
-            $this->thumbImage($file, $fileName);
+                $this->thumbImage($file, $fileName);
 
-            $this->attributes['identification'] = $fileName;
+                $this->attributes['identification'] = $fileName;
+            }
+        } catch (\Throwable $th) {
+            $this->attributes['identification'] = $file;
         }
     }
 

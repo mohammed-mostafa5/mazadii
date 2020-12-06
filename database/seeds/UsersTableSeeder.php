@@ -19,7 +19,7 @@ class UsersTableSeeder extends Seeder
             'username' => 'ahmed777',
             'code' => 'AH1205',
             'phone' => '01001010101',
-            'identification' => 'dummy.pdf',
+            'identification' => 'id.jpg',
             'address' => 'Nasr-City, Cairo, Egypt',
             'email' => 'user@email.com',
             'password' => 'password',

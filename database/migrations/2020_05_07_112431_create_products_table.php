@@ -18,8 +18,11 @@ class CreateProductsTable extends Migration
             $table->string('name');
             $table->string('description');
             $table->bigInteger('category_id')->unsigned();
+            $table->bigInteger('user_id')->unsigned()->nullable();
+            $table->bigInteger('winner_id')->unsigned()->nullable();
             $table->string('code');
             $table->unsignedInteger('start_bid_price');
+            $table->unsignedInteger('highest_value');
             $table->unsignedInteger('min_bid_price');
             $table->unsignedInteger('watched_count');
             $table->timestamp('start_at');

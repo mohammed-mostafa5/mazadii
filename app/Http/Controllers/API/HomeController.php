@@ -93,7 +93,7 @@ class HomeController extends Controller
     public function newsletter(Request $request)
     {
         $validated = $request->validate([
-            'email' => 'required|email|min:3|max:191',
+            'email' => 'required|email|min:3|max:191|unique:newsletters,email',
         ]);
         Newsletter::create($validated);
 
