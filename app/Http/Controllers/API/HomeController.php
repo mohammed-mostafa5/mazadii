@@ -65,7 +65,7 @@ class HomeController extends Controller
 
         $user = User::create($request->all());
 
-        return response()->json(compact('user', 'token'));
+        return response()->json(['msg' => 'ok']);
     }
 
     public function home()
