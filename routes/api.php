@@ -28,7 +28,7 @@ Route::post('newsletter', 'HomeController@newsletter');
 
 Route::get('categories', 'HomeController@categories');
 Route::get('products', 'HomeController@products');
-Route::get('product/{id}', 'HomeController@product');
+Route::get('products/{id}', 'HomeController@product');
 
 
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
@@ -36,5 +36,7 @@ Route::get('product/{id}', 'HomeController@product');
 // });
 
 Route::group(['middleware' => ['auth:api']], function () {
+
+    Route::post('logout', 'HomeController@logout');
     Route::post('create-product', 'HomeController@createProduct')->name('products.create');
 });

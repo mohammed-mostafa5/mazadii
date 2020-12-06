@@ -7,17 +7,19 @@ use App\Models\User;
 use App\Models\Client;
 use App\Models\Slider;
 use App\Models\Contact;
+use App\Models\Product;
 use App\Models\Category;
 use App\Models\NewsFeed;
+use App\Models\Newsletter;
 use App\Helpers\MailsTrait;
 use App\Models\Photographer;
 use Illuminate\Http\Request;
+use App\Models\ProductGallery;
 use App\Helpers\HelperFunctionTrait;
 use App\Http\Controllers\Controller;
-use App\Models\Newsletter;
-use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
+use Laravel\Ui\Presets\React;
 
 class HomeController extends Controller
 {
@@ -40,10 +42,10 @@ class HomeController extends Controller
         } else {
             $user = auth('api')->user();
             if ($user->status == 'Inactive') {
-                return response()->json(['msg' => __('lang.not_active')], 401);
+                return response()->json(['msg' => __('lang.notActive')], 403);
             }
             if (!$user->approved_at) {
-                return response()->json(['msg' => __('lang.not_approved')], 401);
+                return response()->json(['msg' => __('lang.notApproved')], 403);
             }
         }
 
@@ -61,7 +63,7 @@ class HomeController extends Controller
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
             'address' => 'required',
-            'identification' => 'required',
+            'identification' => 'required|image',
         ]);
 
         $user = User::create($request->all());
@@ -108,10 +110,20 @@ class HomeController extends Controller
             'start_bid_price' => 'required',
             'min_bid_price' => 'required',
             'category_id' => 'required',
+            'photos' => 'required|array',
+            'photos.*' => 'image',
         ]);
 
         $validated['user_id'] = auth('api')->id();
-        Product::create($validated);
+        $product = Product::create($validated);
+
+        foreach ($request->photos as $photo) {
+
+            ProductGallery::create([
+                'product_id' => $product->id,
+                'photo' => $photo
+            ]);
+        }
 
         return response()->json(['msg' => 'success']);
     }
@@ -123,14 +135,47 @@ class HomeController extends Controller
         return response()->json(compact('categories'));
     }
 
-    public function products($sortTerm, $searchTerm)
+    public function products(Request $request)
     {
-        $products = Product::query();
+        $request->validate([
+            'sort' => 'in:name,created_at'
+        ]);
 
+        $perPage = request()->filled('per_page') ? request('per_page') : 9;
+
+        $productsQuery = Product::query();
+
+        if ($request->filled('sort')) {
+            $productsQuery->orderBy(request('sort'));
+        }
+
+        if ($request->filled('name')) {
+            $productsQuery->where('name', 'like', '%' . request('name') . '%');
+        }
+
+        if ($request->filled('category_id')) {
+            $productsQuery->where('category_id', request('category_id'));
+        }
+
+        $products = $productsQuery->paginate($perPage);
 
         return response()->json(compact('products'));
     }
 
+    public function product($id)
+    {
+        $product = Product::with('category')->findOrFail($id);
+
+        return response()->json(compact('product'));
+    }
+
+
+    public function logout()
+    {
+        auth('api')->logout();
+
+        return response()->json(['msg' => __('lang.logoutMsg')]);
+    }
 
 
 
@@ -210,12 +255,5 @@ class HomeController extends Controller
         }
 
         return response()->json(['msg' => 'fail']);
-    }
-
-    public function logout()
-    {
-        auth('api')->logout();
-
-        return response()->json(['message' => __('lang.logoutMsg')]);
     }
 }

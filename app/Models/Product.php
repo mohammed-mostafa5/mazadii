@@ -81,6 +81,9 @@ class Product extends Model
         'start_bid_price' => 'required',
         'min_bid_price' => 'required',
         'category_id' => 'required',
+        'photos' => 'required|array|min:6',
+        'photos.*' => 'image',
+
     ];
 
 
