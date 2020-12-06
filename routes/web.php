@@ -117,7 +117,7 @@ Route::group(['prefix' => 'adminPanel', 'namespace' => 'AdminPanel', 'as' => 'ad
         // Product CURD
         Route::resource('products', 'ProductController')->only(['index', 'show']);
 
-        Route::patch('products/approve/{id}', 'UserController@approve')->name('product.approve');
+        Route::patch('products/approve/{id}', 'ProductController@approve')->name('product.approve');
 
         Route::delete('photo/{image}', 'ProductController@destroyImage')->name('products.destroyImage');
 

@@ -45,10 +45,18 @@ class Product extends Model
      */
     public $fillable = [
         'category_id',
+        'user_id',
+        'winner_id',
         'name',
         'description',
-        'start_price',
+        'start_bid_price',
+        'highest_value',
+        'min_bid_price',
+        'watched_count',
+        'start_at',
         'status',
+        'code',
+        'approved_at',
     ];
 
     /**

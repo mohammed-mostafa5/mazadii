@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use App\Helpers\HelperFunctionTrait;
 use App\Http\Controllers\Controller;
 use App\Models\Newsletter;
+use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -89,7 +90,6 @@ class HomeController extends Controller
         return response()->json(['msg' => 'success']);
     }
 
-
     public function newsletter(Request $request)
     {
         $validated = $request->validate([
@@ -99,6 +99,41 @@ class HomeController extends Controller
 
         return response()->json(['msg' => 'success']);
     }
+
+    public function createProduct(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|min:3',
+            'description' => 'required|string|min:3',
+            'start_bid_price' => 'required',
+            'min_bid_price' => 'required',
+            'category_id' => 'required',
+        ]);
+
+        $validated['user_id'] = auth('api')->id();
+        Product::create($validated);
+
+        return response()->json(['msg' => 'success']);
+    }
+
+    public function categories()
+    {
+        $categories = Category::get();
+
+        return response()->json(compact('categories'));
+    }
+
+    public function products($sortTerm, $searchTerm)
+    {
+        $products = Product::query();
+
+
+        return response()->json(compact('products'));
+    }
+
+
+
+
 
 
 

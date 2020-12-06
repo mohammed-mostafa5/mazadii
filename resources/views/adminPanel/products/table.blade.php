@@ -32,12 +32,12 @@
 
                 <td>
                     <a href="{{ route('adminPanel.products.show', [$product->id]) }}" class='btn btn-ghost-success'><i class="fa fa-eye"></i></a>
-                    {!! Form::open(['route' => ['adminPanel.product.approve', $product->id], 'method' => 'patch', 'class' => 'd-inline'])
-                    !!}
-                    <div class='btn-group'>
-                        {!! Form::button('Approve', ['type' => 'submit', 'class' => 'btn btn-primary btn-sm']) !!}
-                    </div>
-                    {!! Form::close() !!}
+
+                    <form action="{{ route('adminPanel.product.approve', [$product->id]) }}" method="post" class="d-inline">
+                        @csrf
+                        @method('patch')
+                        <button type="submit" class="btn btn-primary btn-sm" {{$product->approved_at ? 'disabled': ''}}>Approve</button>
+                    </form>
                 </td>
             </tr>
 

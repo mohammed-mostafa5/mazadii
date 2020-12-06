@@ -146,4 +146,13 @@ class ProductController extends AppBaseController
         // return redirect(route('adminPanel.products.index'));
         return back();
     }
+
+
+    public function approve($id)
+    {
+        $product = Product::find($id);
+        $product->update(['approved_at' => now()]);
+
+        return back();
+    }
 }

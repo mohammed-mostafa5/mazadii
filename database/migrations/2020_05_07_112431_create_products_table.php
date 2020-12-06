@@ -20,21 +20,24 @@ class CreateProductsTable extends Migration
             $table->bigInteger('category_id')->unsigned();
             $table->bigInteger('user_id')->unsigned()->nullable();
             $table->bigInteger('winner_id')->unsigned()->nullable();
-            $table->string('code');
+            $table->string('code')->nullable();
             $table->unsignedInteger('start_bid_price');
-            $table->unsignedInteger('highest_value');
+            $table->unsignedInteger('highest_value')->nullable();
             $table->unsignedInteger('min_bid_price');
-            $table->unsignedInteger('watched_count');
+            $table->unsignedInteger('watched_count')->default(0);
             $table->timestamp('start_at');
 
             $table->unsignedTinyInteger('status')
                 ->default(0)
                 ->comment('0 => Not Approved, 1 => Active, 2 => Pending, 3 => Finished');
 
+            $table->timestamp('approved_at')->nullable();
+
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
 
 
@@ -55,7 +58,6 @@ class CreateProductsTable extends Migration
     public function down()
     {
         Schema::drop('product_gallery');
-        Schema::drop('product_translations');
         Schema::drop('products');
     }
 }
