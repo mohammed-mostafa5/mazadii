@@ -78,7 +78,12 @@ class HomeController extends Controller
 
     public function sendContactMessage(Request $request)
     {
-        $validated = $request->validate(Contact::$rules);
+        $validated = $request->validate([
+            'name' => 'required|string|min:3|max:191',
+            'email' => 'required|email|min:3|max:191',
+            'phone' => 'required',
+            'message' => 'required|string|min:3',
+        ]);
         Contact::create($validated);
 
         return response()->json(['msg' => 'success']);
@@ -87,7 +92,9 @@ class HomeController extends Controller
 
     public function newsletter(Request $request)
     {
-        $validated = $request->validate(Newsletter::$rules);
+        $validated = $request->validate([
+            'email' => 'required|email|min:3|max:191',
+        ]);
         Newsletter::create($validated);
 
         return response()->json(['msg' => 'success']);
