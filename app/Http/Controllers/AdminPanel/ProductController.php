@@ -151,7 +151,7 @@ class ProductController extends AppBaseController
     public function approve($id)
     {
         $product = Product::find($id);
-        $product->update(['approved_at' => now()]);
+        $product->update(['approved_at' => now(), 'end_at' => now()->addDays(3)]);
 
         return back();
     }

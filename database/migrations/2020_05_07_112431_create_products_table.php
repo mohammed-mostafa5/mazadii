@@ -25,7 +25,7 @@ class CreateProductsTable extends Migration
             $table->unsignedInteger('highest_value')->nullable();
             $table->unsignedInteger('min_bid_price');
             $table->unsignedInteger('watched_count')->default(0);
-            $table->timestamp('start_at');
+            $table->timestamp('end_at');
 
             $table->unsignedTinyInteger('status')
                 ->default(0)
@@ -38,6 +38,7 @@ class CreateProductsTable extends Migration
 
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('winner_id')->references('id')->on('users')->onDelete('set null');
         });
 
 
@@ -47,6 +48,17 @@ class CreateProductsTable extends Migration
             $table->string('photo');
 
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+        });
+
+        Schema::create('product_user', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('product_id')->unsigned();
+            $table->bigInteger('user_id')->unsigned();
+            $table->string('value');
+            $table->timestamps();
+
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

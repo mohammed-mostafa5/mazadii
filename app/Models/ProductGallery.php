@@ -58,6 +58,14 @@ class ProductGallery extends Model
         }
     }
 
+
+
+    public function getPhotoAttribute()
+    {
+
+        return $this->attributes['photo'] = asset('uploads/images/original/' . $this->attributes['photo']);
+    }
+
     #################################################################################
     ################################# Relations #####################################
     #################################################################################

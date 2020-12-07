@@ -7,7 +7,7 @@
 <!-- user Name Field -->
 <div class="form-group show">
     {!! Form::label('name', __('models/users.fields.name').':') !!}
-    <span>{{ $user->name }}</span>
+    <span>{{ $user->first_name }} {{ $user->last_name }}</span>
 </div>
 
 <!-- Email Field -->

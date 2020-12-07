@@ -38,5 +38,6 @@ Route::get('products/{id}', 'HomeController@product');
 Route::group(['middleware' => ['auth:api']], function () {
 
     Route::post('logout', 'HomeController@logout');
-    Route::post('create-product', 'HomeController@createProduct')->name('products.create');
+    Route::post('create-product', 'HomeController@createProduct');
+    Route::post('add-bid/{id}', 'HomeController@addBid');
 });

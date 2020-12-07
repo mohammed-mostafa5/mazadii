@@ -122,6 +122,12 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         // return $this->morphToMany('App\Models\Wishlist', 'favoriteable_id');
     }
 
+
+    public function bidItems()
+    {
+        return $this->belongsToMany('App\Models\Product', 'product_user', 'user_id', 'product_id')->withPivot(['value', 'created_at', 'updated_at']);
+    }
+
     #################################################################################
     ################################### Functions ###################################
     #################################################################################

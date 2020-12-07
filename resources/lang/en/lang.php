@@ -240,6 +240,9 @@ return [
 
     'notActive' => 'You Are Not Active',
     'notApproved' => 'You Are Not Approved',
+    'highestValueMsg' => 'The value is lower than or equal last value',
+    'minBidMsg' => 'Your value is lower than Minimum Bid Price',
+    'auctionEnded' => 'Item Auction time ended',
 
 
 

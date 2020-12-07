@@ -50,13 +50,6 @@ class Slider extends Model
         'status' => 'string',
     ];
 
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
-    public static $rules = [];
-
 
     /**
      * Validation rules
@@ -71,7 +64,7 @@ class Slider extends Model
             $rules[$language . '.content'] = '';
         }
 
-        $rules['status'] = 'required|in:Active,inactive';
+        $rules['status'] = 'required|in:0,1';
         $rules['photo'] = 'required|image|mimes:jpeg,jpg,png';
 
         return $rules;

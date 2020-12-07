@@ -75,8 +75,9 @@ class HomeController extends Controller
     {
         $sliders = Slider::active()->inOrderToWeb()->get();
         $categories = Category::get();
+        $products = Product::approved()->active()->limit(9)->get();
 
-        return response()->json(compact('sliders', 'categories'));
+        return response()->json(compact('sliders', 'categories', 'products'));
     }
 
     public function sendContactMessage(Request $request)
@@ -110,7 +111,7 @@ class HomeController extends Controller
             'start_bid_price' => 'required',
             'min_bid_price' => 'required',
             'category_id' => 'required',
-            'photos' => 'required|array',
+            'photos' => 'required|array|min:6',
             'photos.*' => 'image',
         ]);
 
@@ -143,7 +144,7 @@ class HomeController extends Controller
 
         $perPage = request()->filled('per_page') ? request('per_page') : 9;
 
-        $productsQuery = Product::query();
+        $productsQuery = Product::active();
 
         if ($request->filled('sort')) {
             $productsQuery->orderBy(request('sort'));
@@ -164,9 +165,33 @@ class HomeController extends Controller
 
     public function product($id)
     {
-        $product = Product::with('category')->findOrFail($id);
+        $product = Product::with('category', 'biders')->findOrFail($id);
 
         return response()->json(compact('product'));
+    }
+
+
+    public function addBid(Request $request, $productId)
+    {
+        $product = Product::findOrFail($productId);
+
+        if ($product->end_at < now()) {
+            return response()->json(['msg' => __('lang.auctionEnded')], 420);
+        }
+
+        $user = auth('api')->user();
+        $highestValue = $product->highest_value ?? $product->start_bid_price;
+        $minBid = $highestValue + $product->min_bid_price;
+
+        $request->validate([
+            'value' => 'required|integer|min:' . $minBid,
+        ]);
+
+        $product->biders()->attach($user->id, ['value' => request('value')]);
+        $product->update(['highest_value' => request('value'), 'winner_id' => $user->id]);
+        $biders = $product->biders;
+
+        return response()->json(compact('biders'));
     }
 
 

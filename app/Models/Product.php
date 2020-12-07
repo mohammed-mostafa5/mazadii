@@ -53,7 +53,7 @@ class Product extends Model
         'highest_value',
         'min_bid_price',
         'watched_count',
-        'start_at',
+        'end_at',
         'status',
         'code',
         'approved_at',
@@ -154,6 +154,12 @@ class Product extends Model
         return $this->hasMany('App\Models\ProductGallery', 'product_id', 'id');
     }
 
+
+    public function biders()
+    {
+        return $this->belongsToMany('App\Models\User', 'product_user', 'product_id', 'user_id')->withPivot(['value', 'created_at', 'updated_at']);
+    }
+
     #################################################################################
     ################################### Functions ###################################
     #################################################################################
@@ -186,7 +192,11 @@ class Product extends Model
      */
     public function scopeActive($query)
     {
-        return $query->where('status', 1);
+        return $query->where('end_at', '>', now());
+    }
+    public function scopeApproved($query)
+    {
+        return $query->where('approved_at', '!=', null);
     }
 
 
