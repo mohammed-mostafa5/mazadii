@@ -34,36 +34,24 @@ class ProductGallery extends Model
     public function setPhotoAttribute($file)
     {
         if ($file) {
-            if (is_array($file)) {
 
-                foreach ($file as $f) {
-                    $fileName = $this->createFileName($f);
 
-                    $this->originalImage($f, $fileName);
+            $fileName = $this->createFileName($file);
 
-                    $this->thumbImage($f, $fileName);
+            $this->originalImage($file, $fileName);
 
-                    $this->attributes['photo'] = $fileName;
-                }
-            } else {
+            $this->thumbImage($file, $fileName);
 
-                $fileName = $this->createFileName($file);
-
-                $this->originalImage($file, $fileName);
-
-                $this->thumbImage($file, $fileName);
-
-                $this->attributes['photo'] = $fileName;
-            }
+            $this->attributes['photo'] = $fileName;
         }
     }
 
 
 
-    public function getPhotoAttribute()
+    public function getPhotoAttribute($val)
     {
 
-        return $this->attributes['photo'] = asset('uploads/images/original/' . $this->attributes['photo']);
+        return $val ? asset('uploads/images/original') . '/' . $val : null;
     }
 
     #################################################################################

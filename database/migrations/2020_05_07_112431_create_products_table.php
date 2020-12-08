@@ -60,6 +60,15 @@ class CreateProductsTable extends Migration
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
+
+        Schema::create('user_favourites', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->bigInteger('product_id')->unsigned();
+            $table->bigInteger('user_id')->unsigned();
+
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+        });
     }
 
     /**
@@ -69,6 +78,8 @@ class CreateProductsTable extends Migration
      */
     public function down()
     {
+        Schema::drop('user_favourites');
+        Schema::drop('product_user');
         Schema::drop('product_gallery');
         Schema::drop('products');
     }

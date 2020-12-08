@@ -31,7 +31,7 @@ class SliderTableSeeder extends Seeder
                 ],
                 'photo' => 'slide_1.jpg',
                 'in_order_to' => '1',
-                'status' => 'Active',
+                'status' => 1,
             ],
             [
                 'en' => [
@@ -50,7 +50,7 @@ class SliderTableSeeder extends Seeder
                 ],
                 'photo' => 'slide_2.jpg',
                 'in_order_to' => '1',
-                'status' => 'Active',
+                'status' => 1,
             ],
             [
                 'en' => [
@@ -69,7 +69,7 @@ class SliderTableSeeder extends Seeder
                 ],
                 'photo' => 'slide_3.jpg',
                 'in_order_to' => '1',
-                'status' => 'Active',
+                'status' => 1,
             ],
 
         ];

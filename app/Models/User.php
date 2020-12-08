@@ -116,12 +116,15 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
     /**
      * Get all of the products for user in wishlist.
      */
-    public function wishlist()
+    public function favourites()
     {
-        return $this->belongsToMany('App\Models\Product', 'wishlists', 'user_id', 'wishlistable_id');
-        // return $this->morphToMany('App\Models\Wishlist', 'favoriteable_id');
+        return $this->belongsToMany('App\Models\Product', 'user_favourites', 'user_id', 'product_id');
     }
 
+    public function products()
+    {
+        return $this->hasMany('App\Models\Product', 'user_id', 'id');
+    }
 
     public function bidItems()
     {

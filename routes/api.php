@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +39,13 @@ Route::get('products/{id}', 'HomeController@product');
 Route::group(['middleware' => ['auth:api']], function () {
 
     Route::post('logout', 'HomeController@logout');
+
+    // Dashboard
     Route::post('create-product', 'HomeController@createProduct');
     Route::post('add-bid/{id}', 'HomeController@addBid');
+    Route::get('user-bids', 'HomeController@userBids');
+    Route::get('my-bids', 'HomeController@myBids');
+    Route::get('winning-bids', 'HomeController@winningBids');
+    Route::post('add-or-remove-favourites/{id}', 'HomeController@addOrRemoveFavourites');
+    Route::get('my-favourites', 'HomeController@myFavourites');
 });

@@ -71,11 +71,18 @@ class HomeController extends Controller
         return response()->json(['msg' => 'ok']);
     }
 
+    public function logout()
+    {
+        auth('api')->logout();
+
+        return response()->json(['msg' => __('lang.logoutMsg')]);
+    }
+
     public function home()
     {
         $sliders = Slider::active()->inOrderToWeb()->get();
         $categories = Category::get();
-        $products = Product::approved()->active()->limit(9)->get();
+        $products = Product::active()->limit(9)->get();
 
         return response()->json(compact('sliders', 'categories', 'products'));
     }
@@ -138,17 +145,19 @@ class HomeController extends Controller
 
     public function products(Request $request)
     {
-        $request->validate([
-            'sort' => 'in:name,created_at'
-        ]);
 
         $perPage = request()->filled('per_page') ? request('per_page') : 9;
 
         $productsQuery = Product::active();
 
-        if ($request->filled('sort')) {
-            $productsQuery->orderBy(request('sort'));
+        if ($request->filled('sort') == 'name') {
+            $productsQuery->orderBy('name');
+        } elseif ($request->filled('sort') == 'date') {
+            $productsQuery->orderBy('created_at', 'desc');
+        } else {
+            $productsQuery->orderBy('created_at');
         }
+
 
         if ($request->filled('name')) {
             $productsQuery->where('name', 'like', '%' . request('name') . '%');
@@ -169,7 +178,6 @@ class HomeController extends Controller
 
         return response()->json(compact('product'));
     }
-
 
     public function addBid(Request $request, $productId)
     {
@@ -194,13 +202,69 @@ class HomeController extends Controller
         return response()->json(compact('biders'));
     }
 
-
-    public function logout()
+    public function userBids()
     {
-        auth('api')->logout();
+        $user = auth('api')->user();
+        $current = $user->bidItems()->active()->paginate(20);
+        $pending = $user->bidItems()->pending()->paginate(20);
+        $finished = $user->bidItems()->finished()->paginate(20);
 
-        return response()->json(['msg' => __('lang.logoutMsg')]);
+        return response()->json(compact('current', 'pending', 'finished'));
     }
+
+    public function myBids()
+    {
+        $user = auth('api')->user();
+        $upcoming = $user->products()->inactive()->paginate(10);
+        $current = $user->products()->active()->paginate(10);
+        $past = $user->products()->finished()->paginate(10);
+
+        return response()->json(compact('upcoming', 'current', 'past'));
+    }
+
+    public function winningBids(Request $request)
+    {
+
+        $productsQuery = Product::where('winner_id', auth('api')->id())->active();
+
+        if ($request->filled('sort') == 'name') {
+            $productsQuery->orderBy('name');
+        } elseif ($request->filled('sort') == 'date') {
+            $productsQuery->orderBy('created_at', 'desc');
+        } else {
+            $productsQuery->orderBy('created_at');
+        }
+
+        if ($request->filled('name')) {
+            $productsQuery->where('name', 'like', '%' . request('name') . '%');
+        }
+
+        $products = $productsQuery->paginate(10);
+
+        return response()->json(compact('products'));
+    }
+
+    public function addOrRemoveFavourites($productId)
+    {
+        $product = Product::findOrFail($productId);
+
+        $user = auth('api')->user();
+
+        $user->favourites()->toggle($productId);
+
+
+        return response()->json(['msg' => 'Success']);
+    }
+
+    public function myFavourites()
+    {
+        $user = auth('api')->user();
+        $myFavourites = $user->favourites()->paginate(10);
+
+        return response()->json(compact('myFavourites'));
+    }
+
+
 
 
 

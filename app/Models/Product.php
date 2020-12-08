@@ -37,7 +37,6 @@ class Product extends Model
      */
     protected $dates = ['deleted_at'];
 
-
     /**
      * Fillable attributes.
      *
@@ -86,36 +85,37 @@ class Product extends Model
 
     ];
 
-
     #################################################################################
     ################################### Appends #####################################
     #################################################################################
 
-    protected $appends = ['rate', 'first_photo'];
-
+    protected $appends = ['is_fav'];
 
     /**
      * append rateing for product.
      */
-    public function getRateAttribute()
-    {
-        if ($this->reviewsProduct()) {
+    // public function getRateAttribute()
+    // {
+    //     if ($this->reviewsProduct()) {
 
-            return $this->attributes['rate'] = $this->reviewsProduct()->avg('rate');
+    //         return $this->attributes['rate'] = $this->reviewsProduct()->avg('rate');
+    //     }
+
+    //     return $this->attributes['rate'] = 0;
+    // }
+
+
+    public function getIsFavAttribute()
+    {
+        $user = auth('api')->user();
+
+        if ($user) {
+            if (in_array($this->attributes['id'], $user->favourites()->pluck('product_id')->toArray())) {
+                return $this->attributes['is_fav'] = 1;
+            }
         }
 
-        return $this->attributes['rate'] = 0;
-    }
-
-    /**
-     * append firs photo for product.
-     */
-    public function getFirstPhotoAttribute()
-    {
-        $gallery = $this->gallery;
-        foreach ($gallery as $item) {
-            return $this->attributes['first_photo'] = $item->photo;
-        }
+        return $this->attributes['is_fav'] = 0;
     }
 
     #################################################################################
@@ -129,7 +129,6 @@ class Product extends Model
     {
         return $this->belongsTo('App\Models\Category', 'category_id', 'id');
     }
-
 
     /**
      * Get Reviews for product.
@@ -153,7 +152,6 @@ class Product extends Model
     {
         return $this->hasMany('App\Models\ProductGallery', 'product_id', 'id');
     }
-
 
     public function biders()
     {
@@ -179,26 +177,6 @@ class Product extends Model
     {
         return $this->pivot->quantity * $this->price();
     }
-
-    #################################################################################
-    ################################### Scopes ######################################
-    #################################################################################
-
-    /**
-     * Scope a query to only include active products.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeActive($query)
-    {
-        return $query->where('end_at', '>', now());
-    }
-    public function scopeApproved($query)
-    {
-        return $query->where('approved_at', '!=', null);
-    }
-
 
     #################################################################################
     ############################## Accessors & Mutators #############################
@@ -228,5 +206,32 @@ class Product extends Model
                 return 'Not Approved';
                 break;
         }
+    }
+
+    #################################################################################
+    ################################### Scopes ######################################
+    #################################################################################
+
+    /**
+     * Scope a query to only include active products.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeInactive($query)
+    {
+        return $query->where('status', 0);
+    }
+    public function scopeActive($query)
+    {
+        return $query->where('status', 1);
+    }
+    public function scopePending($query)
+    {
+        return $query->where('status', 2);
+    }
+    public function scopeFinished($query)
+    {
+        return $query->where('status', 3);
     }
 }
