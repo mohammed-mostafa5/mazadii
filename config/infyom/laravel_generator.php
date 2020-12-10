@@ -50,8 +50,6 @@ return [
         'modelJs'           => resource_path('assets/js/models/'),
 
         'factory'           => database_path('factories/'),
-
-        'view_provider'     => app_path('Providers/ViewServiceProvider.php'),
     ],
 
     /*
@@ -65,19 +63,19 @@ return [
 
         'model'             => 'App\Models',
 
-        'datatables'        => 'App\DataTables',
+        'datatables'        => 'App\DataTables\AdminPanel',
 
-        'repository'        => 'App\Repositories',
+        'repository'        => 'App\Repositories\AdminPanel',
 
-        'controller'        => 'App\Http\Controllers',
+        'controller'        => 'App\Http\Controllers\AdminPanel',
 
         'api_controller'    => 'App\Http\Controllers\API',
 
-        'request'           => 'App\Http\Requests',
+        'request'           => 'App\Http\Requests\AdminPanel',
 
         'api_request'       => 'App\Http\Requests\API',
 
-        'repository_test'   => 'Tests\Repositories',
+        'repository_test'   => 'Tests\Repositories\AdminPanel',
 
         'api_test'          => 'Tests\APIs',
 
@@ -122,13 +120,13 @@ return [
 
     'options' => [
 
+        'localized' => true,
+
         'softDelete' => true,
 
         'save_schema_file' => true,
 
-        'localized' => false,
-
-        'tables_searchable_default' => false,
+        'tables_searchable_default' => true,
 
         'repository_pattern' => true,
 
@@ -144,11 +142,11 @@ return [
 
     'prefixes' => [
 
-        'route' => '',  // using admin will create route('admin.?.index') type routes
+        'route' => 'adminPanel',  // using admin will create route('admin.?.index') type routes
 
         'path' => '',
 
-        'view' => '',  // using backend will create return view('backend.?.index') type the backend views directory
+        'view' => 'adminPanel',  // using backend will create return view('backend.?.index') type the backend views directory
 
         'public' => '',
     ],
@@ -172,7 +170,7 @@ return [
 
             'enabled'       => true,
 
-            'menu_file'     => 'layouts/menu.blade.php',
+            'menu_file'     => 'adminPanel/layouts/menu.blade.php',
         ],
     ],
 

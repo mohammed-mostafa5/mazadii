@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\Faq;
 use App\Models\File;
+use App\Models\Page;
 use App\Models\User;
 use App\Models\Client;
 use App\Models\Slider;
@@ -12,14 +14,18 @@ use App\Models\Category;
 use App\Models\NewsFeed;
 use App\Models\Newsletter;
 use App\Helpers\MailsTrait;
+use App\Models\FaqCategory;
 use App\Models\Photographer;
 use Illuminate\Http\Request;
+use Laravel\Ui\Presets\React;
 use App\Models\ProductGallery;
 use App\Helpers\HelperFunctionTrait;
 use App\Http\Controllers\Controller;
+use App\Models\Information;
+use App\Models\SocialLink;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Builder;
-use Laravel\Ui\Presets\React;
 
 class HomeController extends Controller
 {
@@ -71,6 +77,34 @@ class HomeController extends Controller
         return response()->json(['msg' => 'ok']);
     }
 
+    public function updatePersonalInformation(Request $request)
+    {
+        $data = $request->validate([
+            'phone' => 'required|numeric',
+            "address" => "required|string|min:3|max:191",
+        ]);
+
+        $user = auth('api')->user();
+
+        $user->update($data);
+
+        return response()->json(compact('user'));
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $user = auth('api')->user();
+        $password = $request->validate(['password' => 'required|string|min:6|confirmed']);
+        if (Hash::check(request('old_password'), $user->password)) {
+
+            $user->update($password);
+
+            return response()->json(['msg',  'success']);
+        }
+
+        return response()->json(['msg',  'Wrong old password']);
+    }
+
     public function logout()
     {
         auth('api')->logout();
@@ -85,6 +119,27 @@ class HomeController extends Controller
         $products = Product::active()->limit(9)->get();
 
         return response()->json(compact('sliders', 'categories', 'products'));
+    }
+
+    public function informations()
+    {
+        $informations = Information::get();
+
+        $phone = $informations->where('id', 1)->first()->value;
+        $phone2 = $informations->where('id', 2)->first()->value;
+        $email = $informations->where('id', 3)->first()->value;
+        $address = $informations->where('id', 4)->first()->value;
+
+
+        $social = SocialLink::get();
+
+        $facebook = $social->where('id', 1)->first()->link;
+        $twitter = $social->where('id', 2)->first()->link;
+        $instagram = $social->where('id', 3)->first()->link;
+        $linkedIn = $social->where('id', 4)->first()->link;
+
+
+        return response()->json(compact('phone', 'phone2', 'email', 'address', 'facebook', 'twitter', 'instagram', 'linkedIn'));
     }
 
     public function sendContactMessage(Request $request)
@@ -202,29 +257,66 @@ class HomeController extends Controller
         return response()->json(compact('biders'));
     }
 
-    public function userBids()
+    public function dashboard()
+    {
+        $user = auth('api')->user();
+        $userBidsCount = $user->bidItems()->count();
+        $winningBidsCount = Product::where('winner_id', $user->id)->count();
+        $favouritesCount = $user->favourites()->count();
+
+        return response()->json(compact('userBidsCount', 'winningBidsCount', 'favouritesCount'));
+    }
+
+    public function currentUserBids()
     {
         $user = auth('api')->user();
         $current = $user->bidItems()->active()->paginate(20);
-        $pending = $user->bidItems()->pending()->paginate(20);
-        $finished = $user->bidItems()->finished()->paginate(20);
 
-        return response()->json(compact('current', 'pending', 'finished'));
+        return response()->json(compact('current'));
     }
 
-    public function myBids()
+    public function pendingUserBids()
+    {
+        $user = auth('api')->user();
+        $pending = $user->bidItems()->pending()->paginate(20);
+
+        return response()->json(compact('pending'));
+    }
+
+    public function finishedUserBids()
+    {
+        $user = auth('api')->user();
+        $finished = $user->bidItems()->finished()->paginate(20);
+
+        return response()->json(compact('finished'));
+    }
+
+    public function upcomingMyBids()
     {
         $user = auth('api')->user();
         $upcoming = $user->products()->inactive()->paginate(10);
+
+        return response()->json(compact('upcoming'));
+    }
+
+    public function currentMyBids()
+    {
+        $user = auth('api')->user();
         $current = $user->products()->active()->paginate(10);
+
+        return response()->json(compact('current'));
+    }
+
+    public function pastMyBids()
+    {
+        $user = auth('api')->user();
         $past = $user->products()->finished()->paginate(10);
 
-        return response()->json(compact('upcoming', 'current', 'past'));
+        return response()->json(compact('past'));
     }
 
     public function winningBids(Request $request)
     {
-
         $productsQuery = Product::where('winner_id', auth('api')->id())->active();
 
         if ($request->filled('sort') == 'name') {
@@ -251,9 +343,9 @@ class HomeController extends Controller
         $user = auth('api')->user();
 
         $user->favourites()->toggle($productId);
+        $isfav = $product->is_fav;
 
-
-        return response()->json(['msg' => 'Success']);
+        return response()->json(['msg' => 'Success', 'isfav' => $isfav]);
     }
 
     public function myFavourites()
@@ -262,6 +354,21 @@ class HomeController extends Controller
         $myFavourites = $user->favourites()->paginate(10);
 
         return response()->json(compact('myFavourites'));
+    }
+
+    public function faqs()
+    {
+        $faqCategories = FaqCategory::get();
+        $faqs = Faq::get();
+
+        return response()->json(compact('faqCategories', 'faqs'));
+    }
+
+    public function pages($id)
+    {
+        $page = Page::find($id);
+
+        return response()->json(compact('page'));
     }
 
 

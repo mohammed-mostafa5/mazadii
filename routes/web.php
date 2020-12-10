@@ -121,16 +121,18 @@ Route::group(['prefix' => 'adminPanel', 'namespace' => 'AdminPanel', 'as' => 'ad
 
         Route::delete('photo/{image}', 'ProductController@destroyImage')->name('products.destroyImage');
 
+        Route::resource('faqCategories', 'FaqCategoryController');
+        Route::resource('faqs', 'FaqController');
 
-        Route::resource('countries', 'CountryController');
-        Route::resource('countries.cities', 'CityController')->shallow();
-        Route::resource('cities.areas', 'AreaController')->shallow();
+        // Route::resource('countries', 'CountryController');
+        // Route::resource('countries.cities', 'CityController')->shallow();
+        // Route::resource('cities.areas', 'AreaController')->shallow();
 
-        // Packages
-        Route::resource('packages', 'PackageController');
-        Route::resource('features', 'FeatureController');
+        // // Packages
+        // Route::resource('packages', 'PackageController');
+        // Route::resource('features', 'FeatureController');
 
-        //Settings
+        // //Settings
         Route::get('customSettings', 'CustomSettingController@settings')->name('customSettings.show');
         Route::patch('customSettings/{id}', 'CustomSettingController@update')->name('customSettings.update');
     });

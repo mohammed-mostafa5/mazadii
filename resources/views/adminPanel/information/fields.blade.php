@@ -3,7 +3,7 @@
     @foreach ( config('langs') as $locale => $name)
 
     <li class="nav-item">
-      <a class="nav-link {{request('languages') == $locale ?'active':''}}" id="{{$name}}-tab" data-toggle="pill" href="#{{$name}}" role="tab" aria-controls="{{$name}}" aria-selected="{{ request('languages') == $locale  ? 'true' : 'false'}}">{{$name}}</a>
+        <a class="nav-link {{request('languages') == $locale ?'active':''}}" id="{{$name}}-tab" data-toggle="pill" href="#{{$name}}" role="tab" aria-controls="{{$name}}" aria-selected="{{ request('languages') == $locale  ? 'true' : 'false'}}">{{$name}}</a>
     </li>
 
 
@@ -23,15 +23,8 @@
         <!-- Description Field -->
         <div class="form-group col-sm-12 col-lg-12">
             {!! Form::label('value', __('models/information.fields.value').':') !!}
-
-            {!! Form::textarea($locale . '[value]', isset($information)? $information->translate($locale)->value : '' , ['class' => 'form-control', 'placeholder' => $name . ' value']) !!}
+            {!! Form::text($locale . '[value]', isset($information)? $information->translate($locale)->value : '' , ['class' => 'form-control', 'placeholder' => $name . ' value']) !!}
         </div>
-        <script type="text/javascript">
-        CKEDITOR.replace("{{ $locale . '[value]' }}", {
-            filebrowserUploadUrl: "{{route('adminPanel.ckeditor.upload', ['_token' => csrf_token() ])}}",
-            filebrowserUploadMethod: 'form'
-        });
-        </script>
 
     </div>
 

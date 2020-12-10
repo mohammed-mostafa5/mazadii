@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property integer $page_id
  * @property string $photo
  */
-class images extends Model
+class Images extends Model
 {
     use SoftDeletes, ImageUploaderTrait;
 
@@ -52,9 +52,9 @@ class images extends Model
 
 
 
-     /**
+    /**
      * Timestamps.
-     * 
+     *
      * @var boolean
      */
     public $timestamps = false;
@@ -82,7 +82,6 @@ class images extends Model
             } catch (\Throwable $th) {
                 //throw $th;
                 $this->attributes['photo'] = $file;
-            
             }
         }
     }

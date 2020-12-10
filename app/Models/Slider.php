@@ -28,13 +28,14 @@ class Slider extends Model
 
     protected $dates = ['deleted_at'];
 
-    public $translatedAttributes =  ['title', 'subtitle', 'content'];
+    public $translatedAttributes =  ['title', 'subtitle', 'content', 'button_text'];
 
 
     public $fillable = [
         'in_order_to',
         'photo',
         'status',
+        'link',
     ];
 
     /**
@@ -61,11 +62,15 @@ class Slider extends Model
         $languages = array_keys(config('langs'));
 
         foreach ($languages as $language) {
-            $rules[$language . '.content'] = '';
+            $rules[$language . '.title'] = 'required';
+            $rules[$language . '.subtitle'] = 'required';
+            $rules[$language . '.button_text'] = 'required';
+            $rules[$language . '.content'] = 'required';
         }
 
         $rules['status'] = 'required|in:0,1';
         $rules['photo'] = 'required|image|mimes:jpeg,jpg,png';
+        $rules['link'] = 'required';
 
         return $rules;
     }

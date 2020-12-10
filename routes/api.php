@@ -31,6 +31,10 @@ Route::get('categories', 'HomeController@categories');
 Route::get('products', 'HomeController@products');
 Route::get('products/{id}', 'HomeController@product');
 
+Route::get('faqs', 'HomeController@faqs');
+Route::get('informations', 'HomeController@informations');
+Route::get('pages/{id}', 'HomeController@pages');
+
 
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
@@ -43,9 +47,23 @@ Route::group(['middleware' => ['auth:api']], function () {
     // Dashboard
     Route::post('create-product', 'HomeController@createProduct');
     Route::post('add-bid/{id}', 'HomeController@addBid');
-    Route::get('user-bids', 'HomeController@userBids');
-    Route::get('my-bids', 'HomeController@myBids');
+
+    Route::get('current-user-bids', 'HomeController@currentUserBids');
+    Route::get('pending-user-bids', 'HomeController@pendingUserBids');
+    Route::get('finished-user-bids', 'HomeController@finishedUserBids');
+
+    Route::get('upcoming-my-bids', 'HomeController@upcomingMyBids');
+    Route::get('current-my-bids', 'HomeController@currentMyBids');
+    Route::get('past-my-bids', 'HomeController@pastMyBids');
+
     Route::get('winning-bids', 'HomeController@winningBids');
+
     Route::post('add-or-remove-favourites/{id}', 'HomeController@addOrRemoveFavourites');
     Route::get('my-favourites', 'HomeController@myFavourites');
+
+
+    Route::get('dashboard', 'HomeController@dashboard');
+
+    Route::post('update-personal-information', 'HomeController@updatePersonalInformation');
+    Route::post('update-password', 'HomeController@updatePassword');
 });

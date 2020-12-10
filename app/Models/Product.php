@@ -89,7 +89,7 @@ class Product extends Model
     ################################### Appends #####################################
     #################################################################################
 
-    protected $appends = ['is_fav'];
+    protected $appends = ['is_fav', 'first_photo'];
 
     /**
      * append rateing for product.
@@ -103,7 +103,13 @@ class Product extends Model
 
     //     return $this->attributes['rate'] = 0;
     // }
-
+    public function getFirstPhotoAttribute()
+    {
+        $gallery = $this->gallery;
+        foreach ($gallery as $item) {
+            return $this->attributes['first_photo'] = $item->photo;
+        }
+    }
 
     public function getIsFavAttribute()
     {

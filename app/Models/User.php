@@ -109,6 +109,11 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         return $this->photo ? asset('uploads/images/original/' . $this->photo) : null;
     }
 
+    public function getIdentificationAttribute()
+    {
+        return $this->attributes['identification'] ? asset('uploads/images/original/' . $this->attributes['identification']) : null;
+    }
+
     #################################################################################
     ################################### Relations ###################################
     #################################################################################

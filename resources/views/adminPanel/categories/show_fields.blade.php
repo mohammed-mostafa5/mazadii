@@ -1,9 +1,3 @@
-<!-- Id Field -->
-{{-- <div class="form-group show">
-    {!! Form::label('id', __('models/categories.fields.id').':') !!}
-    <span>{{ $category->id }}</span>
-</div> --}}
-
 <!-- Photo Field -->
 <div class="form-group show">
     {!! Form::label('photo', __('models/categories.fields.photo').':') !!}

@@ -37,12 +37,12 @@
         </div>
 
 
-        <!-- Description Field -->
+        <!-- content Field -->
         <div class="form-group col-sm-12 col-lg-12">
-            {!! Form::label('description', __('models/sliders.fields.description').':') !!}
+            {!! Form::label('content', __('models/sliders.fields.content').':') !!}
 
-            {!! Form::textarea($locale . '[description]', isset($slider)? $slider->translate($locale)->description : ''
-            , ['class' => 'form-control', 'placeholder' => $name . ' description']) !!}
+            {!! Form::textarea($locale . '[content]', isset($slider)? $slider->translate($locale)->content : ''
+            , ['class' => 'form-control', 'placeholder' => $name . ' content']) !!}
         </div>
 
         {{--
@@ -76,7 +76,7 @@
     <!-- Sort Field -->
     <div class="form-group col-sm-6">
         {!! Form::label('sort', __('models/sliders.fields.sort').':') !!}
-        {!! Form::number('sort', null, ['class' => 'form-control']) !!}
+        {!! Form::number('in_order_to', null, ['class' => 'form-control']) !!}
     </div>
 
     <!-- Status Field -->

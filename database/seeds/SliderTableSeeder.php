@@ -19,7 +19,8 @@ class SliderTableSeeder extends Seeder
                     'content' => 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Placeat autem voluptas commodi temporibus error obcaecati pariatur animi, iure nobis, laudantium maxime dignissimos quo? Perspiciatis laboriosam voluptatibus accusamus iste dolore ab.',
 
                     'title' => 'Title',
-                    'subtitle' => 'Subtitle'
+                    'subtitle' => 'Subtitle',
+                    'button_text' => 'Click Here'
                 ],
 
 
@@ -27,10 +28,12 @@ class SliderTableSeeder extends Seeder
                     'content' => 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Placeat autem voluptas commodi temporibus error obcaecati pariatur animi, iure nobis, laudantium maxime dignissimos quo? Perspiciatis laboriosam voluptatibus accusamus iste dolore ab.',
 
                     'title' => 'Title',
-                    'subtitle' => 'Subtitle'
+                    'subtitle' => 'Subtitle',
+                    'button_text' => 'Click Here'
                 ],
                 'photo' => 'slide_1.jpg',
                 'in_order_to' => '1',
+                'link' => '#',
                 'status' => 1,
             ],
             [
@@ -38,7 +41,8 @@ class SliderTableSeeder extends Seeder
                     'content' => 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Placeat autem voluptas commodi temporibus error obcaecati pariatur animi, iure nobis, laudantium maxime dignissimos quo? Perspiciatis laboriosam voluptatibus accusamus iste dolore ab.',
 
                     'title' => 'Title',
-                    'subtitle' => 'Subtitle'
+                    'subtitle' => 'Subtitle',
+                    'button_text' => 'Click Here'
                 ],
 
 
@@ -46,10 +50,12 @@ class SliderTableSeeder extends Seeder
                     'content' => 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Placeat autem voluptas commodi temporibus error obcaecati pariatur animi, iure nobis, laudantium maxime dignissimos quo? Perspiciatis laboriosam voluptatibus accusamus iste dolore ab.',
 
                     'title' => 'Title',
-                    'subtitle' => 'Subtitle'
+                    'subtitle' => 'Subtitle',
+                    'button_text' => 'Click Here'
                 ],
                 'photo' => 'slide_2.jpg',
                 'in_order_to' => '1',
+                'link' => '#',
                 'status' => 1,
             ],
             [
@@ -57,7 +63,8 @@ class SliderTableSeeder extends Seeder
                     'content' => 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Placeat autem voluptas commodi temporibus error obcaecati pariatur animi, iure nobis, laudantium maxime dignissimos quo? Perspiciatis laboriosam voluptatibus accusamus iste dolore ab.',
 
                     'title' => 'Title',
-                    'subtitle' => 'Subtitle'
+                    'subtitle' => 'Subtitle',
+                    'button_text' => 'Click Here'
                 ],
 
 
@@ -65,10 +72,12 @@ class SliderTableSeeder extends Seeder
                     'content' => 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Placeat autem voluptas commodi temporibus error obcaecati pariatur animi, iure nobis, laudantium maxime dignissimos quo? Perspiciatis laboriosam voluptatibus accusamus iste dolore ab.',
 
                     'title' => 'Title',
-                    'subtitle' => 'Subtitle'
+                    'subtitle' => 'Subtitle',
+                    'button_text' => 'Click Here'
                 ],
                 'photo' => 'slide_3.jpg',
                 'in_order_to' => '1',
+                'link' => '#',
                 'status' => 1,
             ],
 
