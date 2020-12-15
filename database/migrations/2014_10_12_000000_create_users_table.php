@@ -34,11 +34,25 @@ class CreateUsersTable extends Migration
             $table->longText('address')->nullable();
             $table->string('identification');
             $table->integer('transactions_count')->default(0);
+            $table->integer('balance')->default(0);
             $table->timestamp('approved_at')->nullable();
 
             $table->rememberToken();
             $table->softDeletes();
             $table->timestamps();
+        });
+
+
+        Schema::create('user_transactions', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->integer('value');
+            $table->tinyInteger('action');
+
+            $table->softDeletes();
+            $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -49,6 +63,7 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('user_transactions');
         Schema::dropIfExists('users');
     }
 }

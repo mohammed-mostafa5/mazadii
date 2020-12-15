@@ -156,6 +156,13 @@
                         <span>@lang('models/products.plural')</span>
                     </a>
                 </li>
+
+                <li class="nav-item {{ Request::is('adminPanel/reviews*') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('adminPanel.reviews.index') }}">
+                        <i class="nav-icon icon-cursor"></i>
+                        <span>@lang('models/reviews.plural')</span>
+                    </a>
+                </li>
             </div>
         </div>
     </div>

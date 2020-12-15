@@ -17,13 +17,15 @@ class CreateProductReviewsTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('user_id')->unsigned();
             $table->bigInteger('product_id')->unsigned();
-            $table->integer('rate');
             $table->text('comment')->nullable();
+            $table->tinyInteger('user_type')->comment('0 => Seller , 1 => Buyer');
+            $table->tinyInteger('in_home')->default(0)->comment('0 => No , 1 => Yes');
+
+            $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
-
         });
     }
 

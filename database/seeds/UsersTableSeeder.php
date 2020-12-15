@@ -23,6 +23,7 @@ class UsersTableSeeder extends Seeder
             'address' => 'Nasr-City, Cairo, Egypt',
             'email' => 'user@email.com',
             'password' => 'password',
+            'approved_at' => now(),
             'email_verified_at' => now(),
         ]);
 

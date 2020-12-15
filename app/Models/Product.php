@@ -89,20 +89,8 @@ class Product extends Model
     ################################### Appends #####################################
     #################################################################################
 
-    protected $appends = ['is_fav', 'first_photo'];
+    protected $appends = ['is_fav', 'first_photo', 'total_bids'];
 
-    /**
-     * append rateing for product.
-     */
-    // public function getRateAttribute()
-    // {
-    //     if ($this->reviewsProduct()) {
-
-    //         return $this->attributes['rate'] = $this->reviewsProduct()->avg('rate');
-    //     }
-
-    //     return $this->attributes['rate'] = 0;
-    // }
     public function getFirstPhotoAttribute()
     {
         $gallery = $this->gallery;
@@ -122,6 +110,11 @@ class Product extends Model
         }
 
         return $this->attributes['is_fav'] = 0;
+    }
+
+    public function getTotalBidsAttribute()
+    {
+        return $this->attributes['total_bids'] = $this->biders->count();
     }
 
     #################################################################################

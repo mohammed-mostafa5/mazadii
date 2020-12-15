@@ -9,21 +9,21 @@ class InformationTranslation extends Model
 
     /**
      * Table name.
-     * 
+     *
      * @var string
      */
     protected $table = 'information_translations';
 
     /**
      * Primary key.
-     * 
+     *
      * @var string
      */
-    protected $primaryKey = 'trans_id';
+    protected $primaryKey = 'id';
 
     /**
      * Fillable fields.
-     * 
+     *
      * @var array
      */
     protected $fillable = ['name', 'value'];

@@ -66,4 +66,10 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     Route::post('update-personal-information', 'HomeController@updatePersonalInformation');
     Route::post('update-password', 'HomeController@updatePassword');
+
+
+    Route::post('add-review/{id}', 'HomeController@addReview');
+
+    Route::post('charge-balance', 'HomeController@chargeBalance');
+    Route::get('transactions', 'HomeController@transactions');
 });

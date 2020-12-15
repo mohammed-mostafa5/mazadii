@@ -27,9 +27,10 @@ class ProductReview extends Model
 
     public $fillable = [
         'user_id',
+        'user_type',
         'product_id',
-        'rate',
         'comment',
+        'in_home',
     ];
 
     /**
@@ -52,4 +53,17 @@ class ProductReview extends Model
      * @var array
      */
     public static $rules = [];
+
+
+    // Relations
+
+    public function product()
+    {
+        return $this->belongsTo('App\Models\Product', 'product_id', 'id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User', 'user_id', 'id');
+    }
 }

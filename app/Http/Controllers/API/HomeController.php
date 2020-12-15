@@ -22,10 +22,12 @@ use App\Models\ProductGallery;
 use App\Helpers\HelperFunctionTrait;
 use App\Http\Controllers\Controller;
 use App\Models\Information;
+use App\Models\ProductReview;
 use App\Models\SocialLink;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -116,9 +118,10 @@ class HomeController extends Controller
     {
         $sliders = Slider::active()->inOrderToWeb()->get();
         $categories = Category::get();
-        $products = Product::active()->limit(9)->get();
+        $products = Product::where('end_at', '>', now())->limit(9)->get();
+        $reviews = ProductReview::where('in_home', 1)->get();
 
-        return response()->json(compact('sliders', 'categories', 'products'));
+        return response()->json(compact('sliders', 'categories', 'products', 'reviews'));
     }
 
     public function informations()
@@ -130,14 +133,12 @@ class HomeController extends Controller
         $email = $informations->where('id', 3)->first()->value;
         $address = $informations->where('id', 4)->first()->value;
 
-
         $social = SocialLink::get();
 
         $facebook = $social->where('id', 1)->first()->link;
         $twitter = $social->where('id', 2)->first()->link;
         $instagram = $social->where('id', 3)->first()->link;
         $linkedIn = $social->where('id', 4)->first()->link;
-
 
         return response()->json(compact('phone', 'phone2', 'email', 'address', 'facebook', 'twitter', 'instagram', 'linkedIn'));
     }
@@ -203,7 +204,7 @@ class HomeController extends Controller
 
         $perPage = request()->filled('per_page') ? request('per_page') : 9;
 
-        $productsQuery = Product::active();
+        $productsQuery = Product::where('end_at', '>', now());
 
         if ($request->filled('sort') == 'name') {
             $productsQuery->orderBy('name');
@@ -230,8 +231,10 @@ class HomeController extends Controller
     public function product($id)
     {
         $product = Product::with('category', 'biders')->findOrFail($id);
+        $product->increment('watched_count', 1);
+        $biders = DB::table('product_user')->distinct('user_id')->count('user_id');
 
-        return response()->json(compact('product'));
+        return response()->json(compact('product', 'biders'));
     }
 
     public function addBid(Request $request, $productId)
@@ -319,12 +322,12 @@ class HomeController extends Controller
     {
         $productsQuery = Product::where('winner_id', auth('api')->id())->active();
 
-        if ($request->filled('sort') == 'name') {
+        if ($request->sort == 'name') {
             $productsQuery->orderBy('name');
-        } elseif ($request->filled('sort') == 'date') {
-            $productsQuery->orderBy('created_at', 'desc');
+        } elseif ($request->sort == 'date') {
+            $productsQuery->orderBy('approved_at', 'desc');
         } else {
-            $productsQuery->orderBy('created_at');
+            $productsQuery->orderBy('approved_at', 'asc');
         }
 
         if ($request->filled('name')) {
@@ -348,10 +351,25 @@ class HomeController extends Controller
         return response()->json(['msg' => 'Success', 'isfav' => $isfav]);
     }
 
-    public function myFavourites()
+    public function myFavourites(Request $request)
     {
         $user = auth('api')->user();
-        $myFavourites = $user->favourites()->paginate(10);
+        $myFavouritesQuery = $user->favourites();
+
+        if ($request->sort == 'name') {
+            $myFavouritesQuery->orderBy('name');
+        } elseif ($request->sort == 'date') {
+            $myFavouritesQuery->orderBy('approved_at', 'desc');
+        } else {
+            $myFavouritesQuery->orderBy('approved_at', 'asc');
+        }
+
+        if ($request->filled('name')) {
+            $myFavouritesQuery->where('name', 'like', '%' . request('name') . '%');
+        }
+
+        $myFavourites = $myFavouritesQuery->paginate(10);
+
 
         return response()->json(compact('myFavourites'));
     }
@@ -369,6 +387,46 @@ class HomeController extends Controller
         $page = Page::find($id);
 
         return response()->json(compact('page'));
+    }
+
+    public function addReview(Request $request, $product_id)
+    {
+        $product = Product::find($product_id);
+        $validated = $request->validate([
+            'comment' => 'required|string|min:3',
+        ]);
+        $validated['user_id'] = auth('api')->id();
+        $validated['product_id'] = $product_id;
+        $validated['user_type'] = $product->user_id == $validated['user_id'] ? 0 : 1;
+
+        $review = ProductReview::create($validated);
+
+        return response()->json(compact('review'));
+    }
+
+    public function chargeBalance(Request $request)
+    {
+        $user = auth('api')->user();
+        $validated = $request->validate([
+            'value' => 'required'
+        ]);
+
+        $validated['user_id'] = $user->id;
+        $validated['action'] = 1;
+
+        $transaction = $user->transactions()->create($validated);
+
+        $user->increment('balance', $validated['value']);
+
+        return response()->json(compact('transaction'));
+    }
+
+    public function transactions()
+    {
+        $user = auth('api')->user();
+        $transactions = $user->transactions()->paginate(10);
+
+        return response()->json(compact('transactions'));
     }
 
 

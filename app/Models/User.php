@@ -136,6 +136,11 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         return $this->belongsToMany('App\Models\Product', 'product_user', 'user_id', 'product_id')->withPivot(['value', 'created_at', 'updated_at']);
     }
 
+    public function transactions()
+    {
+        return $this->hasMany('App\Models\UserTransactions', 'user_id', 'id');
+    }
+
     #################################################################################
     ################################### Functions ###################################
     #################################################################################

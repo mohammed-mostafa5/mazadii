@@ -124,6 +124,11 @@ Route::group(['prefix' => 'adminPanel', 'namespace' => 'AdminPanel', 'as' => 'ad
         Route::resource('faqCategories', 'FaqCategoryController');
         Route::resource('faqs', 'FaqController');
 
+        Route::get('reviews', 'ReviewController@index')->name('reviews.index');
+        Route::get('reviews/{id}', 'ReviewController@show')->name('reviews.show');
+        Route::patch('reviews/add-to-home/{id}', 'ReviewController@addToHome')->name('reviews.addToHome');
+        Route::patch('reviews/remove-from-home/{id}', 'ReviewController@removeFromHome')->name('reviews.removeFromHome');
+
         // Route::resource('countries', 'CountryController');
         // Route::resource('countries.cities', 'CityController')->shallow();
         // Route::resource('cities.areas', 'AreaController')->shallow();
