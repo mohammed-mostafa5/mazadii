@@ -27,4 +27,28 @@ class UserTransactions extends Model
     ];
 
     public static $rules = [];
+
+
+    #################################################################################
+    ############################## Accessors & Mutators #############################
+    #################################################################################
+
+    public function getActionAttribute()
+    {
+
+        switch ($this->attributes['action']) {
+
+            case 1:
+                return 'Charge Balance';
+                break;
+            case 2:
+                return 'Take Deposit';
+                break;
+
+
+            default:
+                return 'Charge Balance';
+                break;
+        }
+    }
 }

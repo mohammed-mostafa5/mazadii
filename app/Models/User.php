@@ -37,6 +37,7 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         'email_verified_at',
         'photo',
         'identification',
+        'subscription',
         'approved_at'
     ];
 
@@ -133,7 +134,7 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
 
     public function bidItems()
     {
-        return $this->belongsToMany('App\Models\Product', 'product_user', 'user_id', 'product_id')->withPivot(['value', 'created_at', 'updated_at']);
+        return $this->belongsToMany('App\Models\Product', 'product_user', 'user_id', 'product_id')->withPivot(['id', 'value', 'created_at', 'updated_at']);
     }
 
     public function transactions()

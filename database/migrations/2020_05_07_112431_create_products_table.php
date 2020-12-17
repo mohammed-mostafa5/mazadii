@@ -21,11 +21,13 @@ class CreateProductsTable extends Migration
             $table->bigInteger('user_id')->unsigned()->nullable();
             $table->bigInteger('winner_id')->unsigned()->nullable();
             $table->string('code')->nullable();
-            $table->unsignedInteger('start_bid_price');
+            $table->unsignedInteger('start_bid_price')->nullable();
             $table->unsignedInteger('highest_value')->nullable();
-            $table->unsignedInteger('min_bid_price');
+            $table->unsignedInteger('min_bid_price')->nullable();
+            $table->unsignedInteger('min_price')->nullable();
+            $table->unsignedInteger('number_of_items');
             $table->unsignedInteger('watched_count')->default(0);
-            $table->timestamp('end_at');
+            $table->dateTime('end_at')->nullable();
 
             $table->unsignedTinyInteger('status')
                 ->default(0)

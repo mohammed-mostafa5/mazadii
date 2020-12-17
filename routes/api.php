@@ -72,4 +72,6 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     Route::post('charge-balance', 'HomeController@chargeBalance');
     Route::get('transactions', 'HomeController@transactions');
+
+    Route::post('subscription', 'HomeController@subscription');
 });

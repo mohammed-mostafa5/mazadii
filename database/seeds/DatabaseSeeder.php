@@ -23,6 +23,6 @@ class DatabaseSeeder extends Seeder
         $this->call(SocialLinkTableSeeder::class);
         $this->call(CategoryTableSeeder::class);
         $this->call(UsersTableSeeder::class);
-        $this->call(ProductSeeder::class);
+        // $this->call(ProductSeeder::class);
     }
 }

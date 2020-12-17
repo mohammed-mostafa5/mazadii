@@ -6,8 +6,12 @@ return array(
     'fields' =>
     array(
         'id' => 'Id',
+        'category_id' => 'Category',
         'name' => 'Title',
+        'start_price' => 'Start Price',
+        'min_bid_price' => 'Minimum Bid',
         'description' => 'Description',
+        'approve' => 'Approve',
         'price' => 'Price',
         'category_name' => 'Category',
         'start_bid_price' => 'Start Bid Price',

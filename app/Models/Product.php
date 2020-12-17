@@ -51,6 +51,8 @@ class Product extends Model
         'start_bid_price',
         'highest_value',
         'min_bid_price',
+        'min_price',
+        'number_of_items',
         'watched_count',
         'end_at',
         'status',
@@ -154,7 +156,22 @@ class Product extends Model
 
     public function biders()
     {
-        return $this->belongsToMany('App\Models\User', 'product_user', 'product_id', 'user_id')->withPivot(['value', 'created_at', 'updated_at']);
+        return $this->belongsToMany('App\Models\User', 'product_user', 'product_id', 'user_id')->withPivot(['id', 'value', 'created_at', 'updated_at']);
+    }
+
+    public function owner()
+    {
+        return $this->belongsTo('App\Models\User', 'user_id', 'id');
+    }
+
+    public function winner()
+    {
+        return $this->belongsTo('App\Models\User', 'winner_id', 'id');
+    }
+
+    public function bids()
+    {
+        return $this->hasMany('App\Models\Biders', 'product_id', 'id');
     }
 
     #################################################################################
@@ -181,9 +198,7 @@ class Product extends Model
     ############################## Accessors & Mutators #############################
     #################################################################################
 
-    /**
-     * append firs photo for product.
-     */
+
     public function getStatusAttribute()
     {
 
@@ -198,7 +213,13 @@ class Product extends Model
                 return 'Pending';
                 break;
             case 3:
+                return 'Delivered';
+                break;
+            case 4:
                 return 'Finished';
+                break;
+            case 5:
+                return 'Expired';
                 break;
 
             default:
@@ -231,6 +252,6 @@ class Product extends Model
     }
     public function scopeFinished($query)
     {
-        return $query->where('status', 3);
+        return $query->where('status', 4);
     }
 }

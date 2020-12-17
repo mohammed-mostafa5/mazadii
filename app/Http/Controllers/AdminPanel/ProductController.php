@@ -79,7 +79,7 @@ class ProductController extends AppBaseController
     {
         $product = $this->productRepository->find($id);
 
-        $categories = Category::active()->get();
+        $categories = Category::active()->get()->pluck('name', 'id');
 
 
 
@@ -92,9 +92,17 @@ class ProductController extends AppBaseController
         return view('adminPanel.products.edit', compact('categories', 'product'));
     }
 
-    public function update($id, UpdateProductRequest $request)
+    public function update($id, Request $request)
     {
-        $product = $this->productRepository->find($id);
+        $product = Product::find($id);
+        $owner = $product->owner;
+        $deposit = $request->start_bid_price / 100 * 10;
+        // dd($deposit);
+        $validated = $request->validate([
+            'category_id' => 'required',
+            'start_bid_price' => 'required',
+            'min_bid_price' => 'required',
+        ]);
 
         if (empty($product)) {
             Flash::error(__('messages.not_found', ['model' => __('models/products.singular')]));
@@ -102,17 +110,23 @@ class ProductController extends AppBaseController
             return redirect(route('adminPanel.products.index'));
         }
 
-        $this->productRepository->update($request->all(), $id);
-        if ($request->photo) {
-            foreach ($request->photo as $photo) {
-
-                ProductGallery::updateOrCreate([
-                    'product_id' => $product->id,
-                    'photo' => $photo
-                ]);
-            }
+        if ($owner->balance < $deposit) {
+            Flash::error(__('messages.not_enough_balance', ['model' => __('models/products.singular')]));
+            return back();
         }
+        $owner->decrement('balance', $deposit);
 
+        $validated['approved_at'] = now();
+        $validated['end_at'] = now()->addDays(5);
+        $validated['status'] = 1;
+        $product->update($validated);
+        $owner->transactions()->create([
+            'user_id' => $owner->id,
+            'value' => -$deposit,
+            'action' => 2,
+        ]);
+
+        // $product->update(['approved_at' => now(), 'end_at' => now()->addDays(5), 'status' => 1]);
 
         Flash::success(__('messages.updated', ['model' => __('models/products.singular')]));
 

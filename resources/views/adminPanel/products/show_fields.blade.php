@@ -4,7 +4,7 @@
         {!! Form::label('photos', 'Photos : ') !!}
         <div class="product_photos p-3">
             @foreach ($product->gallery as $item)
-            <img src="{{asset("uploads/images/thumbnail/$item->photo")}}" alt="{{$product->name}}" width="200" class="img-thumbnail">
+            <img src="{{$item->photo}}" alt="{{$product->name}}" width="300" height="300" class="img-thumbnail">
             @endforeach
         </div>
     </div>
@@ -33,6 +33,13 @@
 <div class="form-group show">
     {!! Form::label('start_bid_price', __('models/products.fields.start_bid_price').':') !!}
     <span>{{ $product->start_bid_price ?? '' }}</span>
+</div>
+
+
+<!-- start_bid_price Field -->
+<div class="form-group show">
+    {!! Form::label('min_bid_price', __('models/products.fields.min_bid_price').':') !!}
+    <span>{{ $product->min_bid_price ?? '' }}</span>
 </div>
 
 

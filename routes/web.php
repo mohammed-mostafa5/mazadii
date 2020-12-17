@@ -115,7 +115,7 @@ Route::group(['prefix' => 'adminPanel', 'namespace' => 'AdminPanel', 'as' => 'ad
         Route::resource('categories', 'CategoryController');
 
         // Product CURD
-        Route::resource('products', 'ProductController')->only(['index', 'show']);
+        Route::resource('products', 'ProductController')->only(['index', 'show', 'edit', 'update']);
 
         Route::patch('products/approve/{id}', 'ProductController@approve')->name('product.approve');
 

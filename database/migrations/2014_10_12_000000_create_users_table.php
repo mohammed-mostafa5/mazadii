@@ -35,6 +35,7 @@ class CreateUsersTable extends Migration
             $table->string('identification');
             $table->integer('transactions_count')->default(0);
             $table->integer('balance')->default(0);
+            $table->integer('subscription')->default(0);
             $table->timestamp('approved_at')->nullable();
 
             $table->rememberToken();

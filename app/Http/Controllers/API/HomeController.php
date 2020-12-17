@@ -24,6 +24,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Information;
 use App\Models\ProductReview;
 use App\Models\SocialLink;
+use Faker\Provider\Uuid;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\Builder;
@@ -64,7 +65,7 @@ class HomeController extends Controller
 
     public function register(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'first_name' => 'required',
             'last_name' => 'required',
             'phone' => 'required',
@@ -73,8 +74,8 @@ class HomeController extends Controller
             'address' => 'required',
             'identification' => 'required|image',
         ]);
-
-        $user = User::create($request->all());
+        $validated['code'] = strtoupper($request->first_name[0]) . strtoupper($request->last_name[0]) .  $this->randomCode(4);
+        $user = User::create($validated);
 
         return response()->json(['msg' => 'ok']);
     }
@@ -171,14 +172,15 @@ class HomeController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|min:3',
             'description' => 'required|string|min:3',
-            'start_bid_price' => 'required',
-            'min_bid_price' => 'required',
+            'min_price' => '',
+            'number_of_items' => 'required',
             'category_id' => 'required',
             'photos' => 'required|array|min:6',
             'photos.*' => 'image',
         ]);
 
         $validated['user_id'] = auth('api')->id();
+        $validated['code'] = uniqid();
         $product = Product::create($validated);
 
         foreach ($request->photos as $photo) {
@@ -230,7 +232,9 @@ class HomeController extends Controller
 
     public function product($id)
     {
-        $product = Product::with('category', 'biders')->findOrFail($id);
+        $product = Product::with(['category', 'biders' => function ($query) {
+            $query->latest('pivot_id');
+        }])->findOrFail($id);
         $product->increment('watched_count', 1);
         $biders = DB::table('product_user')->distinct('user_id')->count('user_id');
 
@@ -247,14 +251,18 @@ class HomeController extends Controller
 
         $user = auth('api')->user();
         $highestValue = $product->highest_value ?? $product->start_bid_price;
-        $minBid = $highestValue + $product->min_bid_price;
+        $minBid = $product->min_bid_price;
+
 
         $request->validate([
             'value' => 'required|integer|min:' . $minBid,
         ]);
 
-        $product->biders()->attach($user->id, ['value' => request('value')]);
-        $product->update(['highest_value' => request('value'), 'winner_id' => $user->id]);
+        if ($product->user_id == auth('api')->id()) {
+            return response()->json(['msg' => "You can't Bid on your items"], 420);
+        }
+        $product->biders()->attach($user->id, ['value' => $highestValue + request('value')]);
+        $product->update(['highest_value' => $highestValue + request('value'), 'winner_id' => $user->id]);
         $biders = $product->biders;
 
         return response()->json(compact('biders'));
@@ -272,26 +280,31 @@ class HomeController extends Controller
 
     public function currentUserBids()
     {
-        $user = auth('api')->user();
-        $current = $user->bidItems()->active()->paginate(20);
+        $products = Product::active()->whereHas('bids', function (Builder $query) {
+            $query->where('user_id', auth('api')->id());
+        })->with(['bids' => function ($query) {
+            $query->where('user_id', auth('api')->id())->latest()->first();
+        }])->get();
 
-        return response()->json(compact('current'));
+        return response()->json(compact('products'));
     }
 
     public function pendingUserBids()
     {
-        $user = auth('api')->user();
-        $pending = $user->bidItems()->pending()->paginate(20);
+        $products = Product::where('winner_id', auth('api')->id())->pending()->with(['bids' => function ($query) {
+            $query->where('user_id', auth('api')->id())->latest()->first();
+        }])->get();
 
-        return response()->json(compact('pending'));
+        return response()->json(compact('products'));
     }
 
     public function finishedUserBids()
     {
-        $user = auth('api')->user();
-        $finished = $user->bidItems()->finished()->paginate(20);
+        $products = Product::where('winner_id', auth('api')->id())->finished()->with(['bids' => function ($query) {
+            $query->where('user_id', auth('api')->id())->latest()->first();
+        }])->get();
 
-        return response()->json(compact('finished'));
+        return response()->json(compact('products'));
     }
 
     public function upcomingMyBids()
@@ -401,6 +414,12 @@ class HomeController extends Controller
 
         $review = ProductReview::create($validated);
 
+        if ($validated['user_type'] == 0) {
+            $product->update(['status' => 3]);
+        } else {
+            $product->update(['status' => 4]);
+        }
+
         return response()->json(compact('review'));
     }
 
@@ -417,8 +436,8 @@ class HomeController extends Controller
         $transaction = $user->transactions()->create($validated);
 
         $user->increment('balance', $validated['value']);
-
-        return response()->json(compact('transaction'));
+        $userBalance = $user->balance;
+        return response()->json(compact('transaction', 'userBalance'));
     }
 
     public function transactions()
@@ -429,85 +448,38 @@ class HomeController extends Controller
         return response()->json(compact('transactions'));
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public function sendCodeToUser(Request $request)
+    public function subscription()
     {
-        $email = $request->validate(['email' => 'required|email']);
+        $user = auth('api')->user();
+        $subscribeValue = 150;
+        $user->update(['subscription' => $subscribeValue]);
 
-        $user = User::where('email', $email)->first();
-
-        if ($user) {
-
-            $user->update(['verify_code' => $this->randomCode(4)]);
-
-            $this->sendCodeToMail($user->email, $user->verify_code);
-
-            return response()->json(['msg' => 'success', 'verify_code' => $user->verify_code]);
-        }
-
-        return response()->json(['msg' => 'fail'], 403);
+        return response()->json(compact('user'));
     }
 
-    public function verifyCode(Request $request)
+
+
+
+
+
+
+
+
+
+
+    // Helper Mothods
+
+    public function randomCode($length = 8)
     {
-        $request->validate(['verify_code' => 'required|min:4|max:5']);
-
-        $user = User::where('verify_code', $request->verify_code)->first();
-
-
-        if ($user) {
-
-            $user->update(['email_verified_at' => now()]);
-            return response()->json(['msg' => 'success']);
+        // 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
+        // $characters = '0123456789abcdefghijklmnopqrstuvwxyz';
+        $characters = '0123456789';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
 
-        return response()->json(['msg' => 'fail']);
-    }
-
-    public function newPassword(Request $request)
-    {
-        $request->validate([
-            'verify_code' => 'required|min:4|max:5',
-            'password' => 'required|string|min:6|confirmed'
-        ]);
-
-        $user = User::where('verify_code', $request->verify_code)->first();
-
-
-        if ($user) {
-
-            $user->update([
-
-                'email_verified_at' => now(),
-                'verify_code' => null,
-                'password' => $request->password
-            ]);
-
-            return response()->json(['msg' => 'success']);
-        }
-
-        return response()->json(['msg' => 'fail']);
+        return $randomString;
     }
 }

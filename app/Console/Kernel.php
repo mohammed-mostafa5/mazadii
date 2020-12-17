@@ -28,8 +28,16 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         $schedule->call(function () {
-            $product = Product::where('end_at', '<=', now());
-            $product->update(['status' => 2]);
+            $products = Product::where('end_at', '<=', now())->where('status', 1)->get();
+
+            foreach ($products as $product) {
+
+                if ($product->highest_value < $product->min_price) {
+                    $product->update(['status' => 5]);
+                } else {
+                    $product->update(['status' => 2]);
+                }
+            }
         })->everyMinute();
     }
 

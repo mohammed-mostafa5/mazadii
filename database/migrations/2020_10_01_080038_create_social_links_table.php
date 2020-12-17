@@ -19,7 +19,7 @@ class CreateSocialLinksTable extends Migration
             $table->string('name');
             $table->string('link');
             $table->string('status');
-            $table->string('icon', 20);
+            $table->string('icon', 20)->nullable();
             $table->softDeletes();
         });
     }
