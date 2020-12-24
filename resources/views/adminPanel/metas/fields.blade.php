@@ -4,8 +4,7 @@
             @foreach ( config('langs') as $locale => $name)
 
             <li class="nav-item">
-                <a class="nav-link {{request('languages') == $locale ?'active':''}}" id="{{$name}}-tab" data-toggle="pill" href="#{{$name}}"
-                    role="tab" aria-controls="{{$name}}" aria-selected="{{ request('languages') == $locale  ? 'true' : 'false'}}">{{$name}}</a>
+                <a class="nav-link {{request('languages') == $locale ?'active':''}}" id="{{$name}}-tab" data-toggle="pill" href="#{{$name}}" role="tab" aria-controls="{{$name}}" aria-selected="{{ request('languages') == $locale  ? 'true' : 'false'}}">{{$name}}</a>
             </li>
 
             @endforeach
@@ -15,8 +14,7 @@
 
             @foreach ( config('langs') as $locale => $name)
 
-            <div class="tab-pane fade {{request('languages') == $locale ?'show active':''}}" id="{{$name}}" role="tabpanel"
-                aria-labelledby="{{$name}}-tab">
+            <div class="tab-pane fade {{request('languages') == $locale ?'show active':''}}" id="{{$name}}" role="tabpanel" aria-labelledby="{{$name}}-tab">
                 <!-- Title Field -->
                 <div class="form-group col-sm-6">
                     {!! Form::label('title', __('models/metas.fields.title').':') !!}
@@ -43,22 +41,7 @@
             {{--  Page Id Field  --}}
             <div class="form-group col-sm-6">
                 {!! Form::label('page', __('models/metas.fields.page').':') !!}
-                <select name='page_id' class="form-control chosen-select">
-                    @if(isset($meta))
-                    @foreach($pages as $page)
-                    <option value="{{ $page->id }}" {{ $page->id == $meta->page_id ? 'selected' : ''   }}>
-                        {{ $page->name }}
-                    </option>
-                    @endforeach
-                    @else
-                    <option disabled selected>-- {{ trans('general.choosePage') }} --</option>
-                    @foreach($pages as $page)
-                    <option value="{{ $page->id }}">
-                        {{ $page->name }}
-                    </option>
-                    @endforeach
-                    @endif
-                </select>
+                {!! Form::text('page', null, ['class' => 'form-control']) !!}
             </div>
 
 

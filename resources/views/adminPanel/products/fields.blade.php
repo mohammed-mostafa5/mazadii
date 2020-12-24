@@ -7,8 +7,17 @@
 <!-- start Price Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('start_bid_price', __('models/products.fields.start_price').':') !!}
-    {!! Form::number('start_bid_price', null, ['class' => 'form-control']) !!}
+    {!! Form::number('start_bid_price', null, ['class' => 'form-control start_bid_price d-inline']) !!}
 </div>
+
+<!-- deposit Field -->
+<div class="form-group col-sm-6">
+
+    {!! Form::label('deposit', 'Deposit : ') !!}
+    <span class="deposit text-info">{{$product->deposit}}</span>
+    <span class="text-secondary pl-4">( 10% of start price )</span>
+</div>
+
 
 <!-- min bid Field -->
 <div class="form-group col-sm-6">
@@ -24,6 +33,14 @@
     <a href="{{ route('adminPanel.products.index') }}" class="btn btn-default">@lang('crud.cancel')</a>
 </div>
 
-<script>
+@section('scripts')
 
+<script>
+    $('.start_bid_price').keyup(function (e) {
+            e.preventDefault();
+            var deposit = $(this).val() / 100 * 10;
+            $('span.deposit').html(deposit);
+            console.log(deposit);
+        });
 </script>
+@endsection

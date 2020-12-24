@@ -51,7 +51,7 @@ Route::post(
 
 
 Route::get('/', function () {
-    return 'Home';
+    return view('welcome');
 })->name('website.home');
 
 
@@ -96,6 +96,7 @@ Route::group(['prefix' => 'adminPanel', 'namespace' => 'AdminPanel', 'as' => 'ad
 
         // User CURD
         Route::resource('users', 'UserController')->only(['index', 'show', 'update']);
+        Route::get('transactions', 'UserController@transactions')->name('users.transactions');
 
         Route::patch('users/approve/{id}', 'UserController@approve')->name('user.approve');
 
@@ -116,6 +117,9 @@ Route::group(['prefix' => 'adminPanel', 'namespace' => 'AdminPanel', 'as' => 'ad
 
         // Product CURD
         Route::resource('products', 'ProductController')->only(['index', 'show', 'edit', 'update']);
+        Route::get('balance-mail/{id}', 'ProductController@balanceMail')->name('products.balanceMail');
+
+
 
         Route::patch('products/approve/{id}', 'ProductController@approve')->name('product.approve');
 

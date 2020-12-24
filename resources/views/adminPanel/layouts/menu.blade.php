@@ -38,6 +38,15 @@
                     </a>
                 </li>
                 @endcan
+
+
+                <li class="nav-item {{ Request::is('adminPanel/transactions*') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('adminPanel.users.transactions') }}">
+                        <i class="nav-icon icon-user"></i>
+                        <span>@lang('models/transactions.plural')</span>
+                    </a>
+                </li>
+
             </div>
         </div>
     </div>

@@ -29,6 +29,11 @@ class UserTransactions extends Model
     public static $rules = [];
 
 
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User', 'user_id', 'id');
+    }
+
     #################################################################################
     ############################## Accessors & Mutators #############################
     #################################################################################
@@ -44,10 +49,12 @@ class UserTransactions extends Model
             case 2:
                 return 'Take Deposit';
                 break;
-
+            case 3:
+                return 'Return Deposit';
+                break;
 
             default:
-                return 'Charge Balance';
+                return 'Unknown Transaction';
                 break;
         }
     }

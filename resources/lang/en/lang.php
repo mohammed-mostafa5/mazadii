@@ -243,6 +243,8 @@ return [
     'highestValueMsg' => 'The value is lower than or equal last value',
     'minBidMsg' => 'Your value is lower than Minimum Bid Price',
     'auctionEnded' => 'Item Auction time ended',
+    'notEnoughBalance' => "You dont have enough balance",
+    'canotBid' => "You can't Bid on your items",
 
 
 

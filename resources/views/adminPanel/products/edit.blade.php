@@ -11,6 +11,12 @@
     <div class="animated fadeIn">
         @include('coreui-templates::common.errors')
         @include('flash::message')
+        @if(Session::has('error'))
+        <div class="aler alert-danger p-3 m-2">
+            {{Session::get('error')}} . <a href="{{route('adminPanel.products.balanceMail', $product->id)}}" class='btn btn-primary btn-sm'>Send him email</a> to recharge his balance
+        </div>
+
+        @endif
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">

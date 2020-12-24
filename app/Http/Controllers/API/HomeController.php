@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Events\ProductDetails;
+use App\Events\UserActiveBids;
 use App\Models\Faq;
 use App\Models\File;
 use App\Models\Page;
@@ -9,26 +11,31 @@ use App\Models\User;
 use App\Models\Client;
 use App\Models\Slider;
 use App\Models\Contact;
+use App\Models\Deposit;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\NewsFeed;
+use Faker\Provider\Uuid;
 use App\Models\Newsletter;
+use App\Models\SocialLink;
 use App\Helpers\MailsTrait;
 use App\Models\FaqCategory;
+use App\Models\Information;
 use App\Models\Photographer;
 use Illuminate\Http\Request;
+use App\Models\ProductReview;
 use Laravel\Ui\Presets\React;
 use App\Models\ProductGallery;
+use Illuminate\Support\Facades\DB;
 use App\Helpers\HelperFunctionTrait;
 use App\Http\Controllers\Controller;
-use App\Models\Information;
-use App\Models\ProductReview;
-use App\Models\SocialLink;
-use Faker\Provider\Uuid;
+use App\Mail\ProductDeliveredMail;
+use App\Mail\ProductReceivedMail;
+use App\Models\Meta;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -120,9 +127,15 @@ class HomeController extends Controller
         $sliders = Slider::active()->inOrderToWeb()->get();
         $categories = Category::get();
         $products = Product::where('end_at', '>', now())->limit(9)->get();
-        $reviews = ProductReview::where('in_home', 1)->get();
 
-        return response()->json(compact('sliders', 'categories', 'products', 'reviews'));
+        return response()->json(compact('sliders', 'categories', 'products'));
+    }
+
+    public function reviews()
+    {
+        $reviews = ProductReview::where('in_home', 1)->with('user')->get();
+
+        return response()->json(compact('reviews'));
     }
 
     public function informations()
@@ -243,29 +256,65 @@ class HomeController extends Controller
 
     public function addBid(Request $request, $productId)
     {
+        $user = auth('api')->user();
         $product = Product::findOrFail($productId);
+        $deposit = $product->deposit;
+        $highestValue = $product->highest_value ?? $product->start_bid_price;
+        $minBid = $product->min_bid_price;
+
+        if ($product->user_id == auth('api')->id()) {
+            return response()->json(['msg' => __('lang.canotBid')], 420);
+        }
 
         if ($product->end_at < now()) {
             return response()->json(['msg' => __('lang.auctionEnded')], 420);
         }
 
-        $user = auth('api')->user();
-        $highestValue = $product->highest_value ?? $product->start_bid_price;
-        $minBid = $product->min_bid_price;
+        $depositRecord = Deposit::where('user_id', $user->id)->where('product_id', $product->id);
+
+        if ($depositRecord->count() == 0) {
+            if ($user->balance < $deposit) {
+                return response()->json(['msg' => __('lang.notEnoughBalance')], 420);
+            }
+
+            $user->decrement('balance', $deposit);
+            // dd($user->balance);
+
+            $user->transactions()->create([
+                'user_id' => $user->id,
+                'value' => -$deposit,
+                'action' => 2,
+            ]);
+
+            $product->deposit()->sync([$user->id => ['deposit' => $deposit]]);
+        }
 
 
         $request->validate([
             'value' => 'required|integer|min:' . $minBid,
         ]);
 
-        if ($product->user_id == auth('api')->id()) {
-            return response()->json(['msg' => "You can't Bid on your items"], 420);
-        }
         $product->biders()->attach($user->id, ['value' => $highestValue + request('value')]);
         $product->update(['highest_value' => $highestValue + request('value'), 'winner_id' => $user->id]);
-        $biders = $product->biders;
 
-        return response()->json(compact('biders'));
+        $biders = $product->biders;
+        $bidersCount = DB::table('product_user')->distinct('user_id')->count('user_id');
+        $newBider = $product->biders()->latest('pivot_id')->first();
+
+        $data = [
+            'id' => $product->id,
+            'highest_value' => $product->highest_value,
+            'watched_count' => $product->watched_count,
+            'total_bids'    => $product->total_bids,
+            'active_biders' => $bidersCount,
+            'check_deposit' => $product->check_deposit,
+            'new_bider'     => $newBider,
+        ];
+
+        event(new ProductDetails($data));
+        // event(new UserActiveBids($user, $activeBids));
+
+        return response()->json(compact('biders', 'user'));
     }
 
     public function dashboard()
@@ -284,16 +333,16 @@ class HomeController extends Controller
             $query->where('user_id', auth('api')->id());
         })->with(['bids' => function ($query) {
             $query->where('user_id', auth('api')->id())->latest()->first();
-        }])->get();
+        }])->paginate(20);
 
         return response()->json(compact('products'));
     }
 
     public function pendingUserBids()
     {
-        $products = Product::where('winner_id', auth('api')->id())->pending()->with(['bids' => function ($query) {
+        $products = Product::where('winner_id', auth('api')->id())->whereIn('status', [2, 3])->with(['bids' => function ($query) {
             $query->where('user_id', auth('api')->id())->latest()->first();
-        }])->get();
+        }])->paginate(20);
 
         return response()->json(compact('products'));
     }
@@ -302,7 +351,7 @@ class HomeController extends Controller
     {
         $products = Product::where('winner_id', auth('api')->id())->finished()->with(['bids' => function ($query) {
             $query->where('user_id', auth('api')->id())->latest()->first();
-        }])->get();
+        }])->paginate(20);
 
         return response()->json(compact('products'));
     }
@@ -318,7 +367,9 @@ class HomeController extends Controller
     public function currentMyBids()
     {
         $user = auth('api')->user();
-        $current = $user->products()->active()->paginate(10);
+        $current = $user->products()
+            ->whereIn('status', [1, 2, 3])
+            ->paginate(10);
 
         return response()->json(compact('current'));
     }
@@ -402,6 +453,13 @@ class HomeController extends Controller
         return response()->json(compact('page'));
     }
 
+    public function metas()
+    {
+        $metas = Meta::get();
+
+        return response()->json(compact('metas'));
+    }
+
     public function addReview(Request $request, $product_id)
     {
         $product = Product::find($product_id);
@@ -416,8 +474,10 @@ class HomeController extends Controller
 
         if ($validated['user_type'] == 0) {
             $product->update(['status' => 3]);
+            Mail::to($product->winner->email)->send(new ProductDeliveredMail($product));
         } else {
             $product->update(['status' => 4]);
+            Mail::to($product->owner->email)->send(new ProductReceivedMail($product));
         }
 
         return response()->json(compact('review'));
@@ -437,13 +497,18 @@ class HomeController extends Controller
 
         $user->increment('balance', $validated['value']);
         $userBalance = $user->balance;
-        return response()->json(compact('transaction', 'userBalance'));
+        return response()->json(compact('transaction', 'userBalance', 'user'));
     }
 
-    public function transactions()
+    public function transactions(Request $request)
     {
         $user = auth('api')->user();
-        $transactions = $user->transactions()->paginate(10);
+        $transactionsQuery = $user->transactions();
+
+        if ($request->filled('type')) {
+            $transactionsQuery->where('action', $request->type);
+        }
+        $transactions = $transactionsQuery->paginate(10);
 
         return response()->json(compact('transactions'));
     }

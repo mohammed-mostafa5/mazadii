@@ -30,7 +30,7 @@ class Meta extends Model implements TranslatableContract
 
     public $fillable = [
         'status',
-        'page_id'
+        'page'
     ];
 
     /**

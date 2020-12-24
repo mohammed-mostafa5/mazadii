@@ -36,7 +36,7 @@ class CreateMetaRequest extends FormRequest
         }
 
 
-        $rules['page_id'] = 'required|integer|unique:metas';
+        $rules['page'] = 'required|string';
 
         return $rules;
     }
@@ -49,7 +49,7 @@ class CreateMetaRequest extends FormRequest
     public function messages()
     {
         return [
-            'page_id.unique' => 'This page is already in use, you can update its own resource'
+            // 'page_id.unique' => 'This page is already in use, you can update its own resource'
         ];
     }
 }

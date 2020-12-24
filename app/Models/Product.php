@@ -6,6 +6,8 @@ use Eloquent as Model;
 use App\Helpers\ImageUploaderTrait;
 use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Deposit;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class Product
@@ -58,6 +60,7 @@ class Product extends Model
         'status',
         'code',
         'approved_at',
+        'deposit',
     ];
 
     /**
@@ -91,7 +94,7 @@ class Product extends Model
     ################################### Appends #####################################
     #################################################################################
 
-    protected $appends = ['is_fav', 'first_photo', 'total_bids'];
+    protected $appends = ['is_fav', 'first_photo', 'total_bids', 'check_deposit'];
 
     public function getFirstPhotoAttribute()
     {
@@ -112,6 +115,18 @@ class Product extends Model
         }
 
         return $this->attributes['is_fav'] = 0;
+    }
+
+    public function getCheckDepositAttribute()
+    {
+        $user = auth('api')->user();
+        if (!$user) {
+            return false;
+        }
+
+        $depositRecord = Deposit::where('product_id', $this->attributes['id'])->where('user_id', auth('api')->id())->first();
+
+        return !!$depositRecord;
     }
 
     public function getTotalBidsAttribute()
@@ -156,7 +171,12 @@ class Product extends Model
 
     public function biders()
     {
-        return $this->belongsToMany('App\Models\User', 'product_user', 'product_id', 'user_id')->withPivot(['id', 'value', 'created_at', 'updated_at']);
+        return $this->belongsToMany('App\Models\User', 'product_user', 'product_id', 'user_id')->withPivot('id', 'value')->withTimeStamps();
+    }
+
+    public function deposit()
+    {
+        return $this->belongsToMany('App\Models\Deposit', 'product_deposit', 'product_id', 'user_id')->withPivot('deposit')->withTimeStamps();
     }
 
     public function owner()

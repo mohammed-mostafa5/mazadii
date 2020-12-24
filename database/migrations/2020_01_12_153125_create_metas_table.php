@@ -16,22 +16,21 @@ class CreateMetasTable extends Migration
         Schema::create('metas', function (Blueprint $table) {
             $table->increments('id');
             $table->tinyInteger('status')
-                    ->default(1)
-                        ->comment('0 => Inactive, 1 => Active');
+                ->default(1)
+                ->comment('0 => Inactive, 1 => Active');
 
-            $table->unsignedInteger('page_id')->index()->unique();
+            $table->string('page');
 
-            $table->foreign('page_id')
-                        ->references('id')
-                            ->on('pages')
-                                ->onDelete('cascade');
+            // $table->foreign('page_id')
+            //             ->references('id')
+            //                 ->on('pages')
+            //                     ->onDelete('cascade');
 
             $table->timestamps();
             $table->softDeletes();
         });
 
-        Schema::create('meta_translations', function(Blueprint $table)
-        {
+        Schema::create('meta_translations', function (Blueprint $table) {
             $table->increments('trans_id');
             $table->integer('meta_id')->unsigned();
             $table->string('locale', 2)->index();
@@ -39,11 +38,10 @@ class CreateMetasTable extends Migration
             $table->longText('description');
             $table->longText('keywords');
 
-            $table->unique(['meta_id','locale']);
+            $table->unique(['meta_id', 'locale']);
 
             $table->foreign('meta_id')->references('id')->on('metas')->onDelete('cascade');
         });
-
     }
 
     /**

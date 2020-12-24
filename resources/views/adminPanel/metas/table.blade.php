@@ -7,9 +7,9 @@
             <th>@lang('models/metas.fields.title')</th>
             <th>@lang('models/metas.fields.description')</th>
             <th>@lang('models/metas.fields.keywords')</th>
-            <th >@lang('crud.action')</th>
+            <th>@lang('crud.action')</th>
         </thead>
-      
+
         <tbody>
             @foreach($metas as $meta)
             @php $i = 1; @endphp
@@ -17,7 +17,7 @@
             <tr>
                 <td>{{ $meta->id }}</td>
                 <td>{{ $name }}</td>
-                <td> {{ $meta->page->name }} </td>
+                <td> {{ $meta->page }} </td>
                 <td>{{ $meta->translate($locale)->title }}</td>
                 <td>{{ $meta->translate($locale)->description }}</td>
                 <td>{{ $meta->translate($locale)->keywords }}</td>
@@ -25,12 +25,10 @@
                     {!! Form::open(['route' => ['adminPanel.metas.destroy', $meta->id], 'method' => 'delete']) !!}
                     <div class='btn-group'>
                         @can('metas view')
-                        <a href="{{ route('adminPanel.metas.show', [$meta->id]) }}" class='btn btn-ghost-success'><i
-                                class="fa fa-eye"></i></a>
+                        <a href="{{ route('adminPanel.metas.show', [$meta->id]) }}" class='btn btn-ghost-success'><i class="fa fa-eye"></i></a>
                         @endcan
                         @can('metas edit')
-                        <a href="{{ route('adminPanel.metas.edit', [$meta->id]) . "?languages=$locale" }}"
-                            class='btn btn-ghost-info'>
+                        <a href="{{ route('adminPanel.metas.edit', [$meta->id]) . "?languages=$locale" }}" class='btn btn-ghost-info'>
                             <i class="fa fa-edit"></i>
                         </a>
                         @endcan

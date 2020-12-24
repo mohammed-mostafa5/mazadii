@@ -21,6 +21,7 @@ Route::post('register', 'HomeController@register');
 Route::post('login', 'HomeController@login');
 
 Route::get('home', 'HomeController@home');
+Route::get('reviews', 'HomeController@reviews');
 
 
 Route::post('send-contact', 'HomeController@sendContactMessage');
@@ -34,6 +35,7 @@ Route::get('products/{id}', 'HomeController@product');
 Route::get('faqs', 'HomeController@faqs');
 Route::get('informations', 'HomeController@informations');
 Route::get('pages/{id}', 'HomeController@pages');
+Route::get('metas', 'HomeController@metas');
 
 
 // Route::middleware('auth:api')->get('/user', function (Request $request) {

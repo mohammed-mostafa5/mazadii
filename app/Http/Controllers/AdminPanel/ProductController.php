@@ -3,19 +3,26 @@
 namespace App\Http\Controllers\AdminPanel;
 
 use Flash;
+use App\Models\Size;
+use App\Models\Brand;
+use App\Models\Color;
+use App\Models\Style;
+use App\Models\Weight;
+use App\Models\Product;
+use App\Mail\MyTestMail;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Models\ProductGallery;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\AppBaseController;
 use App\Repositories\AdminPanel\ProductRepository;
 use App\Http\Requests\AdminPanel\CreateProductRequest;
 use App\Http\Requests\AdminPanel\UpdateProductRequest;
-use App\Models\Brand;
-use App\Models\Color;
-use App\Models\Product;
-use App\Models\ProductGallery;
-use App\Models\Size;
-use App\Models\Style;
-use App\Models\Weight;
+use App\Mail\ChargeYourBalanceMail;
+use App\Mail\ProductApproveMail;
+use App\Mail\TestMail;
+use App\Models\UserTransactions;
 
 class ProductController extends AppBaseController
 {
@@ -96,7 +103,6 @@ class ProductController extends AppBaseController
     {
         $product = Product::find($id);
         $owner = $product->owner;
-        $deposit = $request->start_bid_price / 100 * 10;
         // dd($deposit);
         $validated = $request->validate([
             'category_id' => 'required',
@@ -104,16 +110,21 @@ class ProductController extends AppBaseController
             'min_bid_price' => 'required',
         ]);
 
+        $deposit = $request->start_bid_price / 100 * 10;
+
         if (empty($product)) {
             Flash::error(__('messages.not_found', ['model' => __('models/products.singular')]));
 
             return redirect(route('adminPanel.products.index'));
         }
 
+        $validated['deposit'] = $deposit;
         if ($owner->balance < $deposit) {
-            Flash::error(__('messages.not_enough_balance', ['model' => __('models/products.singular')]));
+            Session::flash('error', "User don't have enough balance . The user balance is [ $owner->balance ] and required deposit is [ $deposit ] . you can change start price or ");
+            $product->update($validated);
             return back();
         }
+
         $owner->decrement('balance', $deposit);
 
         $validated['approved_at'] = now();
@@ -125,10 +136,12 @@ class ProductController extends AppBaseController
             'value' => -$deposit,
             'action' => 2,
         ]);
+        $product->deposit()->sync([$owner->id => ['deposit' => $deposit]]);
 
-        // $product->update(['approved_at' => now(), 'end_at' => now()->addDays(5), 'status' => 1]);
 
         Flash::success(__('messages.updated', ['model' => __('models/products.singular')]));
+
+        Mail::to($owner->email)->send(new ProductApproveMail($product));
 
         return redirect(route('adminPanel.products.index'));
     }
@@ -167,6 +180,16 @@ class ProductController extends AppBaseController
         $product = Product::find($id);
         $product->update(['approved_at' => now(), 'end_at' => now()->addDays(3), 'status' => 1]);
 
+        return back();
+    }
+
+
+    public function balanceMail($id)
+    {
+        $product = Product::find($id);
+        $owner = $product->owner;
+        Mail::to($owner->email)->send(new ChargeYourBalanceMail($product, $owner));
+        Flash::success('Email sent successfuly', ['model' => __('models/products.singular')]);
         return back();
     }
 }

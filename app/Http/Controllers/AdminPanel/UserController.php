@@ -6,6 +6,9 @@ use Flash;
 use Response;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Mail\UserApproveMail;
+use App\Models\UserTransactions;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\AppBaseController;
 use App\Repositories\AdminPanel\UserRepository;
 
@@ -86,6 +89,16 @@ class UserController extends AppBaseController
         $user = User::find($id);
         $user->update(['approved_at' => now()]);
 
+        Mail::to($user->email)->send(new UserApproveMail($user));
+
         return back();
+    }
+
+
+    public function transactions()
+    {
+        $transactions = UserTransactions::get();
+
+        return view('adminPanel.transactions.index', compact('transactions'));
     }
 }

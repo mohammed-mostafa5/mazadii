@@ -7,8 +7,6 @@ use Response;
 use App\Models\Faq;
 use App\Models\FaqCategory;
 use Illuminate\Http\Request;
-use App\Http\Requests\CreateFaqRequest;
-use App\Http\Requests\UpdateFaqRequest;
 use App\Http\Controllers\AppBaseController;
 
 class FaqController extends AppBaseController
@@ -44,11 +42,11 @@ class FaqController extends AppBaseController
     /**
      * Store a newly created Faq in storage.
      *
-     * @param CreateFaqRequest $request
+     * @param Request $request
      *
      * @return Response
      */
-    public function store(CreateFaqRequest $request)
+    public function store(Request $request)
     {
         $input = $request->all();
 
@@ -105,11 +103,11 @@ class FaqController extends AppBaseController
      * Update the specified Faq in storage.
      *
      * @param int $id
-     * @param UpdateFaqRequest $request
+     * @param Request $request
      *
      * @return Response
      */
-    public function update($id, UpdateFaqRequest $request)
+    public function update($id, Request $request)
     {
         $faq = Faq::find($id);
 

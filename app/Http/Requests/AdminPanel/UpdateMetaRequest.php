@@ -27,8 +27,7 @@ class UpdateMetaRequest extends FormRequest
     {
         $languages = array_keys(config('langs'));
 
-        foreach ($languages as $language)
-        {
+        foreach ($languages as $language) {
             $rules[$language . '.title'] = 'required|string|min:3|max:191';
 
             $rules[$language . '.description'] = 'required|min:3';
@@ -36,8 +35,8 @@ class UpdateMetaRequest extends FormRequest
             $rules[$language . '.keywords'] = 'required|min:3';
         }
 
-        $rules['page_id'] = 'required|integer|unique:metas,id,' . $this->id;
-;
+        $rules['page'] = 'required|string';
+
         return $rules;
     }
 
@@ -49,7 +48,7 @@ class UpdateMetaRequest extends FormRequest
     public function messages()
     {
         return [
-            'page_id.unique' => 'This page is already in use, you can update its own resource'
+            // 'page_id.unique' => 'This page is already in use, you can update its own resource'
         ];
     }
 }
