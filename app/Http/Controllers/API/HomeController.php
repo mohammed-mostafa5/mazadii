@@ -184,6 +184,7 @@ class HomeController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|min:3',
+            'category_id' => 'required',
             'description' => 'required|string|min:3',
             'min_price' => '',
             'number_of_items' => 'required',
