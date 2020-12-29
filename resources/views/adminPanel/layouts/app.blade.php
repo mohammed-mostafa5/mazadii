@@ -90,9 +90,9 @@
                 <a class="dropdown-item" href="#">
                     <i class="fa fa-wrench"></i> @lang('auth.app.settings')</a>  --}}
                     {{-- <div class="dropdown-divider"></div> --}}
-                    <a class="dropdown-item" href="{{route('adminPanel.customSettings.show')}}" target="/">
-                        <i class="fa fa-cog"></i> @lang('models/customSettings.plural')
-                    </a>
+                    {{-- <a class="dropdown-item" href="{{route('adminPanel.customSettings.show')}}" target="/">
+                    <i class="fa fa-cog"></i> @lang('models/customSettings.plural')
+                    </a> --}}
                     <a class="dropdown-item" href="/" target="/">
                         <i class="fa fa-eye"></i> @lang('auth.app.view_site')
                     </a>
