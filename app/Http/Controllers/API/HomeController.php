@@ -147,6 +147,10 @@ class HomeController extends Controller
         $email = $informations->where('id', 3)->first()->value;
         $address = $informations->where('id', 4)->first()->value;
 
+        $usa_phone = $informations->where('id', 5)->first()->value;
+        $usa_email = $informations->where('id', 6)->first()->value;
+        $usa_address = $informations->where('id', 7)->first()->value;
+
         $social = SocialLink::get();
 
         $facebook = $social->where('id', 1)->first()->link;
@@ -154,7 +158,7 @@ class HomeController extends Controller
         $instagram = $social->where('id', 3)->first()->link;
         $linkedIn = $social->where('id', 4)->first()->link;
 
-        return response()->json(compact('phone', 'phone2', 'email', 'address', 'facebook', 'twitter', 'instagram', 'linkedIn'));
+        return response()->json(compact('phone', 'phone2', 'email', 'address', 'usa_phone', 'usa_email', 'usa_address', 'facebook', 'twitter', 'instagram', 'linkedIn'));
     }
 
     public function sendContactMessage(Request $request)

@@ -24,9 +24,13 @@
 
 
                 <td>
+                    @can('products view')
                     <a href="{{ route('adminPanel.products.show', [$product->id]) }}" class='btn btn-ghost-success'><i class="fa fa-eye"></i></a>
+                    @endcan
 
+                    @can('products edit')
                     <a href="{{ route('adminPanel.products.edit', [$product->id]) }}" class="btn btn-primary btn-sm {{$product->approved_at ? 'd-none': 'd-inline'}}" {{$product->approved_at ? 'disabled': ''}}>@lang('models/products.fields.approve')</a>
+                    @endcan
                     {{-- <form action="{{ route('adminPanel.products.edit', [$product->id]) }}" method="post" class="d-inline">
                     @csrf
                     @method('patch')

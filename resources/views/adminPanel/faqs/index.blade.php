@@ -13,13 +13,14 @@
                     <div class="card-header">
                         <i class="fa fa-align-justify"></i>
                         Faqs
+                        @can('faqs create')
                         <a class="pull-right" href="{{ route('adminPanel.faqs.create') }}"><i class="fa fa-plus-square fa-lg"></i></a>
+                        @endcan
                     </div>
                     <div class="card-body">
                         @include('adminPanel.faqs.table')
                         <div class="pull-right mr-3">
 
-                            @include('coreui-templates::common.paginate', ['records' => $faqs])
 
                         </div>
                     </div>

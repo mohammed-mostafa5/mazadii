@@ -20,17 +20,23 @@
 
 
                 <td>
+                    @can('reviews view')
                     <a href="{{ route('adminPanel.reviews.show', [$review->id]) }}" class='btn btn-ghost-success'><i class="fa fa-eye"></i></a>
+                    @endcan
 
                     <form action="{{ route('adminPanel.reviews.addToHome', [$review->id]) }}" method="post" class="d-inline">
                         @csrf
                         @method('patch')
+                        @can('reviews addToHome')
                         <button type="submit" class="btn btn-primary btn-sm" {{$review->in_home ? 'disabled': ''}}>Add To Home</button>
+                        @endcan
                     </form>
                     <form action="{{ route('adminPanel.reviews.removeFromHome', [$review->id]) }}" method="post" class="d-inline">
                         @csrf
                         @method('patch')
+                        @can('reviews removeFromHome')
                         <button type="submit" class="btn btn-danger btn-sm" {{$review->in_home ? '': 'disabled'}}>Remove From Home</button>
+                        @endcan
                     </form>
                 </td>
             </tr>

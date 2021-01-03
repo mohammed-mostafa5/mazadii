@@ -19,9 +19,15 @@
                 <td>
                     {!! Form::open(['route' => ['adminPanel.faqs.destroy', $faq->id], 'method' => 'delete']) !!}
                     <div class='btn-group'>
+                        @can('faqs view')
                         <a href="{{ route('adminPanel.faqs.show', [$faq->id]) }}" class='btn btn-ghost-success'><i class="fa fa-eye"></i></a>
+                        @endcan
+                        @can('faqs edit')
                         <a href="{{ route('adminPanel.faqs.edit', [$faq->id]) }}" class='btn btn-ghost-info'><i class="fa fa-edit"></i></a>
+                        @endcan
+                        @can('faqs destroy')
                         {!! Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-ghost-danger', 'onclick' => "return confirm('Are you sure?')"]) !!}
+                        @endcan
                     </div>
                     {!! Form::close() !!}
                 </td>

@@ -114,7 +114,7 @@ class FaqCategoryController extends AppBaseController
             return redirect(route('adminPanel.faqCategories.index'));
         }
 
-        $faqCategory = FaqCategory::update($request->all(), $id);
+        $faqCategory->update($request->all());
 
         Flash::success('Faq Category updated successfully.');
 
@@ -140,7 +140,7 @@ class FaqCategoryController extends AppBaseController
             return redirect(route('adminPanel.faqCategories.index'));
         }
 
-        FaqCategory::delete($id);
+        $faqCategory->delete($id);
 
         Flash::success('Faq Category deleted successfully.');
 

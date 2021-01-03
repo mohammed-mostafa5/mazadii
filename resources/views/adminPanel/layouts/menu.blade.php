@@ -39,19 +39,18 @@
                 </li>
                 @endcan
 
-
+                @can('transactions view')
                 <li class="nav-item {{ Request::is('adminPanel/transactions*') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('adminPanel.users.transactions') }}">
                         <i class="nav-icon icon-user"></i>
                         <span>@lang('models/transactions.plural')</span>
                     </a>
                 </li>
-
+                @endcan
             </div>
         </div>
     </div>
 </div>
-
 
 {{--////////// Pages ////////////--}}
 <div class="accordion" id="accordionPages">
@@ -136,7 +135,6 @@
     </div>
 </div>
 
-
 {{--////////// Products ////////////--}}
 <div class="accordion nav-item" id="accordionProducts">
     <div class="card bg-dark m-0">
@@ -151,27 +149,30 @@
 
         <div id="collapseProducts" class="collapse " aria-labelledby="headingProducts" data-parent="#accordionProducts">
             <div class="card-body bg-secondary p-0">
-
+                @can('categories view')
                 <li class="nav-item {{ Request::is('adminPanel/categories*') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('adminPanel.categories.index') }}">
                         <i class="nav-icon icon-cursor"></i>
                         <span>@lang('models/categories.plural')</span>
                     </a>
                 </li>
-
+                @endcan
+                @can('products view')
                 <li class="nav-item {{ Request::is('adminPanel/products*') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('adminPanel.products.index') }}">
                         <i class="nav-icon icon-cursor"></i>
                         <span>@lang('models/products.plural')</span>
                     </a>
                 </li>
-
+                @endcan
+                @can('reviews view')
                 <li class="nav-item {{ Request::is('adminPanel/reviews*') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('adminPanel.reviews.index') }}">
                         <i class="nav-icon icon-cursor"></i>
                         <span>@lang('models/reviews.plural')</span>
                     </a>
                 </li>
+                @endcan
             </div>
         </div>
     </div>

@@ -21,10 +21,9 @@ class FaqController extends AppBaseController
      */
     public function index()
     {
-        $faqs = Faq::paginate(10);
+        $faqs = Faq::get();
 
-        return view('adminPanel.faqs.index')
-            ->with('faqs', $faqs);
+        return view('adminPanel.faqs.index', compact('faqs'));
     }
 
     /**
@@ -49,7 +48,7 @@ class FaqController extends AppBaseController
     public function store(Request $request)
     {
         $input = $request->all();
-
+        $request->validate(Faq::rules());
         $faq = Faq::create($input);
 
         Flash::success('Faq saved successfully.');
@@ -110,14 +109,14 @@ class FaqController extends AppBaseController
     public function update($id, Request $request)
     {
         $faq = Faq::find($id);
-
+        $request->validate(Faq::rules());
         if (empty($faq)) {
             Flash::error('Faq not found');
 
             return redirect(route('adminPanel.faqs.index'));
         }
 
-        $faq = Faq::update($request->all(), $id);
+        $faq->update($request->all());
 
         Flash::success('Faq updated successfully.');
 
@@ -143,7 +142,7 @@ class FaqController extends AppBaseController
             return redirect(route('adminPanel.faqs.index'));
         }
 
-        Faq::delete($id);
+        $faq->delete($id);
 
         Flash::success('Faq deleted successfully.');
 
