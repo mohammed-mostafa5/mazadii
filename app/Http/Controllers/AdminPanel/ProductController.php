@@ -128,7 +128,7 @@ class ProductController extends AppBaseController
         $owner->decrement('balance', $deposit);
 
         $validated['approved_at'] = now();
-        $validated['end_at'] = now()->addDays(5);
+        $validated['end_at'] = now()->addDays(10);
         $validated['status'] = 1;
         $product->update($validated);
         $owner->transactions()->create([
