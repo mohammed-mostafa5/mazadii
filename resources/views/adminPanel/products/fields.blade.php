@@ -34,11 +34,13 @@
 </div>
 
 @section('scripts')
-
+@php
+$depositPercentage = \App\Models\SiteOption::first()->deposit_percentage;
+@endphp
 <script>
     $('.start_bid_price').keyup(function (e) {
             e.preventDefault();
-            var deposit = $(this).val() / 100 * 10;
+            var deposit = $(this).val() / 100 * {{$depositPercentage}};
             $('span.deposit').html(deposit);
             console.log(deposit);
         });

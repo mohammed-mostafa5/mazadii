@@ -228,3 +228,12 @@
 </script>
 
 @endsection
+
+{{-- @can('siteOptions view')
+<li class="nav-item {{ Request::is('adminPanel/siteOptions*') ? 'active' : '' }}">
+<a class="nav-link" href="{{ route('adminPanel.siteOptions.edit', 1) }}">
+    <i class="nav-icon icon-cursor"></i>
+    <span>@lang('models/siteOptions.plural')</span>
+</a>
+</li>
+@endcan --}}

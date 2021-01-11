@@ -96,6 +96,11 @@
                     <a class="dropdown-item" href="/" target="/">
                         <i class="fa fa-eye"></i> @lang('auth.app.view_site')
                     </a>
+                    @can('siteOptions view')
+                    <a class="dropdown-item" href="{{ route('adminPanel.siteOptions.edit', 1) }}">
+                        <i class="fa fa-wrench"></i> @lang('models/siteOptions.plural')
+                    </a>
+                    @endcan
                     <a class="dropdown-item" href="{{ route('adminPanel.logout') }}" class="btn btn-default btn-flat">
                         <i class="fa fa-lock"></i>@lang('auth.sign_out')
                     </a>

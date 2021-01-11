@@ -36,6 +36,7 @@ Route::get('faqs', 'HomeController@faqs');
 Route::get('informations', 'HomeController@informations');
 Route::get('pages/{id}', 'HomeController@pages');
 Route::get('metas', 'HomeController@metas');
+Route::get('our-inventory', 'HomeController@ourInventory');
 
 Route::post('forgotPassword', '\App\Http\Controllers\Auth\ForgotPasswordController@sendResetLinkEmail');
 

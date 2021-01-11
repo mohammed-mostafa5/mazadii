@@ -527,6 +527,13 @@ class HomeController extends Controller
         return response()->json(compact('user'));
     }
 
+    public function ourInventory()
+    {
+        $inventory = Category::orderByTranslation('name')->get();
+
+        return response()->json(compact('inventory'));
+    }
+
 
 
 

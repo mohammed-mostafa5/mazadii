@@ -22,6 +22,7 @@ use App\Http\Requests\AdminPanel\UpdateProductRequest;
 use App\Mail\ChargeYourBalanceMail;
 use App\Mail\ProductApproveMail;
 use App\Mail\TestMail;
+use App\Models\SiteOption;
 use App\Models\UserTransactions;
 
 class ProductController extends AppBaseController
@@ -101,7 +102,10 @@ class ProductController extends AppBaseController
 
     public function update($id, Request $request)
     {
+
         $product = Product::find($id);
+        $productDuration = SiteOption::first()->product_duration;
+        $depositPercentage = SiteOption::first()->deposit_percentage;
         $owner = $product->owner;
         // dd($deposit);
         $validated = $request->validate([
@@ -110,7 +114,7 @@ class ProductController extends AppBaseController
             'min_bid_price' => 'required',
         ]);
 
-        $deposit = $request->start_bid_price / 100 * 10;
+        $deposit = $request->start_bid_price / 100 * $depositPercentage;
 
         if (empty($product)) {
             Flash::error(__('messages.not_found', ['model' => __('models/products.singular')]));
@@ -127,8 +131,9 @@ class ProductController extends AppBaseController
 
         $owner->decrement('balance', $deposit);
 
+
         $validated['approved_at'] = now();
-        $validated['end_at'] = now()->addDays(10);
+        $validated['end_at'] = now()->addDays($productDuration);
         $validated['status'] = 1;
         $product->update($validated);
         $owner->transactions()->create([
