@@ -32,6 +32,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\ProductDeliveredMail;
 use App\Mail\ProductReceivedMail;
 use App\Models\Meta;
+use App\Models\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -451,9 +452,16 @@ class HomeController extends Controller
         return response()->json(compact('faqCategories', 'faqs'));
     }
 
+    public function rules()
+    {
+        $rules = Rule::get();
+
+        return response()->json(compact('rules'));
+    }
+
     public function pages($id)
     {
-        $page = Page::find($id);
+        $page = Page::with('images')->find($id);
 
         return response()->json(compact('page'));
     }

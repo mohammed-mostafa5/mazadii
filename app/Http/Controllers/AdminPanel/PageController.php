@@ -30,7 +30,7 @@ class PageController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $pages = Page::withCount('paragraph', 'image')->get();
+        $pages = Page::withCount('paragraph', 'images')->get();
 
         return view('adminPanel.pages.index')
             ->with('pages', $pages);

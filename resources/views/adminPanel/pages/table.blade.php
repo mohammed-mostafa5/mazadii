@@ -24,7 +24,7 @@
                 </td>
                 <td>
                     <a href="{{ route('adminPanel.pages.images.index', $page->id) }}">
-                        {{ $page->image_count }}
+                        {{ $page->images_count }}
                     </a>
                 </td>
                 <td>

@@ -6,7 +6,7 @@ use App\Http\Requests\AdminPanel\CreateimagesRequest;
 use App\Http\Requests\AdminPanel\UpdateimagesRequest;
 use App\Repositories\AdminPanel\imagesRepository;
 use App\Http\Controllers\AppBaseController;
-use App\Models\images;
+use App\Models\Images;
 use App\Models\Page;
 use Illuminate\Http\Request;
 use Flash;
@@ -31,7 +31,7 @@ class imagesController extends AppBaseController
      */
     public function index(Page $page)
     {
-        $images = images::where('page_id', $page->id)->get();
+        $images = Images::where('page_id', $page->id)->get();
 
         return view('adminPanel.images.index', compact('page', 'images'));
     }

@@ -86,6 +86,13 @@ class Images extends Model
         }
     }
 
+    protected $appends = ['photo_path'];
+
+    public function getPhotoPathAttribute()
+    {
+        return $this->photo ? asset('uploads/images/original/' . $this->photo) : null;
+    }
+
 
     // Relations
 

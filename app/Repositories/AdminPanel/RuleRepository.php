@@ -2,23 +2,23 @@
 
 namespace App\Repositories\AdminPanel;
 
-use App\Models\Images;
+use App\Models\Rule;
 use App\Repositories\BaseRepository;
 
 /**
- * Class imagesRepository
+ * Class RuleRepository
  * @package App\Repositories\AdminPanel
- * @version September 27, 2020, 12:25 pm UTC
- */
+ * @version January 13, 2021, 2:10 pm EET
+*/
 
-class imagesRepository extends BaseRepository
+class RuleRepository extends BaseRepository
 {
     /**
      * @var array
      */
     protected $fieldSearchable = [
-        'page_id',
-        'photo'
+        'title',
+        'description'
     ];
 
     /**
@@ -36,6 +36,6 @@ class imagesRepository extends BaseRepository
      **/
     public function model()
     {
-        return Images::class;
+        return Rule::class;
     }
 }

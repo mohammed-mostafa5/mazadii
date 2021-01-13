@@ -83,7 +83,7 @@ class Page extends Model
         return $this->hasMany('App\Models\Paragraph', 'page_id', 'id');
     }
 
-    public function image()
+    public function images()
     {
         return $this->hasMany('App\Models\Images', 'page_id', 'id');
     }

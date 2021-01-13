@@ -111,6 +111,15 @@
                 </li>
                 @endcan
 
+                @can('rules view')
+                <li class="nav-item {{ Request::is('adminPanel/rules*') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('adminPanel.rules.index') }}">
+                        <i class="nav-icon icon-cursor"></i>
+                        <span>@lang('models/rules.plural')</span>
+                    </a>
+                </li>
+                @endcan
+
                 @can('information view')
                 <li class="nav-item {{ Request::is('adminPanel/information*') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('adminPanel.information.index') }}">

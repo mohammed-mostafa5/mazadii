@@ -33,6 +33,7 @@ Route::get('products', 'HomeController@products');
 Route::get('products/{id}', 'HomeController@product');
 
 Route::get('faqs', 'HomeController@faqs');
+Route::get('rules', 'HomeController@rules');
 Route::get('informations', 'HomeController@informations');
 Route::get('pages/{id}', 'HomeController@pages');
 Route::get('metas', 'HomeController@metas');

@@ -133,6 +133,8 @@ Route::group(['prefix' => 'adminPanel', 'namespace' => 'AdminPanel', 'as' => 'ad
         Route::resource('faqCategories', 'FaqCategoryController');
         Route::resource('faqs', 'FaqController');
 
+        Route::resource('rules', 'RuleController');
+
         Route::get('reviews', 'ReviewController@index')->name('reviews.index');
         Route::get('reviews/{id}', 'ReviewController@show')->name('reviews.show');
         Route::patch('reviews/add-to-home/{id}', 'ReviewController@addToHome')->name('reviews.addToHome');
