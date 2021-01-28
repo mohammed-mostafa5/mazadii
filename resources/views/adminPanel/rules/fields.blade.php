@@ -21,11 +21,18 @@
             'form-control', 'placeholder' => $name . ' title']) !!}
         </div>
         <!-- description Field -->
-        <div class="form-group col-sm-6">
+        <div class="form-group col-sm-12">
             {!! Form::label('description', __('models/rules.fields.description').':') !!}
             {!! Form::textarea($locale . '[description]', isset($rule)? $rule->translate($locale)->description : '' , ['class' =>
             'form-control', 'placeholder' => $name . ' description']) !!}
         </div>
+
+        <script type="text/javascript">
+            CKEDITOR.replace("{{ $locale . '[description]' }}", {
+                filebrowserUploadUrl: "{{route('adminPanel.ckeditor.upload', ['_token' => csrf_token() ])}}",
+                filebrowserUploadMethod: 'form',
+            });
+        </script>
     </div>
 
     @php $i = 0; @endphp

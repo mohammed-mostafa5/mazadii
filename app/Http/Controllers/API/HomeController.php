@@ -126,8 +126,8 @@ class HomeController extends Controller
     public function home()
     {
         $sliders = Slider::active()->inOrderToWeb()->get();
-        $categories = Category::get();
-        $products = Product::where('end_at', '>', now())->limit(9)->get();
+        $categories = Category::orderByTranslation('name')->get();
+        $products = Product::where('end_at', '>', now())->limit(9)->orderBy('name')->get();
 
         return response()->json(compact('sliders', 'categories', 'products'));
     }
@@ -215,7 +215,7 @@ class HomeController extends Controller
 
     public function categories()
     {
-        $categories = Category::get();
+        $categories = Category::orderByTranslation('name')->get();
 
         return response()->json(compact('categories'));
     }
@@ -227,12 +227,12 @@ class HomeController extends Controller
 
         $productsQuery = Product::where('end_at', '>', now());
 
-        if ($request->filled('sort') == 'name') {
-            $productsQuery->orderBy('name');
-        } elseif ($request->filled('sort') == 'date') {
+        if ($request->filled('sort') == 'date') {
             $productsQuery->orderBy('created_at', 'desc');
+        } elseif ($request->filled('sort') == 'name') {
+            $productsQuery->orderBy('name');
         } else {
-            $productsQuery->orderBy('created_at');
+            $productsQuery->orderBy('name');
         }
 
 
@@ -294,7 +294,6 @@ class HomeController extends Controller
 
             $product->deposit()->sync([$user->id => ['deposit' => $deposit]]);
         }
-
 
         $request->validate([
             'value' => 'required|integer|min:' . $minBid,
@@ -446,15 +445,15 @@ class HomeController extends Controller
 
     public function faqs()
     {
-        $faqCategories = FaqCategory::get();
-        $faqs = Faq::get();
+        $faqCategories = FaqCategory::orderByTranslation('name')->get();
+        $faqs = Faq::orderByTranslation('question')->get();
 
         return response()->json(compact('faqCategories', 'faqs'));
     }
 
     public function rules()
     {
-        $rules = Rule::get();
+        $rules = Rule::orderByTranslation('title')->get();
 
         return response()->json(compact('rules'));
     }

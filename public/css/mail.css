@@ -1,0 +1,44 @@
+.logo {
+    background-color: #5E58F5;
+    display: flex;
+    padding: 2%;
+    margin: 0 auto;
+    border-radius: 15px;
+    width: 150px !important;
+}
+
+.logo a,
+.mail,
+.footer-logo {
+    margin: auto;
+}
+
+.mail {
+    text-align: center;
+    padding: .8rem
+}
+
+.footer-logo {
+    background-color: #5E58F5;
+    display: flex;
+    padding: 2%;
+    float: right;
+    width: 100px !important;
+    border-radius: 15px;
+}
+
+.footer-logo a {
+    padding: .5rem;
+}
+
+.footer-mail {
+    width: 100%;
+    padding: .5rem;
+}
+
+.footer {
+    display: flex;
+    width: 33% !important;
+    float: right;
+    flex-wrap: wrap;
+}
