@@ -11,6 +11,8 @@ return array(
         'start_price' => 'Start Price',
         'min_bid_price' => 'Minimum Bid',
         'description' => 'Description',
+        'specifications' => 'Specifications',
+        'issues' => 'Issues',
         'approve' => 'Approve',
         'price' => 'Price',
         'category_name' => 'Category',

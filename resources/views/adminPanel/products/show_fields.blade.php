@@ -22,12 +22,23 @@
     <span>{{ $product->name }}</span>
 </div>
 
+<!-- specifications Field -->
+<div class="form-group show">
+    {!! Form::label('specifications', __('models/products.fields.specifications').':') !!}
+    <span>{{ $product->specifications }}</span>
+</div>
+
+<!-- issues Field -->
+<div class="form-group show">
+    {!! Form::label('issues', __('models/products.fields.issues').':') !!}
+    <span>{{ $product->issues }}</span>
+</div>
+
 <!-- Description Field -->
 <div class="form-group show">
     {!! Form::label('description', __('models/products.fields.description').':') !!}
-    <span>{{ $product->description }}</span>
+    <span>{{ $product->description ?? '' }}</span>
 </div>
-
 
 <!-- start_bid_price Field -->
 <div class="form-group show">

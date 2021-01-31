@@ -50,6 +50,8 @@ class Product extends Model
         'winner_id',
         'name',
         'description',
+        'specifications',
+        'issues',
         'start_bid_price',
         'highest_value',
         'min_bid_price',
