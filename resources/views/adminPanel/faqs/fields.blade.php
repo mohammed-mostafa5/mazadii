@@ -21,10 +21,17 @@
             'form-control', 'placeholder' => $name . ' question']) !!}
         </div>
         <!-- answer Field -->
-        <div class="form-group col-sm-6">
+        <div class="form-group col-sm-12">
             {!! Form::label('answer', __('models/faqs.fields.answer').':') !!}
             {!! Form::text($locale . '[answer]', isset($faq)? $faq->translate($locale)->answer : '' , ['class' =>
             'form-control', 'placeholder' => $name . ' answer']) !!}
+
+            <script type="text/javascript">
+                CKEDITOR.replace("{{ $locale . '[answer]' }}", {
+                filebrowserUploadUrl: "{{route('adminPanel.ckeditor.upload', ['_token' => csrf_token() ])}}",
+                filebrowserUploadMethod: 'form',
+                });
+            </script>
         </div>
     </div>
 

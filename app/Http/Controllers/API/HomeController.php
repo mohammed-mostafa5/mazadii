@@ -44,7 +44,24 @@ class HomeController extends Controller
 
     public function test()
     {
-        return ('test home');
+        $latestCode = 'C100000';
+
+        if (!$latestCode) {
+            return 'a1';
+        }
+
+        $letter = substr($latestCode, 0, 1);
+        $number = substr($latestCode, 1);
+
+        if ($number == 100000) {
+            $letter++;
+            $code = $letter . "1";
+        } else {
+            $code = $latestCode;
+            $code++;
+        }
+
+        return $code;
     }
 
     public function login(Request $request)
@@ -200,8 +217,12 @@ class HomeController extends Controller
             'photos.*' => 'image',
         ]);
 
+        $product = Product::latest()->first();
+        $latestCode = $product->code;
+        // dd($latestCode);
         $validated['user_id'] = auth('api')->id();
-        $validated['code'] = uniqid();
+        // $validated['code'] = uniqid();
+        $validated['code'] = $this->codeGenerator($latestCode);
         $product = Product::create($validated);
 
         foreach ($request->photos as $photo) {
@@ -554,6 +575,29 @@ class HomeController extends Controller
 
 
     // Helper Mothods
+
+
+    // Code Formate : A1 To A100000 ... B2 to B100000 .......
+
+    private function codeGenerator($latestCode)
+    {
+        if (!$latestCode) {
+            return 'A1';
+        }
+
+        $letter = substr($latestCode, 0, 1);
+        $number = substr($latestCode, 1);
+
+        if ($number == 100000) {
+            $letter++;
+            $code = $letter . "1";
+        } else {
+            $code = $latestCode;
+            $code++;
+        }
+
+        return $code;
+    }
 
     public function randomCode($length = 8)
     {
