@@ -125,7 +125,7 @@ class HomeController extends Controller
 
     public function home()
     {
-        $sliders = Slider::active()->inOrderToWeb()->get();
+        $sliders = Slider::active()->orderBy('in_order_to')->get();
         $categories = Category::orderByTranslation('name')->get();
         $products = Product::where('end_at', '>', now())->limit(9)->orderBy('name')->get();
 
