@@ -30,6 +30,7 @@ class Contact extends Model
         'name',
         'email',
         'phone',
+        'code',
         'message'
     ];
 

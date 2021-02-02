@@ -185,6 +185,7 @@ class HomeController extends Controller
             'name' => 'required|string|min:3|max:191',
             'email' => 'required|email|min:3|max:191',
             'phone' => 'required',
+            'code' => 'nullable',
             'message' => 'required|string|min:3',
         ]);
         Contact::create($validated);

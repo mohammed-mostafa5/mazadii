@@ -4,7 +4,7 @@
             <tr>
                 <th>@lang('models/contacts.fields.name')</th>
                 <th>@lang('models/contacts.fields.email')</th>
-                <th>@lang('models/contacts.fields.subject')</th>
+                <th>@lang('models/contacts.fields.code')</th>
                 <th>@lang('models/contacts.fields.message')</th>
                 <th>@lang('crud.action')</th>
             </tr>
@@ -12,9 +12,9 @@
         <tbody>
             @foreach($contacts as $contact)
             <tr>
-                <td>{{ Str::limit($contact->name, 20) }}</td>
-                <td>{{ Str::limit($contact->email, 20) }}</td>
-                <td>{{ Str::limit($contact->subject, 20) }}</td>
+                <td>{{ $contact->name ?? '' }}</td>
+                <td>{{ $contact->email ?? '' }}</td>
+                <td>{{ $contact->code ?? '' }}</td>
                 <td>{{ Str::limit($contact->message, 20) }}</td>
                 <td>
                     {!! Form::open(['route' => ['adminPanel.contacts.destroy', $contact->id], 'method' => 'delete']) !!}
