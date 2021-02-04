@@ -586,8 +586,11 @@ class HomeController extends Controller
             return 'A1';
         }
 
-        $letter = substr($latestCode, 0, 1);
-        $number = substr($latestCode, 1);
+        preg_match('/[a-z]+/i', $latestCode, $letter);
+        preg_match('/[0-9]+/', $latestCode, $number);
+
+        $letter = $letter[0];
+        $number = $number[0];
 
         if ($number == 100000) {
             $letter++;
