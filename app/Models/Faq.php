@@ -24,8 +24,8 @@ class Faq extends Model
 
     public $fillable = [
         'faq_category_id',
-        'question',
-        'answer'
+        // 'question',
+        // 'answer'
     ];
 
     protected $casts = [

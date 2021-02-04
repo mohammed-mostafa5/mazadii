@@ -15,7 +15,7 @@
             <tr>
                 <td>{{ $faq->id }}</td>
                 <td>{{ $faq->translateOrNew($locale)->question }}</td>
-                <td>{{ $faq->translateOrNew($locale)->answer }}</td>
+                <td>{!! $faq->translateOrNew($locale)->answer !!}</td>
                 <td>
                     {!! Form::open(['route' => ['adminPanel.faqs.destroy', $faq->id], 'method' => 'delete']) !!}
                     <div class='btn-group'>

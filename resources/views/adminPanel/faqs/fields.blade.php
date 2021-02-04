@@ -23,7 +23,7 @@
         <!-- answer Field -->
         <div class="form-group col-sm-12">
             {!! Form::label('answer', __('models/faqs.fields.answer').':') !!}
-            {!! Form::text($locale . '[answer]', isset($faq)? $faq->translate($locale)->answer : '' , ['class' =>
+            {!! Form::textarea($locale . '[answer]', isset($faq)? $faq->translateOrNew($locale)->answer : '' , ['class' =>
             'form-control', 'placeholder' => $name . ' answer']) !!}
 
             <script type="text/javascript">
