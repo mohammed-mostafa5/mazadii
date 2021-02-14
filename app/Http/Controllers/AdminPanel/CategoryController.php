@@ -157,12 +157,14 @@ class CategoryController extends AppBaseController
 
         $category = $this->CategoryRepository->update($request->all(), $id);
 
-        // Deleting Current Photo
-        if (file_exists($photo)) {
-            unlink(public_path($photo));
-        }
-        if (file_exists($photo_thumbnail)) {
-            unlink(public_path($photo_thumbnail));
+        if ($request->photo) {
+            // Deleting Current Photo
+            if (file_exists($photo)) {
+                unlink(public_path($photo));
+            }
+            if (file_exists($photo_thumbnail)) {
+                unlink(public_path($photo_thumbnail));
+            }
         }
 
         Flash::success(__('messages.updated', ['model' => __('models/categories.singular')]));
