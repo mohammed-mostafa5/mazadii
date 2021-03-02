@@ -28,7 +28,7 @@ class CreateFaqsTable extends Migration
             $table->integer('faq_id')->unsigned();
             $table->string('locale', 2)->index();
             $table->string('question');
-            $table->string('answer');
+            $table->text('answer');
 
             $table->unique(['faq_id', 'locale']);
 

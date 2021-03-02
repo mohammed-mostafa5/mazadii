@@ -67,12 +67,13 @@
                             </form>
                         </div>
                     </div>
-                    <div class="card text-white bg-primary py-5 d-md-down-none" style="width:44%">
+                    <div class="card text-white bg-white py-5 d-md-down-none" style="width:44%">
                         <div class="card-body text-center">
                             <div>
-                                <h2>Secure Admin Portal</h2>
+                                <h3 class="text-dark">Secure Admin Portal</h3>
+                                <br>
                                 <p>
-                                    <img src="https://www.techvillageco.com/wp-content/uploads/2019/06/Tech_Village_Marketing-1.png">
+                                    <img src="{{asset('logo.png')}}">
                                 </p>
                             </div>
                         </div>
