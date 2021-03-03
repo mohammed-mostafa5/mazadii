@@ -45,14 +45,14 @@
             , ['class' => 'form-control', 'placeholder' => $name . ' content']) !!}
         </div>
 
-        {{--
+
 
         <script type="text/javascript">
-            CKEDITOR.replace("{{ $locale . '[description]' }}", {
+            CKEDITOR.replace("{{ $locale . '[content]' }}", {
         filebrowserUploadUrl: "{{route('adminPanel.ckeditor.upload', ['_token' => csrf_token() ])}}",
         filebrowserUploadMethod: 'form'
         });
-        </script> --}}
+        </script>
 
     </div>
 
