@@ -10,6 +10,12 @@
     {!! Form::number('deposit_percentage', null, ['class' => 'form-control']) !!}
 </div>
 
+<!-- Subscription Fees Field -->
+<div class="form-group col-sm-6">
+    {!! Form::label('subscription_fees', __('models/siteOptions.fields.subscription_fees').':') !!}
+    {!! Form::number('subscription_fees', null, ['class' => 'form-control']) !!}
+</div>
+
 <!-- Submit Field -->
 <div class="form-group col-sm-12">
     {!! Form::submit(__('crud.save'), ['class' => 'btn btn-primary']) !!}

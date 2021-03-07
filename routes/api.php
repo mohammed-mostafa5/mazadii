@@ -52,6 +52,7 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     // Dashboard
     Route::post('create-product', 'HomeController@createProduct');
+    Route::post('add-bills', 'HomeController@addBills');
     Route::post('add-bid/{id}', 'HomeController@addBid');
 
     Route::get('current-user-bids', 'HomeController@currentUserBids');

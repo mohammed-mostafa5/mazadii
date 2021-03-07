@@ -33,6 +33,7 @@ use App\Mail\ProductDeliveredMail;
 use App\Mail\ProductReceivedMail;
 use App\Models\Meta;
 use App\Models\Rule;
+use App\Models\SiteOption;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -220,14 +221,11 @@ class HomeController extends Controller
 
         $product = Product::latest()->first();
         $latestCode = $product->code;
-        // dd($latestCode);
         $validated['user_id'] = auth('api')->id();
-        // $validated['code'] = uniqid();
         $validated['code'] = $this->codeGenerator($latestCode);
         $product = Product::create($validated);
 
         foreach ($request->photos as $photo) {
-
             ProductGallery::create([
                 'product_id' => $product->id,
                 'photo' => $photo
@@ -235,6 +233,23 @@ class HomeController extends Controller
         }
 
         return response()->json(['msg' => 'success']);
+    }
+
+    public function addBills(Request $request)
+    {
+        $request->validate([
+            'product_id'         => 'required',
+            'electricity_bill'   => 'required',
+            'gas_bill'           => 'required',
+        ]);
+
+        $product = Product::find(request('product_id'));
+        $product->update([
+            'electricity_bill' => request('electricity_bill'),
+            'gas_bill'         => request('gas_bill')
+        ]);
+
+        return response()->json(compact('product'));
     }
 
     public function categories()
@@ -552,7 +567,7 @@ class HomeController extends Controller
     public function subscription()
     {
         $user = auth('api')->user();
-        $subscribeValue = 150;
+        $subscribeValue = SiteOption::first()->subscription_fees;
         $user->update(['subscription' => $subscribeValue]);
 
         return response()->json(compact('user'));

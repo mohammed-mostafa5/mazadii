@@ -30,11 +30,9 @@ class ProductGallery extends Model
     public static $rules = [];
 
 
-
     public function setPhotoAttribute($file)
     {
         if ($file) {
-
 
             $fileName = $this->createFileName($file);
 
@@ -45,8 +43,6 @@ class ProductGallery extends Model
             $this->attributes['photo'] = $fileName;
         }
     }
-
-
 
     public function getPhotoAttribute($val)
     {

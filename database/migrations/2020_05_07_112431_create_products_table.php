@@ -31,6 +31,8 @@ class CreateProductsTable extends Migration
             $table->unsignedInteger('number_of_items');
             $table->unsignedInteger('watched_count')->default(0);
             $table->dateTime('end_at')->nullable();
+            $table->string('electricity_bill')->nullable();
+            $table->string('gas_bill')->nullable();
 
             $table->unsignedTinyInteger('status')
                 ->default(0)

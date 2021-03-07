@@ -63,6 +63,8 @@ class Product extends Model
         'code',
         'approved_at',
         'deposit',
+        'electricity_bill',
+        'gas_bill',
     ];
 
     /**
@@ -96,7 +98,7 @@ class Product extends Model
     ################################### Appends #####################################
     #################################################################################
 
-    protected $appends = ['is_fav', 'first_photo', 'total_bids', 'check_deposit'];
+    protected $appends = ['is_fav', 'first_photo', 'total_bids', 'check_deposit', 'is_winner'];
 
     public function getFirstPhotoAttribute()
     {
@@ -104,6 +106,18 @@ class Product extends Model
         foreach ($gallery as $item) {
             return $this->attributes['first_photo'] = $item->photo;
         }
+    }
+
+    public function getIsWinnerAttribute()
+    {
+        $user = auth('api')->user();
+
+        if ($user) {
+            if ($user->id == $this->attributes['winner_id']) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public function getIsFavAttribute()
@@ -200,21 +214,6 @@ class Product extends Model
     ################################### Functions ###################################
     #################################################################################
 
-    /**
-     * Deprecated.
-     */
-    public function avgReview()
-    {
-        return 3;
-    }
-
-    /**
-     * Deprecated.
-     */
-    public function quantityPrice()
-    {
-        return $this->pivot->quantity * $this->price();
-    }
 
     #################################################################################
     ############################## Accessors & Mutators #############################
@@ -249,6 +248,47 @@ class Product extends Model
                 break;
         }
     }
+
+    public function setElectricityBillAttribute($file)
+    {
+        if ($file) {
+
+            $fileName = $this->createFileName($file);
+
+            $this->originalImage($file, $fileName);
+
+            $this->thumbImage($file, $fileName);
+
+            $this->attributes['electricity_bill'] = $fileName;
+        }
+    }
+
+    public function getElectricityBillAttribute($val)
+    {
+
+        return $val ? asset('uploads/images/original') . '/' . $val : null;
+    }
+
+    public function setGasBillAttribute($file)
+    {
+        if ($file) {
+
+            $fileName = $this->createFileName($file);
+
+            $this->originalImage($file, $fileName);
+
+            $this->thumbImage($file, $fileName);
+
+            $this->attributes['gas_bill'] = $fileName;
+        }
+    }
+
+    public function getGasBillAttribute($val)
+    {
+
+        return $val ? asset('uploads/images/original') . '/' . $val : null;
+    }
+
 
     #################################################################################
     ################################### Scopes ######################################

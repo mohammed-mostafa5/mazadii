@@ -17,32 +17,15 @@ class SiteOption extends Model
 
     public $table = 'site_options';
 
-
-
-
     public $fillable = [
         'product_duration',
-        'deposit_percentage'
+        'deposit_percentage',
+        'subscription_fees'
     ];
 
-    /**
-     * The attributes that should be casted to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'id' => 'integer',
-        'product_duration' => 'integer',
-        'deposit_percentage' => 'integer'
-    ];
-
-    /**
-     * Validation rules
-     *
-     * @var array
-     */
     public static $rules = [
         'product_duration' => 'required',
         'deposit_percentage' => 'required',
+        'subscription_fees' => 'required',
     ];
 }

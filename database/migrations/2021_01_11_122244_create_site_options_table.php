@@ -18,6 +18,7 @@ class CreateSiteOptionsTable extends Migration
             $table->increments('id');
             $table->integer('product_duration');
             $table->integer('deposit_percentage');
+            $table->integer('subscription_fees');
             $table->timestamps();
         });
     }

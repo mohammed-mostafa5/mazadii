@@ -131,10 +131,10 @@ class ProductController extends AppBaseController
 
         $owner->decrement('balance', $deposit);
 
-
         $validated['approved_at'] = now();
         $validated['end_at'] = now()->addDays($productDuration);
         $validated['status'] = 1;
+        $validated['highest_value'] = $request->start_bid_price;
         $product->update($validated);
         $owner->transactions()->create([
             'user_id' => $owner->id,
@@ -180,13 +180,13 @@ class ProductController extends AppBaseController
     }
 
 
-    public function approve($id)
-    {
-        $product = Product::find($id);
-        $product->update(['approved_at' => now(), 'end_at' => now()->addDays(3), 'status' => 1]);
+    // public function approve($id)
+    // {
+    //     $product = Product::find($id);
+    //     $product->update(['approved_at' => now(), 'end_at' => now()->addDays(3), 'status' => 1]);
 
-        return back();
-    }
+    //     return back();
+    // }
 
 
     public function balanceMail($id)

@@ -9,6 +9,21 @@
         </div>
     </div>
 </div>
+@if ($product->electricity_bill)
+<!-- Electricity Bill Field -->
+<div class="form-group show">
+    {!! Form::label('electricity_bill', 'Electricity Bill : ') !!}
+    <img src="{{$product->electricity_bill}}" alt="{{$product->name}}" style="max-width: 90%" class="img-thumbnail">
+</div>
+@endif
+
+@if ($product->gas_bill)
+<!-- gas Bill Field -->
+<div class="form-group show">
+    {!! Form::label('gas_bill', 'Gas Bill : ') !!}
+    <img src="{{$product->gas_bill}}" alt="{{$product->name}}" style="max-width: 90%" class="img-thumbnail">
+</div>
+@endif
 <!-- Category Field -->
 <div class="form-group show">
     {!! Form::label('category', __('models/products.fields.category_name').':') !!}
