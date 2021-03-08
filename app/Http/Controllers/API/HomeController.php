@@ -89,6 +89,16 @@ class HomeController extends Controller
         return response()->json(compact('user', 'token'));
     }
 
+    public function registerRules()
+    {
+        $asBuyer = Rule::findOrFail(3);
+        $asSeller = Rule::findOrFail(5);
+        $notesForBuyer = Rule::findOrFail(4);
+        $notesForSeller = Rule::findOrFail(6);
+
+        return response()->json(compact('asBuyer', 'asSeller', 'notesForBuyer', 'notesForSeller'));
+    }
+
     public function register(Request $request)
     {
         $validated = $request->validate([

@@ -19,6 +19,7 @@ Route::get('test', 'HomeController@test');
 
 Route::post('register', 'HomeController@register');
 Route::post('login', 'HomeController@login');
+Route::get('register-rules', 'HomeController@registerRules');
 
 Route::get('home', 'HomeController@home');
 Route::get('reviews', 'HomeController@reviews');
