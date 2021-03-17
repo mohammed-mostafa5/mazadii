@@ -103,11 +103,16 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
     ################################### Appends #####################################
     #################################################################################
 
-    protected $appends = ['photo_path'];
+    protected $appends = ['photo_path', 'thumbnail_path'];
 
     public function getPhotoPathAttribute()
     {
         return $this->photo ? asset('uploads/images/original/' . $this->photo) : null;
+    }
+
+    public function getThumbnailPathAttribute()
+    {
+        return $this->photo ? asset('uploads/images/thumbnail/' . $this->photo) : null;
     }
 
     public function getIdentificationAttribute()
@@ -179,7 +184,7 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
 
                 $this->originalImage($file, $fileName);
 
-                $this->thumbImage($file, $fileName);
+                $this->thumbImage($file, $fileName, 200, 200);
 
                 $this->attributes['photo'] = $fileName;
             }

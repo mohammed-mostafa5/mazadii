@@ -20,6 +20,7 @@ Route::get('test', 'HomeController@test');
 Route::post('register', 'HomeController@register');
 Route::post('login', 'HomeController@login');
 Route::get('register-rules', 'HomeController@registerRules');
+Route::get('approved-users-count', 'HomeController@approvedUsersCount');
 
 Route::get('home', 'HomeController@home');
 Route::get('reviews', 'HomeController@reviews');

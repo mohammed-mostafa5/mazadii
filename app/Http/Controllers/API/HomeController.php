@@ -144,6 +144,13 @@ class HomeController extends Controller
         return response()->json(['msg',  'Wrong old password']);
     }
 
+    public function approvedUsersCount()
+    {
+        $approvedUsersCount = User::whereNotNull('approved_at')->count();
+
+        return response()->json(compact('approvedUsersCount'));
+    }
+
     public function logout()
     {
         auth('api')->logout();
@@ -173,6 +180,7 @@ class HomeController extends Controller
 
         $phone = $informations->where('id', 1)->first()->value;
         $phone2 = $informations->where('id', 2)->first()->value;
+        $phone3 = $informations->where('id', 8)->first()->value;
         $email = $informations->where('id', 3)->first()->value;
         $address = $informations->where('id', 4)->first()->value;
 
@@ -187,7 +195,7 @@ class HomeController extends Controller
         $instagram = $social->where('id', 3)->first()->link;
         $linkedIn = $social->where('id', 4)->first()->link;
 
-        return response()->json(compact('phone', 'phone2', 'email', 'address', 'usa_phone', 'usa_email', 'usa_address', 'facebook', 'twitter', 'instagram', 'linkedIn'));
+        return response()->json(compact('phone', 'phone2','phone3', 'email', 'address', 'usa_phone', 'usa_email', 'usa_address', 'facebook', 'twitter', 'instagram', 'linkedIn'));
     }
 
     public function sendContactMessage(Request $request)
@@ -576,8 +584,13 @@ class HomeController extends Controller
 
     public function subscription()
     {
+
         $user = auth('api')->user();
-        $subscribeValue = SiteOption::first()->subscription_fees;
+        $approvedUsersCount = User::whereNotNull('approved_at')->count();
+        $subscribeValue = 0;
+        if ($approvedUsersCount > 200) {
+            $subscribeValue = SiteOption::first()->subscription_fees;
+        }
         $user->update(['subscription' => $subscribeValue]);
 
         return response()->json(compact('user'));
