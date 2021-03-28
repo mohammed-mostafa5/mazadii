@@ -33,6 +33,7 @@ class CreateProductsTable extends Migration
             $table->dateTime('end_at')->nullable();
             $table->string('electricity_bill')->nullable();
             $table->string('gas_bill')->nullable();
+            $table->string('identification')->nullable();
 
             $table->unsignedTinyInteger('status')
                 ->default(0)

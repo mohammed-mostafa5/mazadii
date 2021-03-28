@@ -108,7 +108,7 @@ class HomeController extends Controller
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
             'address' => 'required',
-            'identification' => 'required|image',
+            'identification' => 'nullable|image',
         ]);
         $validated['code'] = strtoupper($request->first_name[0]) . strtoupper($request->last_name[0]) .  $this->randomCode(4);
         $user = User::create($validated);
@@ -195,7 +195,7 @@ class HomeController extends Controller
         $instagram = $social->where('id', 3)->first()->link;
         $linkedIn = $social->where('id', 4)->first()->link;
 
-        return response()->json(compact('phone', 'phone2','phone3', 'email', 'address', 'usa_phone', 'usa_email', 'usa_address', 'facebook', 'twitter', 'instagram', 'linkedIn'));
+        return response()->json(compact('phone', 'phone2', 'phone3', 'email', 'address', 'usa_phone', 'usa_email', 'usa_address', 'facebook', 'twitter', 'instagram', 'linkedIn'));
     }
 
     public function sendContactMessage(Request $request)
@@ -259,12 +259,14 @@ class HomeController extends Controller
             'product_id'         => 'required',
             'electricity_bill'   => 'required',
             'gas_bill'           => 'required',
+            'identification'     => 'required|image',
         ]);
 
         $product = Product::find(request('product_id'));
         $product->update([
             'electricity_bill' => request('electricity_bill'),
-            'gas_bill'         => request('gas_bill')
+            'gas_bill'         => request('gas_bill'),
+            'identification'   => request('identification')
         ]);
 
         return response()->json(compact('product'));

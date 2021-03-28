@@ -97,27 +97,11 @@ class Category extends Model
 
     public function setPhotoAttribute($file)
     {
-
         if ($file) {
-            if (is_array($file)) {
-                foreach ($file as $f) {
-                    $fileName = $this->createFileName($f);
-
-                    $this->originalImage($f, $fileName);
-
-                    $this->thumbImage($f, $fileName, 182, 182);
-
-                    $this->attributes['photo'] = $fileName;
-                }
-            } else {
-                $fileName = $this->createFileName($file);
-
-                $this->originalImage($file, $fileName);
-
-                $this->thumbImage($file, $fileName, 182, 182);
-
-                $this->attributes['photo'] = $fileName;
-            }
+            $fileName = $this->createFileName($file);
+            $this->originalImage($file, $fileName);
+            $this->thumbImage($file, $fileName, 182, 182);
+            $this->attributes['photo'] = $fileName;
         }
     }
 

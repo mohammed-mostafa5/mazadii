@@ -115,10 +115,7 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         return $this->photo ? asset('uploads/images/thumbnail/' . $this->photo) : null;
     }
 
-    public function getIdentificationAttribute()
-    {
-        return $this->attributes['identification'] ? asset('uploads/images/original/' . $this->attributes['identification']) : null;
-    }
+
 
     #################################################################################
     ################################### Relations ###################################
@@ -193,22 +190,6 @@ class User extends Authenticatable implements MustVerifyEmail, JWTSubject
         }
     }
 
-    public function setIdentificationAttribute($file)
-    {
-        try {
-            if ($file) {
-                $fileName = $this->createFileName($file);
-
-                $this->originalImage($file, $fileName);
-
-                $this->thumbImage($file, $fileName);
-
-                $this->attributes['identification'] = $fileName;
-            }
-        } catch (\Throwable $th) {
-            $this->attributes['identification'] = $file;
-        }
-    }
 
     public function getStatusAttribute()
     {

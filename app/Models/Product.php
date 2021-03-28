@@ -65,6 +65,7 @@ class Product extends Model
         'deposit',
         'electricity_bill',
         'gas_bill',
+        'identification'
     ];
 
     /**
@@ -287,6 +288,31 @@ class Product extends Model
     {
 
         return $val ? asset('uploads/images/original') . '/' . $val : null;
+    }
+
+
+
+
+    public function setIdentificationAttribute($file)
+    {
+        try {
+            if ($file) {
+                $fileName = $this->createFileName($file);
+
+                $this->originalImage($file, $fileName);
+
+                $this->thumbImage($file, $fileName);
+
+                $this->attributes['identification'] = $fileName;
+            }
+        } catch (\Throwable $th) {
+            $this->attributes['identification'] = $file;
+        }
+    }
+
+    public function getIdentificationAttribute()
+    {
+        return $this->attributes['identification'] ? asset('uploads/images/original/' . $this->attributes['identification']) : null;
     }
 
 
