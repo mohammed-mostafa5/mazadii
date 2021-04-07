@@ -504,7 +504,7 @@ class HomeController extends Controller
 
     public function faqs()
     {
-        $faqCategories = FaqCategory::get();
+        $faqCategories = FaqCategory::orderByTranslation('name')->get();
         $faqs = Faq::orderByTranslation('question')->get();
 
         return response()->json(compact('faqCategories', 'faqs'));

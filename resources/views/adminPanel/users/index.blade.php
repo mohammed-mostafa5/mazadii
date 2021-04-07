@@ -13,6 +13,7 @@
                     <div class="card-header">
                         <i class="fa fa-align-justify"></i>
                         @lang('models/users.plural')
+                        <span class="badge badge-pill badge-primary ml-3" style="font-size: 1rem">{{$users->count()}}</span>
                     </div>
                     <div class="card-body">
                         @include('adminPanel.users.table')
